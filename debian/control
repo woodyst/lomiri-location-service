@@ -32,6 +32,7 @@ Build-Depends: cmake,
                qtpositioning5-dev,
                trust-store-bin,
                cmake-extras,
+               libgps-dev
 Standards-Version: 3.9.4
 Homepage: https://gitlab.com/ubports/development/core/location-service
 Vcs-Git: https://gitlab.com/ubports/development/core/location-service.git
