@@ -22,6 +22,10 @@
 
 #include <core/dbus/types/object_path.h>
 
+#include <sys/apparmor.h>
+
+#include <algorithm>
+
 namespace cll = com::lomiri::location;
 namespace clls = com::lomiri::location::service;
 namespace cllss = com::lomiri::location::service::session;
@@ -134,7 +138,8 @@ clls::Skeleton::Skeleton(const clls::Skeleton::Configuration& configuration)
           object->get_property<clls::Interface::Properties::DoesSatelliteBasedPositioning>(),
           object->get_property<clls::Interface::Properties::DoesReportCellAndWifiIds>(),
           object->get_property<clls::Interface::Properties::IsOnline>(),
-          object->get_property<clls::Interface::Properties::VisibleSpaceVehicles>()
+          object->get_property<clls::Interface::Properties::VisibleSpaceVehicles>(),
+          object->get_property<clls::Interface::Properties::ClientApplications>(),
       },
       connections
       {
@@ -153,7 +158,11 @@ clls::Skeleton::Skeleton(const clls::Skeleton::Configuration& configuration)
           properties.is_online->changed().connect([this](bool value)
           {
               on_is_online_changed(value);
-          })
+          }),
+          properties.client_applications->changed().connect([this](const std::vector<std::string>& value)
+          {
+              on_client_applications_changed(value);
+          }),
       }
 {
     object->install_method_handler<clls::Interface::CreateSessionForCriteria>([this](const dbus::Message::Ptr& msg)
@@ -179,6 +188,8 @@ void clls::Skeleton::handle_create_session_for_criteria(const dbus::Message::Ptr
     auto sender = in->sender();
     auto reply = the_empty_reply();
     auto thiz = shared_from_this();
+
+    std::string apparmor_profile;
 
     try
     {
@@ -212,7 +223,8 @@ void clls::Skeleton::handle_create_session_for_criteria(const dbus::Message::Ptr
             },
             cllss::Skeleton::Remote
             {
-                stub->object_for_path(path)
+                stub->object_for_path(path),
+                credentials.profile,
             }
         };
 
@@ -232,8 +244,8 @@ void clls::Skeleton::handle_create_session_for_criteria(const dbus::Message::Ptr
         {
             reply = dbus::Message::make_method_return(in);
             reply->writer() << path;
+            add_client_application(credentials.profile);
         }
-
     } catch(const std::exception& e)
     {
         // We only send a very generic error message to the client to avoid
@@ -272,7 +284,26 @@ bool clls::Skeleton::add_to_session_store_for_path(
 void clls::Skeleton::remove_from_session_store_for_path(const core::dbus::types::ObjectPath& path)
 {
     std::lock_guard<std::mutex> lg(guard);
-    session_store.erase(path);
+    auto i = session_store.find(path);
+    if (i != session_store.end()) {
+        auto session = i->second.session;
+        remove_client_application(static_cast<cllss::Skeleton*>(session.get())->remote_app_id());
+        session_store.erase(i);
+    }
+}
+
+void clls::Skeleton::add_client_application(const std::string& app_id)
+{
+    std::vector<std::string> apps = client_applications().get();
+    apps.push_back(app_id);
+    client_applications() = apps;
+}
+
+void clls::Skeleton::remove_client_application(const std::string& app_id)
+{
+    std::vector<std::string> apps = client_applications().get();
+    apps.erase(std::remove(apps.begin(), apps.end(), app_id), apps.end());
+    client_applications() = apps;
 }
 
 void clls::Skeleton::on_state_changed(clls::State state)
@@ -343,6 +374,23 @@ void clls::Skeleton::on_is_online_changed(bool value)
                 the_empty_array_of_invalidated_properties()));
 }
 
+void clls::Skeleton::on_client_applications_changed(const std::vector<std::string>& value)
+{
+    VLOG(1) << __PRETTY_FUNCTION__;
+    std::map<std::string, core::dbus::types::Variant> dict
+    {
+        {
+            clls::Interface::Properties::ClientApplications::name(),
+            core::dbus::types::Variant::encode(value)
+        }
+    };
+    properties_changed->emit(
+            std::tie(
+                core::dbus::traits::Service<clls::Interface>::interface_name(),
+                dict,
+                the_empty_array_of_invalidated_properties()));
+}
+
 const core::Property<clls::State>& clls::Skeleton::state() const
 {
     return *properties.state;
@@ -366,4 +414,10 @@ core::Property<bool>& clls::Skeleton::is_online()
 core::Property<std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>>& clls::Skeleton::visible_space_vehicles()
 {
     return *properties.visible_space_vehicles;
+}
+
+core::Property<std::vector<std::string>>& clls::Skeleton::client_applications()
+{
+    VLOG(1) << __PRETTY_FUNCTION__;
+    return *properties.client_applications;
 }

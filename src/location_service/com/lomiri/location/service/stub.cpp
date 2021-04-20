@@ -38,7 +38,8 @@ struct clls::Stub::Private
           does_satellite_based_positioning(object->get_property<clls::Interface::Properties::DoesSatelliteBasedPositioning>()),
           does_report_cell_and_wifi_ids(object->get_property<clls::Interface::Properties::DoesReportCellAndWifiIds>()),
           is_online(object->get_property<clls::Interface::Properties::IsOnline>()),
-          visible_space_vehicles(object->get_property<clls::Interface::Properties::VisibleSpaceVehicles>())
+          visible_space_vehicles(object->get_property<clls::Interface::Properties::VisibleSpaceVehicles>()),
+          client_applications(object->get_property<clls::Interface::Properties::ClientApplications>())
     {
     }
 
@@ -49,6 +50,7 @@ struct clls::Stub::Private
     std::shared_ptr<dbus::Property<clls::Interface::Properties::DoesReportCellAndWifiIds>> does_report_cell_and_wifi_ids;
     std::shared_ptr<dbus::Property<clls::Interface::Properties::IsOnline>> is_online;
     std::shared_ptr<dbus::Property<clls::Interface::Properties::VisibleSpaceVehicles>> visible_space_vehicles;
+    std::shared_ptr<dbus::Property<clls::Interface::Properties::ClientApplications>> client_applications;
 };
 
 clls::Stub::Stub(const dbus::Bus::Ptr& connection) : dbus::Stub<clls::Interface>(connection),
@@ -99,4 +101,9 @@ core::Property<bool>& clls::Stub::is_online()
 core::Property<std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>>& clls::Stub::visible_space_vehicles()
 {
     return *d->visible_space_vehicles;
+}
+
+core::Property<std::vector<std::string>>& clls::Stub::client_applications()
+{
+    return *d->client_applications;
 }
