@@ -26,6 +26,13 @@
 #include <boost/units/systems/si.hpp>
 #include <boost/units/systems/si/prefixes.hpp>
 
+// std::optional doesn't support operator<< so core::Optional users shouldn't
+// expect it to be available. However, consumers (e.g. GoogleTest) can
+// auto-detect this operator using "ADL", so without including
+// boost/optional/optional_io.hpp they will detect the non-working one which
+// breaks the build.
+#include <boost/optional/optional_io.hpp>
+
 namespace com
 {
 namespace ubuntu
