@@ -1,0 +1,10 @@
+[Unit]
+Description=Location Services
+
+[Service]
+Type=dbus
+BusName=com.ubuntu.location.Service
+Exec=@CMAKE_INSTALL_FULL_BINDIR@/ubuntu-location-serviced --bus system --provider gps::Provider --provider remote::Provider
+
+[Install]
+WantedBy=multi-user.target
