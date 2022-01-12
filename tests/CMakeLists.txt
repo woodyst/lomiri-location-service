@@ -53,7 +53,7 @@ macro(LOCATION_SERVICE_ADD_TEST test_name src)
   # Address android's limit on cmdline length and distill ubuntu-location-service into uls
   install(
     TARGETS ${test_name}
-    DESTINATION ${CMAKE_INSTALL_BINDIR}/uls-tests
+    DESTINATION /usr/libexec/uls-tests
   )
 endmacro(LOCATION_SERVICE_ADD_TEST)
 

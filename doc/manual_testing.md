@@ -65,9 +65,9 @@ This applies only if GPS provider is enabled.
  - (If applicable: Remember to add the silo you are testing)
  - `sudo apt-get install ubuntu-location-service-tests`
  - If you want to send off crowdsourced information, i.e., information about visible wifis and visible radio cells for the obtained location fixes to Mozilla's location service and our own instance: 
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  /usr/bin/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
  - If you '''don't''' want to send off crowdsourced information:
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 /usr/bin/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
 
  - The test will output a lot of diagnostic information to the
    terminal and will take ~30 minutes. If satellite visibility is
@@ -94,9 +94,9 @@ _A_ssistance) are enabled.
  - If you want to send off crowdsourced information, i.e., information
    about visible wifis and visible radio cells for the obtained
    location fixes to Mozilla's location service and our own instance:
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/bin/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
  - If you '''don't''' want to send off crowdsourced information:
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/bin/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
 
  - The test will output a lot of diagnostic information to the
    terminal and will take ~10 minutes or less. The test will
