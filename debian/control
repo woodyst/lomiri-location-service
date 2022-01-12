@@ -48,7 +48,7 @@ Description: location service aggregating position/velocity/heading
 Package: libubuntu-location-service-dev
 Section: libdevel
 Architecture: any
-Multi-Arch: foreign
+Multi-Arch: same
 Recommends: ubuntu-location-service-doc,
 Depends: libubuntu-location-service3 (= ${binary:Version}),
          libdbus-1-dev,
