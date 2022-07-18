@@ -19,6 +19,7 @@
 #define LOCATION_SERVICE_COM_UBUNTU_LOCATION_OPTIONAL_H_
 
 #include <boost/optional.hpp>
+#include <boost/optional/optional_io.hpp>
 
 namespace com
 {
