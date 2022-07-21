@@ -15,21 +15,21 @@
  *
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
-#include <com/ubuntu/location/service/default_permission_manager.h>
+#include <com/lomiri/location/service/default_permission_manager.h>
 
-#include <com/ubuntu/location/criteria.h>
+#include <com/lomiri/location/criteria.h>
 
 #include <gtest/gtest.h>
 
 TEST(DefaultPermissionManager, for_now_only_local_sessions_are_accepted)
 {
-    //com::ubuntu::location::Credentials invalid_credentials{0, 0};
-    com::ubuntu::location::service::Credentials valid_credentials{getpid(), getuid()};
-    com::ubuntu::location::service::DefaultPermissionManager pm;
-    /*EXPECT_EQ(com::ubuntu::location::DefaultPermissionManager::Result::rejected,
-              pm.check_permission_for_credentials(com::ubuntu::location::Criteria {},
+    //com::lomiri::location::Credentials invalid_credentials{0, 0};
+    com::lomiri::location::service::Credentials valid_credentials{getpid(), getuid()};
+    com::lomiri::location::service::DefaultPermissionManager pm;
+    /*EXPECT_EQ(com::lomiri::location::DefaultPermissionManager::Result::rejected,
+              pm.check_permission_for_credentials(com::lomiri::location::Criteria {},
               invalid_credentials));*/
-    EXPECT_EQ(com::ubuntu::location::service::PermissionManager::Result::granted,
-              pm.check_permission_for_credentials(com::ubuntu::location::Criteria {},
+    EXPECT_EQ(com::lomiri::location::service::PermissionManager::Result::granted,
+              pm.check_permission_for_credentials(com::lomiri::location::Criteria {},
                                                   valid_credentials));
 }

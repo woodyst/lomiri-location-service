@@ -15,38 +15,38 @@
  *
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
-#include <com/ubuntu/location/provider.h>
+#include <com/lomiri/location/provider.h>
 
 #include "mock_provider.h"
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-namespace cul = com::ubuntu::location;
+namespace cll = com::lomiri::location;
 
 namespace
 {
-auto timestamp = com::ubuntu::location::Clock::now();
+auto timestamp = com::lomiri::location::Clock::now();
 
-com::ubuntu::location::Update<com::ubuntu::location::Position> reference_position_update
+com::lomiri::location::Update<com::lomiri::location::Position> reference_position_update
 {
     {
-        com::ubuntu::location::wgs84::Latitude{9. * com::ubuntu::location::units::Degrees},
-        com::ubuntu::location::wgs84::Longitude{53. * com::ubuntu::location::units::Degrees},
-        com::ubuntu::location::wgs84::Altitude{-2. * com::ubuntu::location::units::Meters}
+        com::lomiri::location::wgs84::Latitude{9. * com::lomiri::location::units::Degrees},
+        com::lomiri::location::wgs84::Longitude{53. * com::lomiri::location::units::Degrees},
+        com::lomiri::location::wgs84::Altitude{-2. * com::lomiri::location::units::Meters}
     },
     timestamp
 };
 
-com::ubuntu::location::Update<com::ubuntu::location::Velocity> reference_velocity_update
+com::lomiri::location::Update<com::lomiri::location::Velocity> reference_velocity_update
 {
-    {5. * com::ubuntu::location::units::MetersPerSecond},
+    {5. * com::lomiri::location::units::MetersPerSecond},
     timestamp
 };
 
-com::ubuntu::location::Update<com::ubuntu::location::Heading> reference_heading_update
+com::lomiri::location::Update<com::lomiri::location::Heading> reference_heading_update
 {
-    {120. * com::ubuntu::location::units::Degrees},
+    {120. * com::lomiri::location::units::Degrees},
     timestamp
 };
 }

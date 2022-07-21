@@ -1,6 +1,6 @@
 # Introduction               {#mainpage}
 
-Ubuntu's location service is a central hub for multiplexing access to
+Ubuntu Touch's location service is a central hub for multiplexing access to
 positioning subsystems available via hard- and software. It provides a
 client API offering positioning capabilities to applications and other
 system components, abstracting away the details of individual
@@ -53,11 +53,11 @@ privileged client applications.
 ## Privacy & Access Control
 
 Location information is highly privacy relevant. For this reason, the
-location service is deeply integrated with AppArmor and Ubuntu's
+location service is deeply integrated with AppArmor and Ubuntu Touch's
 overall trust infrastructure. Every incoming session request is
 validated and if in doubt, the user is asked to explicitly grant trust
 to the application requesting access to positioning
-information. Please see [@ref com::ubuntu::location::service::PermissionManager]
+information. Please see [@ref com::lomiri::location::service::PermissionManager]
 for further details.
 
 In addition, the location service allows for selectively adjusting the

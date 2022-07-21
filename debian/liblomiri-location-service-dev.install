@@ -1,0 +1,5 @@
+usr/include/lomiri-location-service-3
+usr/lib/*/liblomiri-location-service.so
+usr/lib/*/liblomiri-location-service-connectivity.so
+usr/lib/*/pkgconfig/lomiri-location-service.pc
+usr/lib/*/pkgconfig/lomiri-location-service-connectivity.pc

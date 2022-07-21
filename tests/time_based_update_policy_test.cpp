@@ -15,35 +15,35 @@
  *
  * Authored by: Manuel de la Pena <manuel.delapena@canonical.com>
  */
-#include <com/ubuntu/location/time_based_update_policy.h>
+#include <com/lomiri/location/time_based_update_policy.h>
 
 #include <gtest/gtest.h>
 
 using namespace ::testing;
-namespace cul = com::ubuntu::location;
+namespace cll = com::lomiri::location;
 
 namespace
 {
-    auto timestamp = com::ubuntu::location::Clock::now();
+    auto timestamp = com::lomiri::location::Clock::now();
 
-    com::ubuntu::location::Update<com::ubuntu::location::Position> reference_position_update
+    com::lomiri::location::Update<com::lomiri::location::Position> reference_position_update
             {
                     {
-                            com::ubuntu::location::wgs84::Latitude{9. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Longitude{53. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Altitude{-2. * com::ubuntu::location::units::Meters},
+                            com::lomiri::location::wgs84::Latitude{9. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Longitude{53. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Altitude{-2. * com::lomiri::location::units::Meters},
                     },
                     timestamp
             };
 }
 
 // make certain internal details public so that we can set the last update
-class PublicTimeBasedUpdatePolicy : public cul::TimeBasedUpdatePolicy {
+class PublicTimeBasedUpdatePolicy : public cll::TimeBasedUpdatePolicy {
  public:
-    PublicTimeBasedUpdatePolicy(std::chrono::minutes mins) :  cul::TimeBasedUpdatePolicy(mins) {}
-    using cul::TimeBasedUpdatePolicy::last_position_update;
-    using cul::TimeBasedUpdatePolicy::last_heading_update;
-    using cul::TimeBasedUpdatePolicy::last_velocity_update;
+    PublicTimeBasedUpdatePolicy(std::chrono::minutes mins) :  cll::TimeBasedUpdatePolicy(mins) {}
+    using cll::TimeBasedUpdatePolicy::last_position_update;
+    using cll::TimeBasedUpdatePolicy::last_heading_update;
+    using cll::TimeBasedUpdatePolicy::last_velocity_update;
 };
 
 TEST(TimeBasedUpdatePolicy, policy_ignores_updates_that_are_too_old)
@@ -51,12 +51,12 @@ TEST(TimeBasedUpdatePolicy, policy_ignores_updates_that_are_too_old)
     auto policy = std::make_shared<PublicTimeBasedUpdatePolicy>(std::chrono::minutes(2));
     policy->last_position_update = reference_position_update;
 
-    com::ubuntu::location::Update<com::ubuntu::location::Position> old_update
+    com::lomiri::location::Update<com::lomiri::location::Position> old_update
             {
                     {
-                            com::ubuntu::location::wgs84::Latitude{10. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Longitude{60. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Altitude{10. * com::ubuntu::location::units::Meters}
+                            com::lomiri::location::wgs84::Latitude{10. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Longitude{60. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Altitude{10. * com::lomiri::location::units::Meters}
                     },
                     timestamp - std::chrono::minutes(5)
             };
@@ -78,12 +78,12 @@ TEST(TimeBasedUpdatePolicy, policy_uses_very_recent_updates)
 
     policy->last_position_update = reference_position_update;
 
-    com::ubuntu::location::Update<com::ubuntu::location::Position> new_update
+    com::lomiri::location::Update<com::lomiri::location::Position> new_update
             {
                     {
-                            com::ubuntu::location::wgs84::Latitude{10. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Longitude{60. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Altitude{10. * com::ubuntu::location::units::Meters}
+                            com::lomiri::location::wgs84::Latitude{10. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Longitude{60. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Altitude{10. * com::lomiri::location::units::Meters}
                     },
                     timestamp + std::chrono::minutes(3)
             };
@@ -103,19 +103,19 @@ TEST(TimeBasedUpdatePolicy, policy_uses_very_recent_updates)
 TEST(TimeBasedUpdatePolicy, policy_ignores_inaccurate_updates)
 {
     auto policy = std::make_shared<PublicTimeBasedUpdatePolicy>(std::chrono::minutes(2));
-    reference_position_update.value.accuracy.horizontal = 1. * com::ubuntu::location::units::Meters;
+    reference_position_update.value.accuracy.horizontal = 1. * com::lomiri::location::units::Meters;
     policy->last_position_update = reference_position_update;
 
-    com::ubuntu::location::Update<com::ubuntu::location::Position> new_update
+    com::lomiri::location::Update<com::lomiri::location::Position> new_update
             {
                     {
-                            com::ubuntu::location::wgs84::Latitude{10. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Longitude{60. * com::ubuntu::location::units::Degrees},
-                            com::ubuntu::location::wgs84::Altitude{10. * com::ubuntu::location::units::Meters},
+                            com::lomiri::location::wgs84::Latitude{10. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Longitude{60. * com::lomiri::location::units::Degrees},
+                            com::lomiri::location::wgs84::Altitude{10. * com::lomiri::location::units::Meters},
                     },
                     timestamp + std::chrono::minutes(1)
             };
-    new_update.value.accuracy.horizontal = 8. * com::ubuntu::location::units::Meters;
+    new_update.value.accuracy.horizontal = 8. * com::lomiri::location::units::Meters;
 
     policy->verify_update(new_update);
     ASSERT_TRUE(*new_update.value.accuracy.horizontal > *reference_position_update.value.accuracy.horizontal);

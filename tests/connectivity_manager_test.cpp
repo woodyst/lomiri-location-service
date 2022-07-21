@@ -16,9 +16,9 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/connectivity/manager.h>
+#include <com/lomiri/location/connectivity/manager.h>
 
-#include <com/ubuntu/location/connectivity/ofono_nm_connectivity_manager.h>
+#include <com/lomiri/location/connectivity/ofono_nm_connectivity_manager.h>
 
 #include "did_finish_successfully.h"
 #include "mock_network_manager.h"
@@ -32,8 +32,8 @@
 
 #include <gtest/gtest.h>
 
-namespace location = com::ubuntu::location;
-namespace connectivity = com::ubuntu::location::connectivity;
+namespace location = com::lomiri::location;
+namespace connectivity = com::lomiri::location::connectivity;
 
 namespace
 {

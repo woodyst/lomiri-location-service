@@ -16,9 +16,9 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/trust_store_permission_manager.h>
+#include <com/lomiri/location/service/trust_store_permission_manager.h>
 
-#include <com/ubuntu/location/criteria.h>
+#include <com/lomiri/location/criteria.h>
 
 #include <core/posix/fork.h>
 #include <core/testing/cross_process_sync.h>
@@ -29,8 +29,8 @@
 
 #include <sys/apparmor.h>
 
-namespace location = com::ubuntu::location;
-namespace service = com::ubuntu::location::service;
+namespace location = com::lomiri::location;
+namespace service = com::lomiri::location::service;
 
 namespace
 {

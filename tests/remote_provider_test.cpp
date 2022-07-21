@@ -16,14 +16,14 @@
  * Authored by: Manuel de la Peña <manuel.delapena@canonical.com>
  */
 
-#include <com/ubuntu/location/logging.h>
-#include <com/ubuntu/location/provider.h>
+#include <com/lomiri/location/logging.h>
+#include <com/lomiri/location/provider.h>
 
-#include <com/ubuntu/location/providers/remote/interface.h>
-#include <com/ubuntu/location/providers/remote/skeleton.h>
-#include <com/ubuntu/location/providers/remote/stub.h>
+#include <com/lomiri/location/providers/remote/interface.h>
+#include <com/lomiri/location/providers/remote/skeleton.h>
+#include <com/lomiri/location/providers/remote/stub.h>
 
-#include <com/ubuntu/location/providers/remote/provider.h>
+#include <com/lomiri/location/providers/remote/provider.h>
 
 #include "mock_event_consumer.h"
 #include "mock_provider.h"
@@ -42,9 +42,9 @@
 
 #include <condition_variable>
 
-namespace cul = com::ubuntu::location;
+namespace cll = com::lomiri::location;
 namespace dbus = core::dbus;
-namespace remote = com::ubuntu::location::providers::remote;
+namespace remote = com::lomiri::location::providers::remote;
 
 using namespace ::testing;
 
@@ -87,7 +87,7 @@ struct RemoteProvider : public core::dbus::testing::Fixture
 
     static constexpr const char* stub_remote_provider_path
     {
-        "/com/ubuntu/remote/Provider"
+        "/com/lomiri/remote/Provider"
     };
 };
 }
@@ -96,23 +96,23 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
 {
     using namespace ::testing;
 
-    static const cul::Position position
+    static const cll::Position position
     {
-        cul::wgs84::Latitude{2* cul::units::Degrees},
-        cul::wgs84::Longitude{3* cul::units::Degrees},
-        cul::wgs84::Altitude{4* cul::units::Meters},
-        cul::Position::Accuracy::Horizontal(5* cul::units::Meters),
-        cul::Position::Accuracy::Vertical(6* cul::units::Meters)
+        cll::wgs84::Latitude{2* cll::units::Degrees},
+        cll::wgs84::Longitude{3* cll::units::Degrees},
+        cll::wgs84::Altitude{4* cll::units::Meters},
+        cll::Position::Accuracy::Horizontal(5* cll::units::Meters),
+        cll::Position::Accuracy::Vertical(6* cll::units::Meters)
     };
 
-    static const cul::Heading heading
+    static const cll::Heading heading
     {
-        120. * cul::units::Degrees
+        120. * cll::units::Degrees
     };
 
-    static const cul::Velocity velocity
+    static const cll::Velocity velocity
     {
-        5. * cul::units::MetersPerSecond
+        5. * cll::units::MetersPerSecond
     };
 
     auto skeleton = core::posix::fork([this]()
@@ -171,7 +171,7 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
         {
             while (running)
             {
-                mock_provider->inject_update(cul::Update<cul::Position>{position});
+                mock_provider->inject_update(cll::Update<cll::Position>{position});
                 std::this_thread::sleep_for(std::chrono::milliseconds{10});
             }
         }};
@@ -180,7 +180,7 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
         {
             while (running)
             {
-                mock_provider->inject_update(cul::Update<cul::Heading>{heading});
+                mock_provider->inject_update(cll::Update<cll::Heading>{heading});
                 std::this_thread::sleep_for(std::chrono::milliseconds{10});
             }
         }};
@@ -189,7 +189,7 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
         {
             while (running)
             {
-                mock_provider->inject_update(cul::Update<cul::Velocity>{velocity});
+                mock_provider->inject_update(cll::Update<cll::Velocity>{velocity});
                 std::this_thread::sleep_for(std::chrono::milliseconds{10});
             }
         }};
@@ -236,23 +236,23 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
 
         auto provider = remote::stub::create_with_configuration(conf);
 
-        EXPECT_FALSE(provider->matches_criteria(cul::Criteria{}));
+        EXPECT_FALSE(provider->matches_criteria(cll::Criteria{}));
 
-        EXPECT_TRUE(provider->supports(cul::Provider::Features::none));
-        EXPECT_TRUE(provider->supports(cul::Provider::Features::position));
-        EXPECT_TRUE(provider->supports(cul::Provider::Features::heading));
-        EXPECT_TRUE(provider->supports(cul::Provider::Features::velocity));
+        EXPECT_TRUE(provider->supports(cll::Provider::Features::none));
+        EXPECT_TRUE(provider->supports(cll::Provider::Features::position));
+        EXPECT_TRUE(provider->supports(cll::Provider::Features::heading));
+        EXPECT_TRUE(provider->supports(cll::Provider::Features::velocity));
 
-        EXPECT_TRUE(provider->requires(cul::Provider::Requirements::cell_network));
-        EXPECT_TRUE(provider->requires(cul::Provider::Requirements::data_network));
-        EXPECT_TRUE(provider->requires(cul::Provider::Requirements::monetary_spending));
-        EXPECT_TRUE(provider->requires(cul::Provider::Requirements::none));
-        EXPECT_TRUE(provider->requires(cul::Provider::Requirements::satellites));
+        EXPECT_TRUE(provider->requires(cll::Provider::Requirements::cell_network));
+        EXPECT_TRUE(provider->requires(cll::Provider::Requirements::data_network));
+        EXPECT_TRUE(provider->requires(cll::Provider::Requirements::monetary_spending));
+        EXPECT_TRUE(provider->requires(cll::Provider::Requirements::none));
+        EXPECT_TRUE(provider->requires(cll::Provider::Requirements::satellites));
 
-        provider->on_wifi_and_cell_reporting_state_changed(cul::WifiAndCellIdReportingState::on);
-        provider->on_reference_location_updated(cul::Update<cul::Position>{});
-        provider->on_reference_heading_updated(cul::Update<cul::Heading>{});
-        provider->on_reference_velocity_updated(cul::Update<cul::Velocity>{});
+        provider->on_wifi_and_cell_reporting_state_changed(cll::WifiAndCellIdReportingState::on);
+        provider->on_reference_location_updated(cll::Update<cll::Position>{});
+        provider->on_reference_heading_updated(cll::Update<cll::Heading>{});
+        provider->on_reference_velocity_updated(cll::Update<cll::Velocity>{});
         provider->state_controller()->start_position_updates();
         provider->state_controller()->start_heading_updates();
         provider->state_controller()->start_velocity_updates();
@@ -264,7 +264,7 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
 
         core::ScopedConnection sc1
         {
-            provider->updates().position.connect([&mec](const cul::Update<cul::Position>& p)
+            provider->updates().position.connect([&mec](const cll::Update<cll::Position>& p)
             {
                 mec.on_new_position(p);
             })
@@ -272,7 +272,7 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
 
         core::ScopedConnection sc2
         {
-            provider->updates().heading.connect([&mec](const cul::Update<cul::Heading>& h)
+            provider->updates().heading.connect([&mec](const cll::Update<cll::Heading>& h)
             {
                 mec.on_new_heading(h);
             })
@@ -280,7 +280,7 @@ TEST_F(RemoteProvider, DISABLED_updates_are_fwd)
 
         core::ScopedConnection sc3
         {
-            provider->updates().velocity.connect([&mec](const cul::Update<cul::Velocity>& v)
+            provider->updates().velocity.connect([&mec](const cll::Update<cll::Velocity>& v)
             {
                 mec.on_new_velocity(v);
             })

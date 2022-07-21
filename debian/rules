@@ -29,10 +29,10 @@ override_dh_missing:
 	dh_missing --fail-missing
 
 override_dh_install:
-	dh_install -Xubuntu-location-service.1
+	dh_install -Xlomiri-location-service.1
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib/$(DEB_HOST_MULTIARCH)/ubuntu-location-service -DCMAKE_C_COMPILER=$(CC) -DCMAKE_CXX_COMPILER=$(CXX) -DLOCATION_SERVICE_ENABLE_GPS_PROVIDER=$(LOCATION_SERVICE_ENABLE_GPS_PROVIDER) -DLOCATION_SERVICE_ENABLE_GEOCLUE_PROVIDER=OFF
+	dh_auto_configure -- -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib/$(DEB_HOST_MULTIARCH)/lomiri-location-service -DCMAKE_C_COMPILER=$(CC) -DCMAKE_CXX_COMPILER=$(CXX) -DLOCATION_SERVICE_ENABLE_GPS_PROVIDER=$(LOCATION_SERVICE_ENABLE_GPS_PROVIDER) -DLOCATION_SERVICE_ENABLE_GEOCLUE_PROVIDER=OFF
 
 override_dh_auto_test:
 	# Don't run tests in parallel as fake web servers all bind to same port

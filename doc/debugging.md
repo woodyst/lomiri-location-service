@@ -10,20 +10,20 @@ work. Same result of no location? Next step.
 
 ## Check that stack works with dummy provider
 
-Edit /etc/init/ubuntu-location-provider.override to start
+Edit /etc/init/lomiri-location-provider.override to start
 location-serviced with just the dummy provider; this should
 work. Doesn't work? File a bug against location-service. Works? Reset
 config to defaults and try the next thing.
 
 ## location-service debug
 
-Collect some debug data by editing /etc/init/ubuntu-location-service.override
+Collect some debug data by editing /etc/init/lomiri-location-service.override
 and changing the start sequence to add some env vars:
 
     export GLOG_v=200
 
 before the exec. Reboot, and start some app. You should have some log
-files under /var/log/upstart/ubuntu-location-service.log to attach to a bug
+files under /var/log/upstart/lomiri-location-service.log to attach to a bug
 report; e.g. a working log looks like this:
 
     WARNING: Logging before InitGoogleLogging() is written to STDERR

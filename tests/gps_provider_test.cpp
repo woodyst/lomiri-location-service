@@ -15,13 +15,13 @@
  *
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
-#include <com/ubuntu/location/providers/gps/provider.h>
-#include <com/ubuntu/location/providers/gps/android_hardware_abstraction_layer.h>
+#include <com/lomiri/location/providers/gps/provider.h>
+#include <com/lomiri/location/providers/gps/android_hardware_abstraction_layer.h>
 
-#include <com/ubuntu/location/providers/gps/net_cpp_gps_xtra_downloader.h>
+#include <com/lomiri/location/providers/gps/net_cpp_gps_xtra_downloader.h>
 
-#include <com/ubuntu/location/logging.h>
-#include <com/ubuntu/location/service/program_options.h>
+#include <com/lomiri/location/logging.h>
+#include <com/lomiri/location/service/program_options.h>
 
 #include <core/posix/fork.h>
 #include <core/posix/this_process.h>
@@ -43,8 +43,8 @@
 
 #include "web_server.h"
 
-namespace gps = com::ubuntu::location::providers::gps;
-namespace location = com::ubuntu::location;
+namespace gps = com::lomiri::location::providers::gps;
+namespace location = com::lomiri::location;
 
 namespace
 {
@@ -525,7 +525,7 @@ TEST(GpsXtraDownloader, download_attempt_throws_if_timeout_is_reached)
  ****************************************************************/
 TEST(GpsProvider, DISABLED_accessing_starting_and_stopping_gps_provider_works_requires_hardware)
 {
-    com::ubuntu::location::providers::gps::Provider provider;
+    com::lomiri::location::providers::gps::Provider provider;
     EXPECT_NO_THROW(provider.start_position_updates());
     EXPECT_NO_THROW(provider.stop_position_updates());
     EXPECT_NO_THROW(provider.start_velocity_updates());
@@ -537,8 +537,8 @@ TEST(GpsProvider, DISABLED_accessing_starting_and_stopping_gps_provider_works_re
 // We are carrying out quite some positioning here and leverage that fact for feeding location
 // and wifi/cell data to Mozilla location service instances. Please note that we feed to the mozilla location service
 // in the general case.
-#include <com/ubuntu/location/service/harvester.h>
-#include <com/ubuntu/location/service/ichnaea_reporter.h>
+#include <com/lomiri/location/service/harvester.h>
+#include <com/lomiri/location/service/ichnaea_reporter.h>
 
 namespace
 {
@@ -605,11 +605,11 @@ struct HardwareAbstractionLayerFixture : public ::testing::Test
 
         options.add(ichnaea_api_key,
                     "The API key to submit under.",
-                    std::string{"ubuntu_location_service_test_cases"});
+                    std::string{"lomiri_location_service_test_cases"});
 
         options.add(ichnaea_nickname,
                     "The nickname to submit under.",
-                    std::string{"ubuntu_location_service"});
+                    std::string{"lomiri_location_service"});
 
         options.add(ref_lat,
                     "Reference latitude value.",
@@ -647,7 +647,7 @@ struct HardwareAbstractionLayerFixture : public ::testing::Test
         if (!(::getuid() == 0))
             FAIL() << "This test has to be run as root.";
 
-        int rc = ::system("service ubuntu-location-service stop");
+        int rc = ::system("service lomiri-location-service stop");
 
         // We consciously ignore the return code of the command here.
         // The location service might not have been running before and with that
@@ -659,7 +659,7 @@ struct HardwareAbstractionLayerFixture : public ::testing::Test
 
     void TearDown()
     {
-        int rc = ::system("service ubuntu-location-service start");
+        int rc = ::system("service lomiri-location-service start");
         (void) rc;
     }
 

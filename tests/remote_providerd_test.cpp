@@ -16,13 +16,13 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/daemon.h>
-#include <com/ubuntu/location/service/provider_daemon.h>
+#include <com/lomiri/location/service/daemon.h>
+#include <com/lomiri/location/service/provider_daemon.h>
 
-#include <com/ubuntu/location/service/stub.h>
+#include <com/lomiri/location/service/stub.h>
 
-#include <com/ubuntu/location/position.h>
-#include <com/ubuntu/location/update.h>
+#include <com/lomiri/location/position.h>
+#include <com/lomiri/location/update.h>
 
 #include <core/dbus/fixture.h>
 
@@ -35,7 +35,7 @@
 
 #include <gmock/gmock.h>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 namespace
 {
@@ -54,8 +54,8 @@ TEST_F(RemoteProviderdTest, AClientReceivesUpdatesFromAnOutOfProcessProvider)
         const char* argv[] =
         {
             "--bus", "session",                                         // 2
-            "--service-name", "com.ubuntu.location.providers.Dummy",    // 4
-            "--service-path", "/com/ubuntu/location/providers/Dummy",   // 6
+            "--service-name", "com.lomiri.location.providers.Dummy",    // 4
+            "--service-path", "/com/lomiri/location/providers/Dummy",   // 6
             "--provider", "dummy::Provider"                             // 8
         };
 
@@ -83,8 +83,8 @@ TEST_F(RemoteProviderdTest, AClientReceivesUpdatesFromAnOutOfProcessProvider)
             "--bus", "session",                                                 // 2
             "--provider", "remote::Provider",                                   // 4
             "--remote::Provider::bus=session_with_address_from_env",            // 5
-            "--remote::Provider::name=com.ubuntu.location.providers.Dummy",     // 6
-            "--remote::Provider::path=/com/ubuntu/location/providers/Dummy"     // 7
+            "--remote::Provider::name=com.lomiri.location.providers.Dummy",     // 6
+            "--remote::Provider::path=/com/lomiri/location/providers/Dummy"     // 7
         };
 
         // The daemon instance requires two bus instances.
@@ -129,7 +129,7 @@ TEST_F(RemoteProviderdTest, AClientReceivesUpdatesFromAnOutOfProcessProvider)
         EXPECT_CALL(receiver, heading_update_received(_)).Times(AtLeast(1));
         EXPECT_CALL(receiver, velocity_update_received(_)).Times(AtLeast(1));
 
-        com::ubuntu::location::service::Stub service{bus};
+        com::lomiri::location::service::Stub service{bus};
 
         auto session = service.create_session_for_criteria(location::Criteria{});
 

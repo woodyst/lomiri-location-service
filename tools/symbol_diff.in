@@ -21,8 +21,8 @@
 import re
 import subprocess
 
-OLD_FILE = './debian/libubuntu-location-service@UBUNTU_LOCATION_SERVICE_VERSION_MAJOR@.symbols'
-NEW_FILE = './debian/libubuntu-location-service@UBUNTU_LOCATION_SERVICE_VERSION_MAJOR@/DEBIAN/symbols'
+OLD_FILE = './debian/liblomiri-location-service@LOMIRI_LOCATION_SERVICE_VERSION_MAJOR@.symbols'
+NEW_FILE = './debian/liblomiri-location-service@LOMIRI_LOCATION_SERVICE_VERSION_MAJOR@/DEBIAN/symbols'
 
 def run():
     old_regex = re.compile(r'^ (\(.*\))"(.*)" (.*)$')

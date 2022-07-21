@@ -1,9 +1,9 @@
-ubuntu-location-service(2) -- A location service aggregating position/velocity/heading updates and exporting them over dbus.
+lomiri-location-service(2) -- A location service aggregating position/velocity/heading updates and exporting them over dbus.
 ============================================================================================================================
 
 ## SYNOPSIS
 
-`ubuntu-location-service` `--bus` <well known bus name> `--provider` <provider> [`--provider` <provider>] [provider specific options]
+`lomiri-location-service` `--bus` <well known bus name> `--provider` <provider> [`--provider` <provider>] [provider specific options]
 
 ## DESCRIPTION
 
@@ -59,7 +59,7 @@ These options control the logging behavior of the service:
 ## EXAMPLES
 
 Starting the service with a gps and a skyhook provider, exposing it on the system bus:
-    $ /usr/bin/ubuntu-location-service/examples/service
+    $ /usr/bin/lomiri-location-service/examples/service
         --bus system 
         --provider gps::Provider 
         --provider skyhook::Provider 
@@ -67,7 +67,7 @@ Starting the service with a gps and a skyhook provider, exposing it on the syste
         --skyhook::Provider::realm=ut_testing.com
 
 A slightly more verbose instance:
-    $ /usr/bin/ubuntu-location-service/examples/service 
+    $ /usr/bin/lomiri-location-service/examples/service 
       --logtostderr=true
       --v=5
       --bus system
@@ -78,4 +78,4 @@ A slightly more verbose instance:
 
 ## COPYRIGHT
 
-Ubuntu Location Service is Copyright (C) 2012 Canonical Ltd.
+Lomiri Location Service is Copyright (C) 2012 Canonical Ltd.

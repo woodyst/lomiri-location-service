@@ -1,4 +1,4 @@
-#include <com/ubuntu/location/connectivity/manager.h>
+#include <com/lomiri/location/connectivity/manager.h>
 
 #include <core/posix/signal.h>
 
@@ -8,7 +8,7 @@
 
 #include <thread>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 namespace
 {
@@ -25,7 +25,7 @@ typedef std::vector<location::connectivity::WirelessNetwork::Ptr> WirelessNetwor
 //   (3.) Bootstrap your own setup by explicitly getting all visible wifis and connected cells.
 int main(int argc, char** argv)
 {
-    google::InitGoogleLogging("com::ubuntu::location::connectivity");
+    google::InitGoogleLogging("com::lomiri::location::connectivity");
 
     // We catch sig-term to exit cleanly.
     auto trap = core::posix::trap_signals_for_all_subsequent_threads({core::posix::Signal::sig_term});

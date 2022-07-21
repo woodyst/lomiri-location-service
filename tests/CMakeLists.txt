@@ -31,10 +31,10 @@ macro(LOCATION_SERVICE_ADD_TEST test_name src)
   target_link_libraries(
     ${test_name}
 
-    ubuntu-location-service
-    ubuntu-location-service-connectivity
-    ubuntu-location-service-provider-daemon
-    ubuntu-location-service-daemon
+    lomiri-location-service
+    lomiri-location-service-connectivity
+    lomiri-location-service-provider-daemon
+    lomiri-location-service-daemon
 
     mongoose
 
@@ -50,10 +50,10 @@ macro(LOCATION_SERVICE_ADD_TEST test_name src)
 
   add_test(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name} --gtest_filter=*-*requires*)
 
-  # Address android's limit on cmdline length and distill ubuntu-location-service into uls
+  # Address android's limit on cmdline length and distill lomiri-location-service into lls
   install(
     TARGETS ${test_name}
-    DESTINATION /usr/libexec/uls-tests
+    DESTINATION /usr/libexec/lls-tests
   )
 endmacro(LOCATION_SERVICE_ADD_TEST)
 
@@ -101,7 +101,7 @@ if (LOCATION_SERVICE_ENABLE_GEOCLUE_PROVIDERS)
   target_link_libraries(
     geoclue_provider_test
 
-    ubuntu-location-service
+    lomiri-location-service
 
     ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES}

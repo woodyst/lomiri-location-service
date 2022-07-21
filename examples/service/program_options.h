@@ -23,7 +23,7 @@
 #include <iostream>
 
 namespace com {
-namespace ubuntu {
+namespace lomiri {
 namespace location {
 
 struct ProgramOptions

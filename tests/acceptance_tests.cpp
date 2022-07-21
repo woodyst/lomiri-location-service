@@ -16,26 +16,26 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/criteria.h>
-#include <com/ubuntu/location/clock.h>
-#include <com/ubuntu/location/engine.h>
-#include <com/ubuntu/location/heading.h>
-#include <com/ubuntu/location/logging.h>
-#include <com/ubuntu/location/position.h>
-#include <com/ubuntu/location/provider.h>
-#include <com/ubuntu/location/update.h>
-#include <com/ubuntu/location/velocity.h>
-#include <com/ubuntu/location/wgs84/altitude.h>
-#include <com/ubuntu/location/wgs84/latitude.h>
-#include <com/ubuntu/location/wgs84/longitude.h>
+#include <com/lomiri/location/criteria.h>
+#include <com/lomiri/location/clock.h>
+#include <com/lomiri/location/engine.h>
+#include <com/lomiri/location/heading.h>
+#include <com/lomiri/location/logging.h>
+#include <com/lomiri/location/position.h>
+#include <com/lomiri/location/provider.h>
+#include <com/lomiri/location/update.h>
+#include <com/lomiri/location/velocity.h>
+#include <com/lomiri/location/wgs84/altitude.h>
+#include <com/lomiri/location/wgs84/latitude.h>
+#include <com/lomiri/location/wgs84/longitude.h>
 
-#include <com/ubuntu/location/providers/dummy/provider.h>
+#include <com/lomiri/location/providers/dummy/provider.h>
 
-#include <com/ubuntu/location/service/daemon.h>
-#include <com/ubuntu/location/service/default_configuration.h>
-#include <com/ubuntu/location/service/implementation.h>
-#include <com/ubuntu/location/service/program_options.h>
-#include <com/ubuntu/location/service/stub.h>
+#include <com/lomiri/location/service/daemon.h>
+#include <com/lomiri/location/service/default_configuration.h>
+#include <com/lomiri/location/service/implementation.h>
+#include <com/lomiri/location/service/program_options.h>
+#include <com/lomiri/location/service/stub.h>
 
 #include <core/dbus/announcer.h>
 #include <core/dbus/bus.h>
@@ -60,9 +60,9 @@
 #include <set>
 #include <stdexcept>
 
-namespace cul = com::ubuntu::location;
-namespace culs = com::ubuntu::location::service;
-namespace culss = com::ubuntu::location::service::session;
+namespace cll = com::lomiri::location;
+namespace clls = com::lomiri::location::service;
+namespace cllss = com::lomiri::location::service::session;
 namespace dbus = core::dbus;
 
 namespace
@@ -76,7 +76,7 @@ bool setup_trust_store_permission_manager_for_testing()
 
 static const bool trust_store_is_set_up_for_testing = setup_trust_store_permission_manager_for_testing();
 
-struct NullReporter : public culs::Harvester::Reporter
+struct NullReporter : public clls::Harvester::Reporter
 {
     NullReporter() = default;
 
@@ -93,14 +93,14 @@ struct NullReporter : public culs::Harvester::Reporter
     /**
      * @brief Triggers the reporter to send off the information.
      */
-    void report(const cul::Update<cul::Position>&,
-                const std::vector<cul::connectivity::WirelessNetwork::Ptr>&,
-                const std::vector<cul::connectivity::RadioCell::Ptr>&)
+    void report(const cll::Update<cll::Position>&,
+                const std::vector<cll::connectivity::WirelessNetwork::Ptr>&,
+                const std::vector<cll::connectivity::RadioCell::Ptr>&)
     {
     }
 };
 
-struct NullSettings : public cul::Settings
+struct NullSettings : public cll::Settings
 {
     // Syncs the current settings to implementation-specific backends.
     void sync() override
@@ -116,7 +116,7 @@ struct NullSettings : public cul::Settings
     // Gets an integer value known for the given key, or throws Error::NoValueForKey.
     std::string get_string_for_key_or_throw(const std::string& key) override
     {
-        throw cul::Settings::Error::NoValueForKey{key};
+        throw cll::Settings::Error::NoValueForKey{key};
     }
 
     // Sets values known for the given key.
@@ -126,7 +126,7 @@ struct NullSettings : public cul::Settings
     }
 };
 
-cul::Settings::Ptr null_settings()
+cll::Settings::Ptr null_settings()
 {
     return std::make_shared<NullSettings>();
 }
@@ -136,15 +136,15 @@ struct LocationServiceStandalone : public core::dbus::testing::Fixture
 };
 
 template<typename T>
-cul::Update<T> update_as_of_now(const T& value = T())
+cll::Update<T> update_as_of_now(const T& value = T())
 {
-    return cul::Update<T>{value, cul::Clock::now()};
+    return cll::Update<T>{value, cll::Clock::now()};
 }
 
-class DummyProvider : public cul::Provider
+class DummyProvider : public cll::Provider
 {
 public:
-    DummyProvider() : cul::Provider()
+    DummyProvider() : cll::Provider()
     {
     }
 
@@ -152,59 +152,59 @@ public:
     {
     }
 
-    void inject_update(const cul::Update<cul::Position>& update)
+    void inject_update(const cll::Update<cll::Position>& update)
     {
         mutable_updates().position(update);
     }
 
-    void inject_update(const cul::Update<cul::Velocity>& update)
+    void inject_update(const cll::Update<cll::Velocity>& update)
     {
         mutable_updates().velocity(update);
     }
 
-    void inject_update(const cul::Update<cul::Heading>& update)
+    void inject_update(const cll::Update<cll::Heading>& update)
     {
         mutable_updates().heading(update);
     }
 
-    bool matches_criteria(const cul::Criteria& /*criteria*/)
+    bool matches_criteria(const cll::Criteria& /*criteria*/)
     {
         return true;
     }
 };
 
-struct AlwaysGrantingPermissionManager : public cul::service::PermissionManager
+struct AlwaysGrantingPermissionManager : public cll::service::PermissionManager
 {
     PermissionManager::Result
-    check_permission_for_credentials(const cul::Criteria&,
-                                     const cul::service::Credentials&)
+    check_permission_for_credentials(const cll::Criteria&,
+                                     const cll::service::Credentials&)
     {
         return PermissionManager::Result::granted;
     }
 };
 
-auto timestamp = cul::Clock::now();
+auto timestamp = cll::Clock::now();
 
 // Create reference objects for injecting and validating updates.
-cul::Update<cul::Position> reference_position_update
+cll::Update<cll::Position> reference_position_update
 {
     {
-        cul::wgs84::Latitude{9. * cul::units::Degrees},
-        cul::wgs84::Longitude{53. * cul::units::Degrees},
-        cul::wgs84::Altitude{-2. * cul::units::Meters}
+        cll::wgs84::Latitude{9. * cll::units::Degrees},
+        cll::wgs84::Longitude{53. * cll::units::Degrees},
+        cll::wgs84::Altitude{-2. * cll::units::Meters}
     },
     timestamp
 };
 
-cul::Update<cul::Velocity> reference_velocity_update
+cll::Update<cll::Velocity> reference_velocity_update
 {
-    {5. * cul::units::MetersPerSecond},
+    {5. * cll::units::MetersPerSecond},
     timestamp
 };
 
-cul::Update<cul::Heading> reference_heading_update
+cll::Update<cll::Heading> reference_heading_update
 {
-    {120. * cul::units::Degrees},
+    {120. * cll::units::Degrees},
     timestamp
 };
 } // namespace
@@ -236,22 +236,22 @@ TEST_F(LocationServiceStandalone, SessionsReceiveUpdatesViaDBus)
         std::thread t2{[outgoing](){outgoing->run();}};
 
         auto dummy = new DummyProvider();
-        cul::Provider::Ptr helper(dummy);
+        cll::Provider::Ptr helper(dummy);
 
-        cul::service::DefaultConfiguration config;
-        cul::service::Implementation::Configuration configuration
+        cll::service::DefaultConfiguration config;
+        cll::service::Implementation::Configuration configuration
         {
             incoming,
             outgoing,
             config.the_engine(config.the_provider_set(helper), config.the_provider_selection_policy(), null_settings()),
             config.the_permission_manager(incoming),
-            cul::service::Harvester::Configuration
+            cll::service::Harvester::Configuration
             {
-                cul::connectivity::platform_default_manager(),
+                cll::connectivity::platform_default_manager(),
                 std::make_shared<NullReporter>()
             }
         };
-        auto location_service = std::make_shared<cul::service::Implementation>(configuration);
+        auto location_service = std::make_shared<cll::service::Implementation>(configuration);
 
         sync_start.try_signal_ready_for(std::chrono::milliseconds{500});
 
@@ -286,28 +286,28 @@ TEST_F(LocationServiceStandalone, SessionsReceiveUpdatesViaDBus)
         std::thread t{[bus](){bus->run();}};
 
         auto location_service = dbus::resolve_service_on_bus<
-            cul::service::Interface,
-            cul::service::Stub>(bus);
+            cll::service::Interface,
+            cll::service::Stub>(bus);
         
-        auto s1 = location_service->create_session_for_criteria(cul::Criteria{});
+        auto s1 = location_service->create_session_for_criteria(cll::Criteria{});
 
         std::cout << "Successfully created session" << std::endl;
 
-        cul::Update<cul::Position> position;
+        cll::Update<cll::Position> position;
         auto c1 = s1->updates().position.changed().connect(
-            [&](const cul::Update<cul::Position>& new_position) {
+            [&](const cll::Update<cll::Position>& new_position) {
                 std::cout << "On position updated: " << new_position << std::endl;
                 position = new_position;
             });
-        cul::Update<cul::Velocity> velocity;
+        cll::Update<cll::Velocity> velocity;
         auto c2 = s1->updates().velocity.changed().connect(
-            [&](const cul::Update<cul::Velocity>& new_velocity) {
+            [&](const cll::Update<cll::Velocity>& new_velocity) {
                 std::cout << "On velocity_changed " << new_velocity << std::endl;
                 velocity = new_velocity;
             });
-        cul::Update<cul::Heading> heading;
+        cll::Update<cll::Heading> heading;
         auto c3 = s1->updates().heading.changed().connect(
-            [&](const cul::Update<cul::Heading>& new_heading) {
+            [&](const cll::Update<cll::Heading>& new_heading) {
                 std::cout << "On heading changed: " << new_heading << std::endl;
                 heading = new_heading;
                 bus->stop();
@@ -315,9 +315,9 @@ TEST_F(LocationServiceStandalone, SessionsReceiveUpdatesViaDBus)
         
         std::cout << "Created event connections, starting updates...";
 
-        s1->updates().position_status = culss::Interface::Updates::Status::enabled;
-        s1->updates().heading_status = culss::Interface::Updates::Status::enabled;
-        s1->updates().velocity_status = culss::Interface::Updates::Status::enabled;
+        s1->updates().position_status = cllss::Interface::Updates::Status::enabled;
+        s1->updates().heading_status = cllss::Interface::Updates::Status::enabled;
+        s1->updates().velocity_status = cllss::Interface::Updates::Status::enabled;
         
         std::cout << "done" << std::endl;
 
@@ -358,23 +358,23 @@ TEST_F(LocationServiceStandalone, EngineStatusCanBeQueriedAndAdjusted)
         outgoing->install_executor(core::dbus::asio::make_executor(outgoing));
 
         auto dummy = new DummyProvider();
-        cul::Provider::Ptr helper(dummy);
+        cll::Provider::Ptr helper(dummy);
 
-        cul::service::DefaultConfiguration config;
-        cul::service::Implementation::Configuration configuration
+        cll::service::DefaultConfiguration config;
+        cll::service::Implementation::Configuration configuration
         {
             incoming,
             outgoing,
             config.the_engine(config.the_provider_set(helper), config.the_provider_selection_policy(), null_settings()),
             config.the_permission_manager(incoming),
-            cul::service::Harvester::Configuration
+            cll::service::Harvester::Configuration
             {
-                cul::connectivity::platform_default_manager(),
+                cll::connectivity::platform_default_manager(),
                 std::make_shared<NullReporter>()
             }
         };
-        configuration.engine->configuration.engine_state = cul::Engine::Status::on;
-        auto location_service = std::make_shared<cul::service::Implementation>(configuration);
+        configuration.engine->configuration.engine_state = cll::Engine::Status::on;
+        auto location_service = std::make_shared<cll::service::Implementation>(configuration);
 
         sync_start.try_signal_ready_for(std::chrono::milliseconds{500});
 
@@ -403,8 +403,8 @@ TEST_F(LocationServiceStandalone, EngineStatusCanBeQueriedAndAdjusted)
 
         auto bus = session_bus();
         auto location_service = dbus::resolve_service_on_bus<
-            cul::service::Interface,
-            cul::service::Stub>(bus);
+            cll::service::Interface,
+            cll::service::Stub>(bus);
 
         EXPECT_TRUE(location_service->is_online());
         location_service->is_online() = false;
@@ -439,23 +439,23 @@ TEST_F(LocationServiceStandalone, SatellitePositioningStatusCanBeQueriedAndAdjus
         outgoing->install_executor(core::dbus::asio::make_executor(outgoing));
 
         auto dummy = new DummyProvider();
-        cul::Provider::Ptr helper(dummy);
+        cll::Provider::Ptr helper(dummy);
 
-        cul::service::DefaultConfiguration config;
-        cul::service::Implementation::Configuration configuration
+        cll::service::DefaultConfiguration config;
+        cll::service::Implementation::Configuration configuration
         {
             incoming,
             outgoing,
             config.the_engine(config.the_provider_set(helper), config.the_provider_selection_policy(), null_settings()),
             config.the_permission_manager(incoming),
-            cul::service::Harvester::Configuration
+            cll::service::Harvester::Configuration
             {
-                cul::connectivity::platform_default_manager(),
+                cll::connectivity::platform_default_manager(),
                 std::make_shared<NullReporter>()
             }
         };
-        configuration.engine->configuration.satellite_based_positioning_state.set(cul::SatelliteBasedPositioningState::on);
-        auto location_service = std::make_shared<cul::service::Implementation>(configuration);
+        configuration.engine->configuration.satellite_based_positioning_state.set(cll::SatelliteBasedPositioningState::on);
+        auto location_service = std::make_shared<cll::service::Implementation>(configuration);
 
         sync_start.try_signal_ready_for(std::chrono::milliseconds{500});
 
@@ -484,8 +484,8 @@ TEST_F(LocationServiceStandalone, SatellitePositioningStatusCanBeQueriedAndAdjus
 
         auto bus = session_bus();
         auto location_service = dbus::resolve_service_on_bus<
-            cul::service::Interface,
-            cul::service::Stub>(bus);
+            cll::service::Interface,
+            cll::service::Stub>(bus);
 
         EXPECT_TRUE(location_service->does_satellite_based_positioning());
         location_service->does_satellite_based_positioning() = false;
@@ -519,22 +519,22 @@ TEST_F(LocationServiceStandalone, WifiAndCellIdReportingStateCanBeQueriedAndAjdu
         outgoing->install_executor(core::dbus::asio::make_executor(outgoing));
 
         auto dummy = new DummyProvider();
-        cul::Provider::Ptr helper(dummy);
+        cll::Provider::Ptr helper(dummy);
 
-        cul::service::DefaultConfiguration config;
-        cul::service::Implementation::Configuration configuration
+        cll::service::DefaultConfiguration config;
+        cll::service::Implementation::Configuration configuration
         {
             incoming,
             outgoing,
             config.the_engine(config.the_provider_set(helper), config.the_provider_selection_policy(), null_settings()),
             config.the_permission_manager(incoming),
-            cul::service::Harvester::Configuration
+            cll::service::Harvester::Configuration
             {
-                cul::connectivity::platform_default_manager(),
+                cll::connectivity::platform_default_manager(),
                 std::make_shared<NullReporter>()
             }
         };
-        auto location_service = std::make_shared<cul::service::Implementation>(configuration);
+        auto location_service = std::make_shared<cll::service::Implementation>(configuration);
 
         std::thread t1{[incoming](){incoming->run();}};
         std::thread t2{[outgoing](){outgoing->run();}};
@@ -563,8 +563,8 @@ TEST_F(LocationServiceStandalone, WifiAndCellIdReportingStateCanBeQueriedAndAjdu
 
         auto bus = session_bus();
         auto location_service = dbus::resolve_service_on_bus<
-            cul::service::Interface,
-            cul::service::Stub>(bus);
+            cll::service::Interface,
+            cll::service::Stub>(bus);
 
         EXPECT_FALSE(location_service->does_report_cell_and_wifi_ids());
         location_service->does_report_cell_and_wifi_ids() = true;
@@ -582,10 +582,10 @@ TEST_F(LocationServiceStandalone, VisibleSpaceVehiclesCanBeQueried)
 
     core::testing::CrossProcessSync sync_start;
 
-    cul::SpaceVehicle sv;
-    sv.key.type = cul::SpaceVehicle::Type::gps;
+    cll::SpaceVehicle sv;
+    sv.key.type = cll::SpaceVehicle::Type::gps;
     sv.has_ephimeris_data = true;
-    static const std::map<cul::SpaceVehicle::Key, cul::SpaceVehicle> visible_space_vehicles
+    static const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle> visible_space_vehicles
     {
         {sv.key, sv}
     };
@@ -607,22 +607,22 @@ TEST_F(LocationServiceStandalone, VisibleSpaceVehiclesCanBeQueried)
         outgoing->install_executor(core::dbus::asio::make_executor(outgoing));
 
         auto dummy = new DummyProvider();
-        cul::Provider::Ptr helper(dummy);
+        cll::Provider::Ptr helper(dummy);
 
-        cul::service::DefaultConfiguration config;
-        cul::service::Implementation::Configuration configuration
+        cll::service::DefaultConfiguration config;
+        cll::service::Implementation::Configuration configuration
         {
             incoming,
             outgoing,
             config.the_engine(config.the_provider_set(helper), config.the_provider_selection_policy(), null_settings()),
             config.the_permission_manager(incoming),
-            cul::service::Harvester::Configuration
+            cll::service::Harvester::Configuration
             {
-                cul::connectivity::platform_default_manager(),
+                cll::connectivity::platform_default_manager(),
                 std::make_shared<NullReporter>()
             }
         };
-        auto location_service = std::make_shared<cul::service::Implementation>(configuration);
+        auto location_service = std::make_shared<cll::service::Implementation>(configuration);
 
         configuration.engine->updates.visible_space_vehicles.set(visible_space_vehicles);
 
@@ -653,8 +653,8 @@ TEST_F(LocationServiceStandalone, VisibleSpaceVehiclesCanBeQueried)
 
         auto bus = session_bus();
         auto location_service = dbus::resolve_service_on_bus<
-            cul::service::Interface,
-            cul::service::Stub>(bus);
+            cll::service::Interface,
+            cll::service::Stub>(bus);
 
         auto svs = location_service->visible_space_vehicles().get();
 
@@ -687,9 +687,9 @@ struct LocationServiceStandaloneLoad : public LocationServiceStandalone
         // Test duration in [s]
         static constexpr const char* test_duration{"test_duration"};
     };
-    static cul::ProgramOptions init_options()
+    static cll::ProgramOptions init_options()
     {
-        cul::ProgramOptions options;
+        cll::ProgramOptions options;
 
         options.environment_prefix("ACCEPTANCE_TEST_");
 
@@ -725,7 +725,7 @@ struct LocationServiceStandaloneLoad : public LocationServiceStandalone
     }
 
     // Initialize our options pack.
-    cul::ProgramOptions options = init_options();
+    cll::ProgramOptions options = init_options();
     // And force parsing of the environment.
     bool options_parsed_from_env
     {
@@ -778,40 +778,40 @@ TEST_F(LocationServiceStandaloneLoad, MultipleClientsConnectingAndDisconnectingW
 
         VLOG(1) << "Server started: " << getpid();
 
-        cul::Configuration dummy_provider_config;
+        cll::Configuration dummy_provider_config;
 
         dummy_provider_config.add(
-                    cul::providers::dummy::Configuration::Keys::reference_position_lat,
+                    cll::providers::dummy::Configuration::Keys::reference_position_lat,
                     ref_lat);
 
         dummy_provider_config.add(
-                    cul::providers::dummy::Configuration::Keys::reference_position_lon,
+                    cll::providers::dummy::Configuration::Keys::reference_position_lon,
                     ref_lon);
 
         dummy_provider_config.add(
-                    cul::providers::dummy::Configuration::Keys::reference_heading,
+                    cll::providers::dummy::Configuration::Keys::reference_heading,
                     ref_heading);
 
         dummy_provider_config.add(
-                    cul::providers::dummy::Configuration::Keys::reference_velocity,
+                    cll::providers::dummy::Configuration::Keys::reference_velocity,
                     ref_velocity);
 
         dummy_provider_config.add(
-                    cul::providers::dummy::Configuration::Keys::update_period,
+                    cll::providers::dummy::Configuration::Keys::update_period,
                     update_period);
 
-        std::map<std::string, cul::Configuration> provider_config
+        std::map<std::string, cll::Configuration> provider_config
         {
-            {cul::providers::dummy::Provider::class_name(), dummy_provider_config}
+            {cll::providers::dummy::Provider::class_name(), dummy_provider_config}
         };
 
-        cul::service::Daemon::Configuration config;
+        cll::service::Daemon::Configuration config;
         config.incoming = std::make_shared<core::dbus::Bus>(core::posix::this_process::env::get_or_throw("DBUS_SESSION_BUS_ADDRESS"));
         config.outgoing = std::make_shared<core::dbus::Bus>(core::posix::this_process::env::get_or_throw("DBUS_SESSION_BUS_ADDRESS"));
         config.is_testing_enabled = false;
         config.providers =
         {
-            cul::providers::dummy::Provider::class_name()
+            cll::providers::dummy::Provider::class_name()
         };
         config.provider_options = provider_config;
         config.settings = null_settings();
@@ -820,7 +820,7 @@ TEST_F(LocationServiceStandaloneLoad, MultipleClientsConnectingAndDisconnectingW
 
         try
         {
-            status = static_cast<core::posix::exit::Status>(cul::service::Daemon::main(config));
+            status = static_cast<core::posix::exit::Status>(cll::service::Daemon::main(config));
         } catch(const std::exception& e)
         {
             ADD_FAILURE() << e.what();
@@ -854,15 +854,15 @@ TEST_F(LocationServiceStandaloneLoad, MultipleClientsConnectingAndDisconnectingW
         try
         {
             auto location_service = dbus::resolve_service_on_bus<
-                cul::service::Interface,
-                cul::service::Stub>(bus);
+                cll::service::Interface,
+                cll::service::Stub>(bus);
 
-            auto s1 = location_service->create_session_for_criteria(cul::Criteria{});
+            auto s1 = location_service->create_session_for_criteria(cll::Criteria{});
 
             VLOG(1) << "Successfully created session: " << s1 << std::flush;
 
             auto c1 = s1->updates().position.changed().connect(
-                [this](const cul::Update<cul::Position>& new_position)
+                [this](const cll::Update<cll::Position>& new_position)
                 {
                     VLOG(100) << new_position;
 
@@ -871,14 +871,14 @@ TEST_F(LocationServiceStandaloneLoad, MultipleClientsConnectingAndDisconnectingW
                 });
 
             auto c2 = s1->updates().velocity.changed().connect(
-                [this](const cul::Update<cul::Velocity>& new_velocity)
+                [this](const cll::Update<cll::Velocity>& new_velocity)
                 {
                     VLOG(100) << new_velocity;
                     EXPECT_DOUBLE_EQ(ref_velocity, new_velocity.value.value());
                 });
 
             auto c3 = s1->updates().heading.changed().connect(
-                [this](const cul::Update<cul::Heading>& new_heading)
+                [this](const cll::Update<cll::Heading>& new_heading)
                 {
                     VLOG(100) << new_heading;
                     EXPECT_DOUBLE_EQ(ref_heading, new_heading.value.value());
@@ -886,9 +886,9 @@ TEST_F(LocationServiceStandaloneLoad, MultipleClientsConnectingAndDisconnectingW
 
             VLOG(100) << "Created event connections, starting updates..." << std::flush;
 
-            s1->updates().position_status = culss::Interface::Updates::Status::enabled;
-            s1->updates().heading_status = culss::Interface::Updates::Status::enabled;
-            s1->updates().velocity_status = culss::Interface::Updates::Status::enabled;
+            s1->updates().position_status = cllss::Interface::Updates::Status::enabled;
+            s1->updates().heading_status = cllss::Interface::Updates::Status::enabled;
+            s1->updates().velocity_status = cllss::Interface::Updates::Status::enabled;
 
             trap->run();
         } catch(const std::exception& e)

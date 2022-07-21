@@ -33,7 +33,7 @@ Homepage: https://gitlab.com/ubports/development/core/location-service
 Vcs-Git: https://gitlab.com/ubports/development/core/location-service.git
 Vcs-Browser: https://gitlab.com/ubports/development/core/location-service
 
-Package: libubuntu-location-service3
+Package: liblomiri-location-service3
 Section: libs
 Architecture: any
 Multi-Arch: same
@@ -45,24 +45,24 @@ Description: location service aggregating position/velocity/heading
  .
  Contains the shared library needed by client applications.
 
-Package: libubuntu-location-service-dev
+Package: liblomiri-location-service-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Recommends: ubuntu-location-service-doc,
-Depends: libubuntu-location-service3 (= ${binary:Version}),
+Recommends: lomiri-location-service-doc,
+Depends: liblomiri-location-service3 (= ${binary:Version}),
          libdbus-1-dev,
          libdbus-cpp-dev,
          libboost-dev,
          ${misc:Depends},
-Suggests: ubuntu-location-service-doc,
+Suggests: lomiri-location-service-doc,
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .
- Contains header files required to develop clients talking to the ubuntu
+ Contains header files required to develop clients talking to the Lomiri
  location service.
 
-Package: ubuntu-location-service-tests
+Package: lomiri-location-service-tests
 Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends},
@@ -71,38 +71,38 @@ Description: location service aggregating position/velocity/heading
  .
  Contains all test executables.
 
-Package: ubuntu-location-service-bin
+Package: lomiri-location-service-bin
 Architecture: any
-Depends: libubuntu-location-service3 (= ${binary:Version}),
+Depends: liblomiri-location-service3 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends},
          trust-store-bin,
-Breaks: ubuntu-location-service-examples (<< 0.0.2),
-Replaces: ubuntu-location-service-examples (<< 0.0.2),
+Breaks: lomiri-location-service-examples (<< 0.0.2),
+Replaces: lomiri-location-service-examples (<< 0.0.2),
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains the service executable and man pages.
 
-Package: ubuntu-location-service-examples
+Package: lomiri-location-service-examples
 Architecture: any
 Multi-Arch: same
-Depends: libubuntu-location-service3 (= ${binary:Version}),
+Depends: liblomiri-location-service3 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends},
-         ubuntu-location-service-doc,
+         lomiri-location-service-doc,
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains example service and client.
 
-Package: ubuntu-location-service-doc
+Package: lomiri-location-service-doc
 Section: doc
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends},
 Build-Profiles: <!nodoc>
-Recommends: ubuntu-location-service-examples,
+Recommends: lomiri-location-service-examples,
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .

@@ -16,8 +16,8 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/providers/gps/sntp_client.h>
-#include <com/ubuntu/location/service/runtime.h>
+#include <com/lomiri/location/providers/gps/sntp_client.h>
+#include <com/lomiri/location/service/runtime.h>
 
 #include <future>
 
@@ -26,7 +26,7 @@
 #include <gtest/gtest.h>
 
 namespace env = core::posix::this_process::env;
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 namespace sntp = location::providers::gps::sntp;
 
 namespace
@@ -44,7 +44,7 @@ struct SntpClient : public ::testing::Test
     }
 
     std::shared_ptr<location::service::Runtime> rt = location::service::Runtime::create();
-    std::string host = env::get("UBUNTU_LOCATION_SERVICE_NTP_HOST_FOR_TESTING", "ntp.ubuntu.com");
+    std::string host = env::get("LOMIRI_LOCATION_SERVICE_NTP_HOST_FOR_TESTING", "ntp.ubuntu.com");
 };
 }
 

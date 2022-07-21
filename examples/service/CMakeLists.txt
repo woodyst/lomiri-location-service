@@ -23,7 +23,7 @@ add_executable(
 target_link_libraries(
     client
 
-    ubuntu-location-service
+    lomiri-location-service
 
     ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES}
@@ -34,7 +34,7 @@ target_link_libraries(
 target_link_libraries(
     service
 
-    ubuntu-location-service
+    lomiri-location-service
 
     ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES}
@@ -43,13 +43,13 @@ target_link_libraries(
 )
 
 add_custom_command(
-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/ubuntu-location-service.1"
-    COMMAND ronn --roff --pipe --organization=ubuntu ${CMAKE_CURRENT_SOURCE_DIR}/service.1.ronn > ${CMAKE_CURRENT_BINARY_DIR}/ubuntu-location-service.1
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.1"
+    COMMAND ronn --roff --pipe --organization=ubports ${CMAKE_CURRENT_SOURCE_DIR}/service.1.ronn > ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.1
 )
 
 add_custom_target(
-    ubuntu-location-service-man-page
-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/ubuntu-location-service.1"
+    lomiri-location-service-man-page
+    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/lomiri-location-service.1"
 )
 
 install(
@@ -58,6 +58,6 @@ install(
 )
 
 install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/ubuntu-location-service.1
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/lomiri-location-service.1
     DESTINATION share/doc/${CMAKE_PROJECT_NAME}/man
 )

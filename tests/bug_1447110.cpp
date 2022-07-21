@@ -16,14 +16,14 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/daemon.h>
+#include <com/lomiri/location/service/daemon.h>
 
 #include <core/posix/fork.h>
 
 #include <gtest/gtest.h>
 #include <boost/filesystem.hpp>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 namespace
 {
@@ -36,12 +36,12 @@ auto null_dbus_connection_factory = [](core::dbus::WellKnownBus)
 TEST(Bug1447110, obsolete_log_directory_is_removed_on_startup)
 {
     // We are trying to establish the pre-condition that a non-empty
-    // directory /var/log/ubuntu-location-service exists. If we fail to do
+    // directory /var/log/lomiri-location-service exists. If we fail to do
     // so, we leave a message and bail out, not marking the test as failure.
     {
         boost::system::error_code ec;
-        boost::filesystem::remove_all("/var/log/ubuntu-location-service/not_empty", ec);
-        if (not boost::filesystem::create_directories("/var/log/ubuntu-location-service/not_empty", ec) || ec)
+        boost::filesystem::remove_all("/var/log/lomiri-location-service/not_empty", ec);
+        if (not boost::filesystem::create_directories("/var/log/lomiri-location-service/not_empty", ec) || ec)
         {
             std::cerr << "Unable to create directory for testing purposes." << std::endl;
             return;
@@ -62,5 +62,5 @@ TEST(Bug1447110, obsolete_log_directory_is_removed_on_startup)
     }, core::posix::StandardStream::stderr);
 
     std::this_thread::sleep_for(std::chrono::seconds{1});
-    EXPECT_FALSE(boost::filesystem::exists("/var/log/ubuntu-location-service"));
+    EXPECT_FALSE(boost::filesystem::exists("/var/log/lomiri-location-service"));
 }

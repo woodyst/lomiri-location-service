@@ -48,8 +48,8 @@ this providers a baseline test for the app to trust-store to
 location-service path.
 
  - phablet-shell into the phone:
-   - `sudo service ubuntu-location-service stop && sudo /usr/bin/ubuntu-location-serviced --bus system --provider dummy::Provider --dummy::Provider::ReferenceLocationLat=48.857503 --dummy::Provider::ReferenceLocationLon=2.295072`
- - As phablet, start the trust store again (it stops when location-service is stopped) with: `start ubuntu-location-service-trust-stored`
+   - `sudo service lomiri-location-service stop && sudo /usr/bin/lomiri-location-serviced --bus system --provider dummy::Provider --dummy::Provider::ReferenceLocationLat=48.857503 --dummy::Provider::ReferenceLocationLon=2.295072`
+ - As phablet, start the trust store again (it stops when location-service is stopped) with: `start lomiri-location-service-trust-stored`
  - Ensure that all AP tests for the webbrowser pass as expected
  - Point the browser to maps.google.com (alternatively: here.com, maps.bing.fr).
  - Request centering the map on current position and observe if it works correctly (should show the Eiffel tower)
@@ -63,11 +63,11 @@ location-service path.
 This applies only if GPS provider is enabled.
 
  - (If applicable: Remember to add the silo you are testing)
- - `sudo apt-get install ubuntu-location-service-tests`
+ - `sudo apt-get install lomiri-location-service-tests`
  - If you want to send off crowdsourced information, i.e., information about visible wifis and visible radio cells for the obtained location fixes to Mozilla's location service and our own instance: 
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  /usr/libexec/lls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
  - If you '''don't''' want to send off crowdsourced information:
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 /usr/libexec/lls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_without_supl_benchmark_requires_hardware`
 
  - The test will output a lot of diagnostic information to the
    terminal and will take ~30 minutes. If satellite visibility is
@@ -79,7 +79,7 @@ This applies only if GPS provider is enabled.
 **Does not apply to Krillin**
 
 Please note that the Krillin GPS chipset driver and its integration
-within Ubuntu does not support vanilla AGPS (i.e., SUPL) right
+within Ubuntu Touch does not support vanilla AGPS (i.e., SUPL) right
 now. For that, this test case is irrelevant for Krillin and is likely
 to fail.
 
@@ -87,16 +87,16 @@ This applied only if GPS provider and some other provider (giving
 _A_ssistance) are enabled.
 
  - Add the silo.
- - `sudo apt-get install ubuntu-location-service-tests`
+ - `sudo apt-get install lomiri-location-service-tests`
  - Obtain a (rough) location estimate for your current location on Google maps.
  - Make sure to replace INSERT_ESTIMATE_HERE with the respective
    values obtained from Google maps.
  - If you want to send off crowdsourced information, i.e., information
    about visible wifis and visible radio cells for the obtained
    location fixes to Mozilla's location service and our own instance:
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_ENABLE_HARVESTING_DURING_TESTS=1  GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/libexec/lls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
  - If you '''don't''' want to send off crowdsourced information:
-   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/libexec/uls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
+   - `sudo GLOG_v=40 GLOG_logtostderr=1 GPS_TEST_REF_LAT=INSERT_ESTIMATE_HERE GPS_TEST_REF_LON=INSERT_ESTIMATE_HERE /usr/libexec/lls-tests/gps_provider_test --gtest_filter=*.time_to_first_fix_cold_start_with_supl_benchmark_requires_hardware`
 
  - The test will output a lot of diagnostic information to the
    terminal and will take ~10 minutes or less. The test will
@@ -110,8 +110,8 @@ cell measurements as well as information on the current overall
 connectivity status of the device. Please execute the following
 commands on a newly flashed device with a writable image:
 
-  - `sudo apt-get update && sudo apt-get build-dep location-service && sudo apt-get install libubuntu-location-service-dev ubuntu-location-service-examples`
-  - `mkdir /tmp/build && cd /tmp/build && cmake /usr/share/ubuntu-location-service/examples/standalone/connectivity/ && make`
+  - `sudo apt-get update && sudo apt-get build-dep location-service && sudo apt-get install liblomiri-location-service-dev lomiri-location-service-examples`
+  - `mkdir /tmp/build && cd /tmp/build && cmake /usr/share/lomiri-location-service/examples/standalone/connectivity/ && make`
   - `GLOG_logtostderr=1 ./connectivity`
 
 Verify that the output looks similar to:
@@ -136,7 +136,7 @@ Verify that the output looks similar to:
 
 Please note that we are assuming a freshly wiped system for testing
 here. If you cannot fulfill that pre-condition, please run `rm -rf
-/home/phablet/.local/share/UbuntuLocationService && sudo shutdown -r` prior to running the
+/home/phablet/.local/share/LomiriLocationService && sudo shutdown -r` prior to running the
 tests:
 
 ## Unconfined

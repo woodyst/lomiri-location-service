@@ -72,15 +72,15 @@ location-service (3.0.0+16.04.20160405-0ubuntu1) xenial; urgency=medium
   * Small fixes around provider loading added: tests/mock_engine.h
   * Use a fusion engine provider to generate higher quality position
     updates added:
-    include/location_service/com/ubuntu/location/fusion_provider.h
-    include/location_service/com/ubuntu/location/fusion_provider_selecti
+    include/location_service/com/lomiri/location/fusion_provider.h
+    include/location_service/com/lomiri/location/fusion_provider_selecti
     on_policy.h
-    include/location_service/com/ubuntu/location/newer_or_more_accurate_
+    include/location_service/com/lomiri/location/newer_or_more_accurate_
     update_selector.h
-    include/location_service/com/ubuntu/location/newer_update_selector.h
-    include/location_service/com/ubuntu/location/update_selector.h
-    src/location_service/com/ubuntu/location/fusion_provider.cpp
-    src/location_service/com/ubuntu/location/fusion_provider_selection_p
+    include/location_service/com/lomiri/location/newer_update_selector.h
+    include/location_service/com/lomiri/location/update_selector.h
+    src/location_service/com/lomiri/location/fusion_provider.cpp
+    src/location_service/com/lomiri/location/fusion_provider_selection_p
     olicy.cpp
 
  -- Scott Sweeny <ci-train-bot@canonical.com>  Tue, 05 Apr 2016 21:33:22 +0000
@@ -111,7 +111,7 @@ location-service (3.0.0-0ubuntu3) wily; urgency=medium
 
 location-service (3.0.0-0ubuntu2) wily; urgency=medium
 
-  * libubuntu-location-service3: Replaces libubuntu-location-service2,
+  * liblomiri-location-service3: Replaces liblomiri-location-service2,
     config file /etc/gps.conf in both packages.
 
  -- Matthias Klose <doko@ubuntu.com>  Thu, 30 Jul 2015 09:57:50 +0200
@@ -184,16 +184,16 @@ location-service (2.1+15.04.20151127-0ubuntu1) vivid; urgency=medium
   * Factor out service::Runtime from daemon.cpp into its own .h/.cpp
     pair of files. Add test cases around correct operation of
     service::Runtime. added:
-    src/location_service/com/ubuntu/location/service/runtime.cpp
-    src/location_service/com/ubuntu/location/service/runtime.h
+    src/location_service/com/lomiri/location/service/runtime.cpp
+    src/location_service/com/lomiri/location/service/runtime.h
     tests/runtime_test.cpp
 
   [ thomas-voss ]
   * Factor out service::Runtime from daemon.cpp into its own .h/.cpp
     pair of files. Add test cases around correct operation of
     service::Runtime. added:
-    src/location_service/com/ubuntu/location/service/runtime.cpp
-    src/location_service/com/ubuntu/location/service/runtime.h
+    src/location_service/com/lomiri/location/service/runtime.cpp
+    src/location_service/com/lomiri/location/service/runtime.h
     tests/runtime_test.cpp
 
  -- Thomas Voß <ci-train-bot@canonical.com>  Fri, 27 Nov 2015 13:00:33 +0000
@@ -347,11 +347,11 @@ location-service (2.1+15.04.20141105.1-0ubuntu1) vivid; urgency=low
   * Resync trunk
 
   [ Kevin DuBois ]
-  * The headers shipped in libubuntu-location-service-dev contain
+  * The headers shipped in liblomiri-location-service-dev contain
     includes that are provided in the libboost-dev package (specifically
     headers like boost/units/cmath.hpp). Make the dev package depend on
     libboost-dev so the downstreams get what they need to compile
-    against the libubuntu-location-service-dev headers
+    against the liblomiri-location-service-dev headers
 
  -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 05 Nov 2014 15:51:16 +0000
 
@@ -669,7 +669,7 @@ location-service (0.0.2+13.10.20131016.1-0ubuntu1) saucy; urgency=low
 location-service (0.0.2+13.10.20131015.2-0ubuntu1) saucy; urgency=low
 
   [ thomas-voss ]
-  * Refactor packaging such that the service executable is part of ubuntu-location-service-bin.
+  * Refactor packaging such that the service executable is part of lomiri-location-service-bin.
   * Refactor packaging of service executable. (LP: #1235419)
 
   [ Ubuntu daily release ]

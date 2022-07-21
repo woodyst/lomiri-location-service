@@ -16,11 +16,11 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/daemon.h>
-#include <com/ubuntu/location/service/default_configuration.h>
+#include <com/lomiri/location/service/daemon.h>
+#include <com/lomiri/location/service/default_configuration.h>
 
-#include <com/ubuntu/location/boost_ptree_settings.h>
-#include <com/ubuntu/location/space_vehicle.h>
+#include <com/lomiri/location/boost_ptree_settings.h>
+#include <com/lomiri/location/space_vehicle.h>
 
 #include <core/dbus/dbus.h>
 #include <core/dbus/fixture.h>
@@ -38,7 +38,7 @@
 
 #include <thread>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 namespace
 {

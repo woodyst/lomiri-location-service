@@ -1,12 +1,12 @@
 {
 global:
     extern "C++" {
-        com::ubuntu::location::*;
-        typeinfo?for?com::ubuntu::location::*;
-        typeinfo?name?for?com::ubuntu::location::*;
-        VTT?for?com::ubuntu::location::*;
-        virtual?thunk?to?com::ubuntu::location::*;
-        vtable?for?com::ubuntu::location::*;
+        com::lomiri::location::*;
+        typeinfo?for?com::lomiri::location::*;
+        typeinfo?name?for?com::lomiri::location::*;
+        VTT?for?com::lomiri::location::*;
+        virtual?thunk?to?com::lomiri::location::*;
+        vtable?for?com::lomiri::location::*;
 	std::hash*;
         json::*;
     };

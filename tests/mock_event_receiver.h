@@ -19,11 +19,11 @@
 #ifndef MOCK_EVENT_RECEIVER_H_
 #define MOCK_EVENT_RECEIVER_H_
 
-#include <com/ubuntu/location/update.h>
+#include <com/lomiri/location/update.h>
 
 #include <gmock/gmock.h>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 struct MockEventReceiver
 {

@@ -15,49 +15,49 @@
  *
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
-#include <com/ubuntu/location/position.h>
+#include <com/lomiri/location/position.h>
 
 #include <gtest/gtest.h>
 
-namespace cul = com::ubuntu::location;
+namespace cll = com::lomiri::location;
 
 TEST(Position, AllFieldsAreInvalidForDefaultConstructor)
 {
-    cul::Position p;
+    cll::Position p;
     EXPECT_FALSE(p.altitude);
     EXPECT_FALSE(p.accuracy.vertical);
 }
 
 TEST(Position, InitWithLatLonGivesValidFieldsForLatLon)
 {
-    cul::Position p{cul::wgs84::Latitude{}, cul::wgs84::Longitude{}};
+    cll::Position p{cll::wgs84::Latitude{}, cll::wgs84::Longitude{}};
     EXPECT_FALSE(p.altitude);
 }
 
 TEST(Position, InitWithLatLonAltGivesValidFieldsForLatLonAlt)
 {
-    cul::Position p{
-        cul::wgs84::Latitude{},
-        cul::wgs84::Longitude{},
-        cul::wgs84::Altitude{}};
+    cll::Position p{
+        cll::wgs84::Latitude{},
+        cll::wgs84::Longitude{},
+        cll::wgs84::Altitude{}};
     EXPECT_TRUE(p.altitude ? true : false);
 }
 
-#include <com/ubuntu/location/codec.h>
+#include <com/lomiri/location/codec.h>
 
 #include <core/dbus/message_streaming_operators.h>
 
 TEST(Position, EncodingAndDecodingGivesSameResults)
 {
-    cul::Position p
+    cll::Position p
     {
-        cul::wgs84::Latitude{9. * cul::units::Degrees},
-        cul::wgs84::Longitude{53. * cul::units::Degrees},
-        cul::wgs84::Altitude{-2. * cul::units::Meters}
+        cll::wgs84::Latitude{9. * cll::units::Degrees},
+        cll::wgs84::Longitude{53. * cll::units::Degrees},
+        cll::wgs84::Altitude{-2. * cll::units::Meters}
     };
 
-    p.accuracy.horizontal =  cul::Position::Accuracy::Horizontal{300*cul::units::Meters};
-    p.accuracy.vertical = cul::Position::Accuracy::Vertical{100*cul::units::Meters};
+    p.accuracy.horizontal =  cll::Position::Accuracy::Horizontal{300*cll::units::Meters};
+    p.accuracy.vertical = cll::Position::Accuracy::Vertical{100*cll::units::Meters};
 
     auto msg = core::dbus::Message::make_method_call(
         "org.freedesktop.DBus",
@@ -67,7 +67,7 @@ TEST(Position, EncodingAndDecodingGivesSameResults)
 
     msg->writer() << p;
 
-    cul::Position pp;
+    cll::Position pp;
     msg->reader() >> pp;
 
     EXPECT_EQ(p, pp);
