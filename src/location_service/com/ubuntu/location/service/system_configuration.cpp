@@ -28,38 +28,6 @@
 namespace culs = com::ubuntu::location::service;
 namespace env = core::posix::this_process::env;
 
-#if defined(SNAPPY_UBUNTU_CORE)
-namespace
-{
-struct SnappySystemConfiguration : public culs::SystemConfiguration
-{
-    fs::path runtime_persistent_data_dir() const
-    {
-        std::string data_dir = env::get("SNAP_DATA");
-        if (!data_dir.empty()) {
-            return data_dir;
-        } else {
-            LOG(WARNING) << "SNAP_DATA environment variable is not defined.";
-
-            // If SNAP_DATA isn't set it's almost certain we're not running
-            // from a snap, so return the conventional path
-            return "/var/lib/ubuntu-location-service";
-        }
-    }
-    
-    culs::PermissionManager::Ptr create_permission_manager(const std::shared_ptr<core::dbus::Bus>&) const
-    {
-        return std::make_shared<culs::AlwaysGrantingPermissionManager>();
-    }
-};
-}
-
-culs::SystemConfiguration& culs::SystemConfiguration::instance()
-{
-    static SnappySystemConfiguration config;
-    return config;
-}
-#else
 namespace
 {
 struct UbuntuSystemConfiguration : public culs::SystemConfiguration
@@ -81,4 +49,3 @@ culs::SystemConfiguration& culs::SystemConfiguration::instance()
     static UbuntuSystemConfiguration config;
     return config;
 }
-#endif // SNAPPY_UBUNTU_CORE
