@@ -15,11 +15,16 @@ export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
 include /usr/share/dpkg/default.mk
 
-ifneq (,$(filter $(DEB_HOST_ARCH),ppc64el powerpc))
+ifneq ($(filter noplatformapi,$(DEB_BUILD_PROFILES)),)
+        # platform-api disabled by build profile
         LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
+else
+ifneq (,$(filter $(DEB_HOST_ARCH),ppc64el powerpc))
+        LOCATION_SERVICE_ENABLE_GPS_PROVIDER = ON
 else
         # disable GPS temporarily as platform-api is not available
         LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
+endif
 endif
 
 %:

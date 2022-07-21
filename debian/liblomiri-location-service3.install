@@ -1,4 +1,4 @@
+#!/usr/bin/dh-exec
 usr/lib/*/liblomiri-location-service.so.*
 usr/lib/*/liblomiri-location-service-connectivity.so.*
-# disable GPS temporarily as platform-api is not available
-#/etc/gps.conf
+etc/gps.conf <!noplatformapi>
