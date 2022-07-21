@@ -36,4 +36,4 @@ override_dh_auto_configure:
 
 override_dh_auto_test:
 	# Don't run tests in parallel as fake web servers all bind to same port
-	dh_auto_test --no-parallel
+	dh_auto_test --no-parallel -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
