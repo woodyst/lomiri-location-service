@@ -1,14 +1,12 @@
 Source: location-service
 Section: utils
 Priority: optional
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-XSBC-Original-Maintainer: Thomas Voß <thomas.voss@canonical.com>
+Maintainer: UBports developers <devs@ubports.com>
 Build-Depends: cmake,
                curl,
                libdbus-cpp-dev (>= 4.1.0),
-               debhelper (>= 9),
+               debhelper-compat (= 12),
                doxygen <!nodoc>,
-               geoclue-ubuntu-geoip,
                google-mock (>= 1.6.0+svn437),
                graphviz <!nodoc>,
                libapparmor-dev,
@@ -24,18 +22,16 @@ Build-Depends: cmake,
                libnet-cpp-dev,
                libprocess-cpp-dev,
                libtrust-store-dev,
-               libubuntu-platform-hardware-api-headers [!ppc64el !powerpc],
-               libubuntu-platform-hardware-api-dev [!ppc64el !powerpc],
+#               libubuntu-platform-hardware-api-headers [!ppc64el !powerpc],
+#               libubuntu-platform-hardware-api-dev [!ppc64el !powerpc],
                libproperties-cpp-dev,
                lsb-release,
                trust-store-bin,
                cmake-extras,
 Standards-Version: 3.9.4
-Homepage: http://launchpad.net/location-service
-# If you aren't a member of ~phablet-team but need to upload packaging changes,
-# just go ahead.  ~phablet-team will notice and sync up the code again.
-Vcs-Bzr: https://code.launchpad.net/~phablet-team/location-service/trunk
-Vcs-Browser: http://bazaar.launchpad.net/~phablet-team/location-service/trunk/files
+Homepage: https://gitlab.com/ubports/development/core/location-service
+Vcs-Git: https://gitlab.com/ubports/development/core/location-service.git
+Vcs-Browser: https://gitlab.com/ubports/development/core/location-service
 
 Package: libubuntu-location-service3
 Section: libs
@@ -45,7 +41,7 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
+ Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains the shared library needed by client applications.
 
@@ -61,30 +57,19 @@ Depends: libubuntu-location-service3 (= ${binary:Version}),
          ${misc:Depends},
 Suggests: ubuntu-location-service-doc,
 Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
+ Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains header files required to develop clients talking to the ubuntu
  location service.
-
-Package: libubuntu-location-service-dbg
-Section: debug
-Architecture: any
-Multi-Arch: foreign
-Depends: libubuntu-location-service3 (= ${binary:Version}),
-         ${misc:Depends},
-Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
- .
- Contains debug symbols.
 
 Package: ubuntu-location-service-tests
 Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
+ Aggregates position/velocity/heading updates and exports them over dbus.
  .
- Contains all test executables
+ Contains all test executables.
 
 Package: ubuntu-location-service-bin
 Architecture: any
@@ -95,7 +80,7 @@ Depends: libubuntu-location-service3 (= ${binary:Version}),
 Breaks: ubuntu-location-service-examples (<< 0.0.2),
 Replaces: ubuntu-location-service-examples (<< 0.0.2),
 Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
+ Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains the service executable and man pages.
 
@@ -107,7 +92,7 @@ Depends: libubuntu-location-service3 (= ${binary:Version}),
          ${shlibs:Depends},
          ubuntu-location-service-doc,
 Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
+ Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains example service and client.
 
@@ -116,10 +101,9 @@ Section: doc
 Architecture: all
 Multi-Arch: foreign
 Depends: ${misc:Depends},
-         ${shlibs:Depends},
 Build-Profiles: <!nodoc>
 Recommends: ubuntu-location-service-examples,
 Description: location service aggregating position/velocity/heading
- updates and exporting them over dbus.
+ Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains documentation for service and client.
