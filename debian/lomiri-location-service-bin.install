@@ -1,0 +1,6 @@
+etc/dbus-1/system.d/
+lib/systemd/system/
+usr/bin/lomiri-location-serviced
+usr/bin/lomiri-location-serviced-cli
+usr/bin/lomiri-location-service-providerd
+usr/share/locale/*

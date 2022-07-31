@@ -15,11 +15,11 @@
  *
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
-#include <com/ubuntu/location/criteria.h>
+#include <com/lomiri/location/criteria.h>
 
 #include <gtest/gtest.h>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 TEST(Criteria, SatisfiesReturnsFalseForNonSatisfyingCriteria)
 {

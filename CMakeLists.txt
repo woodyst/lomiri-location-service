@@ -1,37 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(ubuntu-location-service)
+project(lomiri-location-service)
 
-# We haven't received version information via the packaging setup.
-# For that, we try to determine sensible values on our own, ensuring
-# plain old invocations to cmake still work as expected.
-if (NOT DEFINED UBUNTU_LOCATION_SERVICE_VERSION_MAJOR)
-  find_program(LSB_RELEASE lsb_release)
-  execute_process(
-    COMMAND ${LSB_RELEASE} -c -s
-    OUTPUT_VARIABLE DISTRO_CODENAME
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+set(LOMIRI_LOCATION_SERVICE_VERSION_MAJOR 3)
+set(LOMIRI_LOCATION_SERVICE_VERSION_MINOR 0)
+set(LOMIRI_LOCATION_SERVICE_VERSION_PATCH 0)
 
-  # We explicitly ignore errors and only check if we are building for vivid.
-  # For all other cases:
-  #   - releases other than vivid
-  #   - other distros
-  #   - errors
-  # we define the version to be 2.0.0
-  if (DISTRO_CODENAME STREQUAL "vivid")
-    set(UBUNTU_LOCATION_SERVICE_VERSION_MAJOR 2)
-    set(UBUNTU_LOCATION_SERVICE_VERSION_MINOR 0)
-    set(UBUNTU_LOCATION_SERVICE_VERSION_PATCH 0)
-  else ()
-    set(UBUNTU_LOCATION_SERVICE_VERSION_MAJOR 3)
-    set(UBUNTU_LOCATION_SERVICE_VERSION_MINOR 0)
-    set(UBUNTU_LOCATION_SERVICE_VERSION_PATCH 0)
-  endif()
-endif()
+message(STATUS "${CMAKE_PROJECT_NAME} ${LOMIRI_LOCATION_SERVICE_VERSION_MAJOR}.${LOMIRI_LOCATION_SERVICE_VERSION_MINOR}.${LOMIRI_LOCATION_SERVICE_VERSION_PATCH}")
 
-message(STATUS "${CMAKE_PROJECT_NAME} ${UBUNTU_LOCATION_SERVICE_VERSION_MAJOR}.${UBUNTU_LOCATION_SERVICE_VERSION_MINOR}.${UBUNTU_LOCATION_SERVICE_VERSION_PATCH}")
-
-set(UBUNTU_LOCATION_SERVICE_TRUST_STORE_SERVICE_NAME "UbuntuLocationService")
+set(LOMIRI_LOCATION_SERVICE_TRUST_STORE_SERVICE_NAME "LomiriLocationService")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic -Wextra -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -fno-strict-aliasing -pedantic -Wextra -fPIC")
@@ -89,13 +66,9 @@ if (NOT CLANG_FORMAT_COMMAND)
 endif()
 
 if (CLANG_FORMAT_COMMAND)
-  file(GLOB_RECURSE UBUNTU_LOCATION_SERVICE_INTERFACE_HEADER_FILES ${CMAKE_SOURCE_DIR}/include/*.h)
-  file(GLOB_RECURSE UBUNTU_LOCATION_SERVICE_IMPLEMENTATION_FILES ${CMAKE_SOURCE_DIR}/src/*.h ${CMAKE_SOURCE_DIR}/src/*.cpp)
-  add_custom_target(formatcode ${CLANG_FORMAT_COMMAND} -i ${UBUNTU_LOCATION_SERVICE_INTERFACE_HEADER_FILES} ${UBUNTU_LOCATION_SERVICE_IMPLEMENTATION_FILES} SOURCES _clang-format)
-endif()
-
-if (DEFINED SNAPPY_UBUNTU_CORE)
-    add_definitions(-DSNAPPY_UBUNTU_CORE)
+  file(GLOB_RECURSE LOMIRI_LOCATION_SERVICE_INTERFACE_HEADER_FILES ${CMAKE_SOURCE_DIR}/include/*.h)
+  file(GLOB_RECURSE LOMIRI_LOCATION_SERVICE_IMPLEMENTATION_FILES ${CMAKE_SOURCE_DIR}/src/*.h ${CMAKE_SOURCE_DIR}/src/*.cpp)
+  add_custom_target(formatcode ${CLANG_FORMAT_COMMAND} -i ${LOMIRI_LOCATION_SERVICE_INTERFACE_HEADER_FILES} ${LOMIRI_LOCATION_SERVICE_IMPLEMENTATION_FILES} SOURCES _clang-format)
 endif()
 
 include_directories(
@@ -118,7 +91,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/location_service
 )
 
-file(GLOB_RECURSE UBUNTU_LOCATION_SERVICE_PUBLIC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR} *.h)
+file(GLOB_RECURSE LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR} *.h)
 
 add_subdirectory(data)
 add_subdirectory(doc)

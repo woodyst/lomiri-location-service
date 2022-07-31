@@ -16,7 +16,7 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/ichnaea_reporter.h>
+#include <com/lomiri/location/service/ichnaea_reporter.h>
 
 #include "web_server.h"
 
@@ -33,7 +33,7 @@
 
 #include <condition_variable>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 namespace
 {

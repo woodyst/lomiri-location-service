@@ -16,7 +16,7 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/harvester.h>
+#include <com/lomiri/location/service/harvester.h>
 
 #include "mock_connectivity_manager.h"
 #include "mock_reporter.h"
@@ -25,7 +25,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-namespace location = com::ubuntu::location;
+namespace location = com::lomiri::location;
 
 namespace
 {

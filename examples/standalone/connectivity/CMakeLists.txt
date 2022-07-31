@@ -20,7 +20,7 @@ pkg_check_modules(
 
 pkg_check_modules(
   LOCATION_CONNECTIVITY 
-  ubuntu-location-service-connectivity REQUIRED)
+  lomiri-location-service-connectivity REQUIRED)
 
 include_directories(
   ${DBUS_CPP_INCLUDE_DIRS}

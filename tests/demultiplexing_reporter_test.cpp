@@ -16,14 +16,14 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 
-#include <com/ubuntu/location/service/demultiplexing_reporter.h>
+#include <com/lomiri/location/service/demultiplexing_reporter.h>
 
 #include <gtest/gtest.h>
 
 #include "mock_reporter.h"
 
-namespace location = com::ubuntu::location;
-namespace service = com::ubuntu::location::service;
+namespace location = com::lomiri::location;
+namespace service = com::lomiri::location::service;
 
 namespace
 {

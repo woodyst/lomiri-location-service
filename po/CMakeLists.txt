@@ -1,7 +1,7 @@
 include(FindGettext REQUIRED)
 find_program(GETTEXT_XGETTEXT_EXECUTABLE xgettext)
 
-set(DOMAIN ubuntu-location-service)
+set(DOMAIN lomiri-location-service)
 set(POT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${DOMAIN}.pot)
 file(GLOB PO_FILES *.po)
 
@@ -14,15 +14,15 @@ file(
 list(SORT I18N_CPP_SRC_FILES)
 
 add_custom_target(
-    ubuntu-location-service-pot
+    lomiri-location-service-pot
     COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE}
-        --default-domain=ubuntu-location-service
+        --default-domain=lomiri-location-service
         --output=${POT_FILE}
         --from-code=UTF-8
         --c++ --add-comments=TRANSLATORS
         --keyword='tr'
         --boost
-        --package-name=ubuntu-location-service
+        --package-name=lomiri-location-service
         --copyright-holder='Canonical Ltd.'
         ${I18N_CPP_SRC_FILES})
 

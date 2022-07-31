@@ -15,41 +15,41 @@
  *
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
-#include <com/ubuntu/location/provider.h>
+#include <com/lomiri/location/provider.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-namespace cul = com::ubuntu::location;
+namespace cll = com::lomiri::location;
 
 namespace
 {
 template<typename T>
-cul::Update<T> update_as_of_now(const T& value = T())
+cll::Update<T> update_as_of_now(const T& value = T())
 {
-    return cul::Update<T>{value, cul::Clock::now()};
+    return cll::Update<T>{value, cll::Clock::now()};
 }
 
-class DummyProvider : public com::ubuntu::location::Provider
+class DummyProvider : public com::lomiri::location::Provider
 {
 public:
-    DummyProvider(cul::Provider::Features feats = cul::Provider::Features::none,
-                  cul::Provider::Requirements requs= cul::Provider::Requirements::none)
-        : com::ubuntu::location::Provider(feats, requs)
+    DummyProvider(cll::Provider::Features feats = cll::Provider::Features::none,
+                  cll::Provider::Requirements requs= cll::Provider::Requirements::none)
+        : com::lomiri::location::Provider(feats, requs)
     {
     }
 
-    void inject_update(const com::ubuntu::location::Update<com::ubuntu::location::Position>& update)
+    void inject_update(const com::lomiri::location::Update<com::lomiri::location::Position>& update)
     {
         mutable_updates().position(update);
     }
 
-    void inject_update(const com::ubuntu::location::Update<com::ubuntu::location::Velocity>& update)
+    void inject_update(const com::lomiri::location::Update<com::lomiri::location::Velocity>& update)
     {
         mutable_updates().velocity(update);
     }
 
-    void inject_update(const com::ubuntu::location::Update<com::ubuntu::location::Heading>& update)
+    void inject_update(const com::lomiri::location::Update<com::lomiri::location::Heading>& update)
     {
         mutable_updates().heading(update);
     }
@@ -58,32 +58,32 @@ public:
 
 TEST(Provider, requirement_flags_passed_at_construction_are_correctly_stored)
 {
-    cul::Provider::Features features = cul::Provider::Features::none;
-    cul::Provider::Requirements requirements =
-            cul::Provider::Requirements::cell_network |
-            cul::Provider::Requirements::data_network |
-            cul::Provider::Requirements::monetary_spending |
-            cul::Provider::Requirements::satellites;
+    cll::Provider::Features features = cll::Provider::Features::none;
+    cll::Provider::Requirements requirements =
+            cll::Provider::Requirements::cell_network |
+            cll::Provider::Requirements::data_network |
+            cll::Provider::Requirements::monetary_spending |
+            cll::Provider::Requirements::satellites;
 
     DummyProvider provider(features, requirements);
 
-    EXPECT_TRUE(provider.requires(com::ubuntu::location::Provider::Requirements::satellites));
-    EXPECT_TRUE(provider.requires(com::ubuntu::location::Provider::Requirements::cell_network));
-    EXPECT_TRUE(provider.requires(com::ubuntu::location::Provider::Requirements::data_network));
-    EXPECT_TRUE(provider.requires(com::ubuntu::location::Provider::Requirements::monetary_spending));
+    EXPECT_TRUE(provider.requires(com::lomiri::location::Provider::Requirements::satellites));
+    EXPECT_TRUE(provider.requires(com::lomiri::location::Provider::Requirements::cell_network));
+    EXPECT_TRUE(provider.requires(com::lomiri::location::Provider::Requirements::data_network));
+    EXPECT_TRUE(provider.requires(com::lomiri::location::Provider::Requirements::monetary_spending));
 }
 
 TEST(Provider, feature_flags_passed_at_construction_are_correctly_stored)
 {
-    cul::Provider::Features all_features
-        = cul::Provider::Features::heading |
-          cul::Provider::Features::position |
-          cul::Provider::Features::velocity;
+    cll::Provider::Features all_features
+        = cll::Provider::Features::heading |
+          cll::Provider::Features::position |
+          cll::Provider::Features::velocity;
     DummyProvider provider(all_features);
 
-    EXPECT_TRUE(provider.supports(com::ubuntu::location::Provider::Features::position));
-    EXPECT_TRUE(provider.supports(com::ubuntu::location::Provider::Features::velocity));
-    EXPECT_TRUE(provider.supports(com::ubuntu::location::Provider::Features::heading));
+    EXPECT_TRUE(provider.supports(com::lomiri::location::Provider::Features::position));
+    EXPECT_TRUE(provider.supports(com::lomiri::location::Provider::Features::velocity));
+    EXPECT_TRUE(provider.supports(com::lomiri::location::Provider::Features::heading));
 }
 
 TEST(Provider, delivering_a_message_invokes_subscribers)
@@ -94,26 +94,26 @@ TEST(Provider, delivering_a_message_invokes_subscribers)
     bool velocity_update_triggered {false};
 
     auto c1 = dp.updates().position.connect(
-        [&](const com::ubuntu::location::Update<com::ubuntu::location::Position>&)
+        [&](const com::lomiri::location::Update<com::lomiri::location::Position>&)
         {
             position_update_triggered = true;
         });
 
     auto c2 = dp.updates().heading.connect(
-        [&](const com::ubuntu::location::Update<com::ubuntu::location::Heading>&)
+        [&](const com::lomiri::location::Update<com::lomiri::location::Heading>&)
         {
             heading_update_triggered = true;
         });
 
     auto c3 = dp.updates().velocity.connect(
-        [&](const com::ubuntu::location::Update<com::ubuntu::location::Velocity>&)
+        [&](const com::lomiri::location::Update<com::lomiri::location::Velocity>&)
         {
             velocity_update_triggered = true;
         });
 
-    dp.inject_update(update_as_of_now<cul::Position>());
-    dp.inject_update(update_as_of_now<cul::Heading>());
-    dp.inject_update(update_as_of_now<cul::Velocity>());
+    dp.inject_update(update_as_of_now<cll::Position>());
+    dp.inject_update(update_as_of_now<cll::Heading>());
+    dp.inject_update(update_as_of_now<cll::Velocity>());
 
     EXPECT_TRUE(position_update_triggered);
     EXPECT_TRUE(heading_update_triggered);
@@ -122,23 +122,23 @@ TEST(Provider, delivering_a_message_invokes_subscribers)
 
 namespace
 {
-struct MockProvider : public com::ubuntu::location::Provider
+struct MockProvider : public com::lomiri::location::Provider
 {
-    MockProvider() : cul::Provider()
+    MockProvider() : cll::Provider()
     {
     }
 
-    void inject_update(const cul::Update<cul::Position>& update)
+    void inject_update(const cll::Update<cll::Position>& update)
     {
         mutable_updates().position(update);
     }
 
-    void inject_update(const cul::Update<cul::Velocity>& update)
+    void inject_update(const cll::Update<cll::Velocity>& update)
     {
         mutable_updates().velocity(update);
     }
 
-    void inject_update(const cul::Update<cul::Heading>& update)
+    void inject_update(const cll::Update<cll::Heading>& update)
     {
         mutable_updates().heading(update);
     }
@@ -218,7 +218,7 @@ TEST(Provider, disabling_a_provider_stops_all_updates)
     p.state_controller()->disable();
 }
 
-#include <com/ubuntu/location/proxy_provider.h>
+#include <com/lomiri/location/proxy_provider.h>
 
 TEST(ProxyProvider, start_and_stop_of_updates_propagates_to_correct_providers)
 {
@@ -232,13 +232,13 @@ TEST(ProxyProvider, start_and_stop_of_updates_propagates_to_correct_providers)
     EXPECT_CALL(mp3, start_velocity_updates()).Times(Exactly(1));
     EXPECT_CALL(mp3, stop_velocity_updates()).Times(Exactly(1));
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
-    cul::Provider::Ptr p2{std::addressof(mp2), [](cul::Provider*){}};
-    cul::Provider::Ptr p3{std::addressof(mp3), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
+    cll::Provider::Ptr p2{std::addressof(mp2), [](cll::Provider*){}};
+    cll::Provider::Ptr p3{std::addressof(mp3), [](cll::Provider*){}};
     
-    cul::ProviderSelection selection{p1, p2, p3};
+    cll::ProviderSelection selection{p1, p2, p3};
 
-    cul::ProxyProvider pp{selection};
+    cll::ProxyProvider pp{selection};
 
     pp.start_position_updates();
     pp.stop_position_updates();
@@ -252,9 +252,9 @@ TEST(ProxyProvider, start_and_stop_of_updates_propagates_to_correct_providers)
 
 struct MockEventConsumer
 {
-    MOCK_METHOD1(on_new_position, void(const cul::Update<cul::Position>&));
-    MOCK_METHOD1(on_new_velocity, void(const cul::Update<cul::Velocity>&));
-    MOCK_METHOD1(on_new_heading, void(const cul::Update<cul::Heading>&));
+    MOCK_METHOD1(on_new_position, void(const cll::Update<cll::Position>&));
+    MOCK_METHOD1(on_new_velocity, void(const cll::Update<cll::Velocity>&));
+    MOCK_METHOD1(on_new_heading, void(const cll::Update<cll::Heading>&));
 };
 
 TEST(ProxyProvider, update_signals_are_routed_from_correct_providers)
@@ -263,30 +263,30 @@ TEST(ProxyProvider, update_signals_are_routed_from_correct_providers)
     
     NiceMock<MockProvider> mp1, mp2, mp3;
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
-    cul::Provider::Ptr p2{std::addressof(mp2), [](cul::Provider*){}};
-    cul::Provider::Ptr p3{std::addressof(mp3), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
+    cll::Provider::Ptr p2{std::addressof(mp2), [](cll::Provider*){}};
+    cll::Provider::Ptr p3{std::addressof(mp3), [](cll::Provider*){}};
     
-    cul::ProviderSelection selection{p1, p2, p3};
+    cll::ProviderSelection selection{p1, p2, p3};
 
-    cul::ProxyProvider pp{selection};
+    cll::ProxyProvider pp{selection};
 
     NiceMock<MockEventConsumer> mec;
     EXPECT_CALL(mec, on_new_position(_)).Times(1);
     EXPECT_CALL(mec, on_new_velocity(_)).Times(1);
     EXPECT_CALL(mec, on_new_heading(_)).Times(1);
 
-    pp.updates().position.connect([&mec](const cul::Update<cul::Position>& p){mec.on_new_position(p);});
-    pp.updates().heading.connect([&mec](const cul::Update<cul::Heading>& h){mec.on_new_heading(h);});
-    pp.updates().velocity.connect([&mec](const cul::Update<cul::Velocity>& v){mec.on_new_velocity(v);});
+    pp.updates().position.connect([&mec](const cll::Update<cll::Position>& p){mec.on_new_position(p);});
+    pp.updates().heading.connect([&mec](const cll::Update<cll::Heading>& h){mec.on_new_heading(h);});
+    pp.updates().velocity.connect([&mec](const cll::Update<cll::Velocity>& v){mec.on_new_velocity(v);});
 
-    mp1.inject_update(cul::Update<cul::Position>());
-    mp2.inject_update(cul::Update<cul::Heading>());
-    mp3.inject_update(cul::Update<cul::Velocity>());
+    mp1.inject_update(cll::Update<cll::Position>());
+    mp2.inject_update(cll::Update<cll::Heading>());
+    mp3.inject_update(cll::Update<cll::Velocity>());
 }
 
-#include <com/ubuntu/location/fusion_provider.h>
-#include <com/ubuntu/location/newer_or_more_accurate_update_selector.h>
+#include <com/lomiri/location/fusion_provider.h>
+#include <com/lomiri/location/newer_or_more_accurate_update_selector.h>
 
 TEST(FusionProvider, start_and_stop_of_updates_propagates_to_correct_providers)
 {
@@ -300,15 +300,15 @@ TEST(FusionProvider, start_and_stop_of_updates_propagates_to_correct_providers)
     EXPECT_CALL(mp3, start_velocity_updates()).Times(Exactly(1));
     EXPECT_CALL(mp3, stop_velocity_updates()).Times(Exactly(1));
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
-    cul::Provider::Ptr p2{std::addressof(mp2), [](cul::Provider*){}};
-    cul::Provider::Ptr p3{std::addressof(mp3), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
+    cll::Provider::Ptr p2{std::addressof(mp2), [](cll::Provider*){}};
+    cll::Provider::Ptr p3{std::addressof(mp3), [](cll::Provider*){}};
 
-    cul::ProviderSelection selection{p1, p2, p3};
-    std::set<cul::Provider::Ptr> providers{p1, p2, p3};
+    cll::ProviderSelection selection{p1, p2, p3};
+    std::set<cll::Provider::Ptr> providers{p1, p2, p3};
 
-    //cul::FusionProvider pp{selection};
-    cul::FusionProvider fp{providers, std::make_shared<cul::NewerOrMoreAccurateUpdateSelector>()};
+    //cll::FusionProvider pp{selection};
+    cll::FusionProvider fp{providers, std::make_shared<cll::NewerOrMoreAccurateUpdateSelector>()};
 
     fp.start_position_updates();
     fp.stop_position_updates();
@@ -326,29 +326,29 @@ TEST(FusionProvider, update_signals_are_routed_from_correct_providers)
 
     NiceMock<MockProvider> mp1, mp2, mp3;
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
-    cul::Provider::Ptr p2{std::addressof(mp2), [](cul::Provider*){}};
-    cul::Provider::Ptr p3{std::addressof(mp3), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
+    cll::Provider::Ptr p2{std::addressof(mp2), [](cll::Provider*){}};
+    cll::Provider::Ptr p3{std::addressof(mp3), [](cll::Provider*){}};
 
-    std::set<cul::Provider::Ptr> providers{p1, p2, p3};
+    std::set<cll::Provider::Ptr> providers{p1, p2, p3};
 
-    cul::FusionProvider fp{providers, std::make_shared<cul::NewerOrMoreAccurateUpdateSelector>()};
+    cll::FusionProvider fp{providers, std::make_shared<cll::NewerOrMoreAccurateUpdateSelector>()};
 
     NiceMock<MockEventConsumer> mec;
     EXPECT_CALL(mec, on_new_position(_)).Times(1);
     EXPECT_CALL(mec, on_new_velocity(_)).Times(1);
     EXPECT_CALL(mec, on_new_heading(_)).Times(1);
 
-    fp.updates().position.connect([&mec](const cul::Update<cul::Position>& p){mec.on_new_position(p);});
-    fp.updates().heading.connect([&mec](const cul::Update<cul::Heading>& h){mec.on_new_heading(h);});
-    fp.updates().velocity.connect([&mec](const cul::Update<cul::Velocity>& v){mec.on_new_velocity(v);});
+    fp.updates().position.connect([&mec](const cll::Update<cll::Position>& p){mec.on_new_position(p);});
+    fp.updates().heading.connect([&mec](const cll::Update<cll::Heading>& h){mec.on_new_heading(h);});
+    fp.updates().velocity.connect([&mec](const cll::Update<cll::Velocity>& v){mec.on_new_velocity(v);});
 
-    mp1.inject_update(cul::Update<cul::Position>());
-    mp2.inject_update(cul::Update<cul::Heading>());
-    mp3.inject_update(cul::Update<cul::Velocity>());
+    mp1.inject_update(cll::Update<cll::Position>());
+    mp2.inject_update(cll::Update<cll::Heading>());
+    mp3.inject_update(cll::Update<cll::Velocity>());
 }
 
-#include <com/ubuntu/location/clock.h>
+#include <com/lomiri/location/clock.h>
 
 TEST(FusionProvider, more_timely_update_is_chosen)
 {
@@ -356,24 +356,24 @@ TEST(FusionProvider, more_timely_update_is_chosen)
 
     NiceMock<MockProvider> mp1, mp2;
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
-    cul::Provider::Ptr p2{std::addressof(mp2), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
+    cll::Provider::Ptr p2{std::addressof(mp2), [](cll::Provider*){}};
 
-    std::set<cul::Provider::Ptr> providers{p1, p2};
+    std::set<cll::Provider::Ptr> providers{p1, p2};
 
-    cul::FusionProvider fp{providers, std::make_shared<cul::NewerOrMoreAccurateUpdateSelector>()};
+    cll::FusionProvider fp{providers, std::make_shared<cll::NewerOrMoreAccurateUpdateSelector>()};
 
-    cul::Update<cul::Position> before, after;
-    before.when = cul::Clock::now() - std::chrono::seconds(12);
-    before.value = cul::Position(cul::wgs84::Latitude(), cul::wgs84::Longitude(), cul::wgs84::Altitude(), cul::Position::Accuracy::Horizontal{50*cul::units::Meters});
-    after.when = cul::Clock::now();
-    after.value = cul::Position(cul::wgs84::Latitude(), cul::wgs84::Longitude(), cul::wgs84::Altitude(), cul::Position::Accuracy::Horizontal{500*cul::units::Meters});
+    cll::Update<cll::Position> before, after;
+    before.when = cll::Clock::now() - std::chrono::seconds(12);
+    before.value = cll::Position(cll::wgs84::Latitude(), cll::wgs84::Longitude(), cll::wgs84::Altitude(), cll::Position::Accuracy::Horizontal{50*cll::units::Meters});
+    after.when = cll::Clock::now();
+    after.value = cll::Position(cll::wgs84::Latitude(), cll::wgs84::Longitude(), cll::wgs84::Altitude(), cll::Position::Accuracy::Horizontal{500*cll::units::Meters});
 
     NiceMock<MockEventConsumer> mec;
     EXPECT_CALL(mec, on_new_position(before)).Times(1);
     EXPECT_CALL(mec, on_new_position(after)).Times(1);
 
-    fp.updates().position.connect([&mec](const cul::Update<cul::Position>& p){mec.on_new_position(p);});
+    fp.updates().position.connect([&mec](const cll::Update<cll::Position>& p){mec.on_new_position(p);});
 
     mp1.inject_update(before);
     mp2.inject_update(after);
@@ -386,24 +386,24 @@ TEST(FusionProvider, more_accurate_update_is_chosen)
 
     NiceMock<MockProvider> mp1, mp2;
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
-    cul::Provider::Ptr p2{std::addressof(mp2), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
+    cll::Provider::Ptr p2{std::addressof(mp2), [](cll::Provider*){}};
 
-    std::set<cul::Provider::Ptr> providers{p1, p2};
+    std::set<cll::Provider::Ptr> providers{p1, p2};
 
-    cul::FusionProvider fp{providers, std::make_shared<cul::NewerOrMoreAccurateUpdateSelector>()};
+    cll::FusionProvider fp{providers, std::make_shared<cll::NewerOrMoreAccurateUpdateSelector>()};
 
-    cul::Update<cul::Position> before, after;
-    before.when = cul::Clock::now() - std::chrono::seconds(5);
-    before.value = cul::Position(cul::wgs84::Latitude(), cul::wgs84::Longitude(), cul::wgs84::Altitude(), cul::Position::Accuracy::Horizontal{50*cul::units::Meters});
-    after.when = cul::Clock::now();
-    after.value = cul::Position(cul::wgs84::Latitude(), cul::wgs84::Longitude(), cul::wgs84::Altitude(), cul::Position::Accuracy::Horizontal{500*cul::units::Meters});
+    cll::Update<cll::Position> before, after;
+    before.when = cll::Clock::now() - std::chrono::seconds(5);
+    before.value = cll::Position(cll::wgs84::Latitude(), cll::wgs84::Longitude(), cll::wgs84::Altitude(), cll::Position::Accuracy::Horizontal{50*cll::units::Meters});
+    after.when = cll::Clock::now();
+    after.value = cll::Position(cll::wgs84::Latitude(), cll::wgs84::Longitude(), cll::wgs84::Altitude(), cll::Position::Accuracy::Horizontal{500*cll::units::Meters});
 
     NiceMock<MockEventConsumer> mec;
     // We should see the "older" position in two events
     EXPECT_CALL(mec, on_new_position(before)).Times(2);
 
-    fp.updates().position.connect([&mec](const cul::Update<cul::Position>& p){mec.on_new_position(p);});
+    fp.updates().position.connect([&mec](const cll::Update<cll::Position>& p){mec.on_new_position(p);});
 
     mp1.inject_update(before);
     mp2.inject_update(after);
@@ -416,17 +416,17 @@ TEST(FusionProvider, update_from_same_provider_is_chosen)
 
     NiceMock<MockProvider> mp1;
 
-    cul::Provider::Ptr p1{std::addressof(mp1), [](cul::Provider*){}};
+    cll::Provider::Ptr p1{std::addressof(mp1), [](cll::Provider*){}};
 
-    std::set<cul::Provider::Ptr> providers{p1};
+    std::set<cll::Provider::Ptr> providers{p1};
 
-    cul::FusionProvider fp{providers, std::make_shared<cul::NewerOrMoreAccurateUpdateSelector>()};
+    cll::FusionProvider fp{providers, std::make_shared<cll::NewerOrMoreAccurateUpdateSelector>()};
 
-    cul::Update<cul::Position> before, after;
-    before.when = cul::Clock::now() - std::chrono::seconds(5);
-    before.value = cul::Position(cul::wgs84::Latitude(), cul::wgs84::Longitude(), cul::wgs84::Altitude(), cul::Position::Accuracy::Horizontal{50*cul::units::Meters});
-    after.when = cul::Clock::now();
-    after.value = cul::Position(cul::wgs84::Latitude(), cul::wgs84::Longitude(), cul::wgs84::Altitude(), cul::Position::Accuracy::Horizontal{500*cul::units::Meters});
+    cll::Update<cll::Position> before, after;
+    before.when = cll::Clock::now() - std::chrono::seconds(5);
+    before.value = cll::Position(cll::wgs84::Latitude(), cll::wgs84::Longitude(), cll::wgs84::Altitude(), cll::Position::Accuracy::Horizontal{50*cll::units::Meters});
+    after.when = cll::Clock::now();
+    after.value = cll::Position(cll::wgs84::Latitude(), cll::wgs84::Longitude(), cll::wgs84::Altitude(), cll::Position::Accuracy::Horizontal{500*cll::units::Meters});
 
     NiceMock<MockEventConsumer> mec;
     // We should see the "newer" position even though it's less accurate since
@@ -434,7 +434,7 @@ TEST(FusionProvider, update_from_same_provider_is_chosen)
     EXPECT_CALL(mec, on_new_position(before)).Times(1);
     EXPECT_CALL(mec, on_new_position(after)).Times(1);
 
-    fp.updates().position.connect([&mec](const cul::Update<cul::Position>& p){mec.on_new_position(p);});
+    fp.updates().position.connect([&mec](const cll::Update<cll::Position>& p){mec.on_new_position(p);});
 
     mp1.inject_update(before);
     mp1.inject_update(after);

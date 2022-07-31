@@ -15,42 +15,38 @@
 # Authored by: Thomas Voss <thomas.voss@canonical.com>
 
 configure_file(
-  ubuntu-location-service.pc.in ubuntu-location-service.pc @ONLY
+  lomiri-location-service.pc.in lomiri-location-service.pc @ONLY
 )
 
 configure_file(
-  ubuntu-location-service-connectivity.pc.in ubuntu-location-service-connectivity.pc @ONLY
+  lomiri-location-service-connectivity.pc.in lomiri-location-service-connectivity.pc @ONLY
 )
 
 configure_file(
-  ubuntu-location-service.conf.in ubuntu-location-service.conf @ONLY
+  lomiri-location-service.service.in lomiri-location-service.service @ONLY
 )
 
 configure_file(
-  ubuntu-location-service-trust-stored.conf.in ubuntu-location-service-trust-stored.conf @ONLY
+  lomiri-location-service-trust-stored.service.in lomiri-location-service-trust-stored.service @ONLY
 )
 
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/ubuntu-location-service.pc
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.pc
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/ubuntu-location-service-connectivity.pc
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-connectivity.pc
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
 install(
-  FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.ubuntu.location.Service.conf
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.lomiri.location.Service.conf
   DESTINATION /etc/dbus-1/system.d/
 )
 
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/ubuntu-location-service.conf
-  DESTINATION /etc/init/
-)
-
-install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/ubuntu-location-service-trust-stored.conf
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/upstart/sessions/
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.service
+        ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored.service
+  DESTINATION /lib/systemd/system/
 )
