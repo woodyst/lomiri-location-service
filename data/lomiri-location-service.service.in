@@ -4,7 +4,7 @@ Description=Location Services
 [Service]
 Type=dbus
 BusName=com.lomiri.location.Service
-Exec=@CMAKE_INSTALL_FULL_BINDIR@/lomiri-location-serviced --bus system --provider gps::Provider --provider remote::Provider
+ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/lomiri-location-serviced --bus system --provider gps::Provider --provider remote::Provider
 
 [Install]
 WantedBy=multi-user.target

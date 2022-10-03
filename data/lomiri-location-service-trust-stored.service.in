@@ -5,7 +5,7 @@ After=lomiri-location-service.service
 
 [Service]
 Type=simple
-Exec=@CMAKE_INSTALL_FULL_BINDIR@/trust-stored-skeleton --remote-agent DBusRemoteAgent --bus=system --local-agent MirAgent --trusted-mir-socket=/var/run/user/$(id -u)/mir_socket_trusted --for-service LomiriLocationService --with-text-domain lomiri-location-service --store-bus session
+ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/trust-stored-skeleton --remote-agent DBusRemoteAgent --bus=system --local-agent MirAgent --trusted-mir-socket=/var/run/user/$(id -u)/mir_socket_trusted --for-service LomiriLocationService --with-text-domain lomiri-location-service --store-bus session
 
 [Install]
 WantedBy=multi-user.target
