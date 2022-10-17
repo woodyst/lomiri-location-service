@@ -47,6 +47,10 @@ install(
 
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.service
-        ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored.service
   DESTINATION /lib/systemd/system/
+)
+
+install(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored.service
+  DESTINATION /usr/lib/systemd/user/
 )
