@@ -20,10 +20,9 @@ ifneq ($(filter noplatformapi,$(DEB_BUILD_PROFILES)),)
         LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
 else
 ifneq (,$(filter $(DEB_HOST_ARCH),ppc64el powerpc))
-        LOCATION_SERVICE_ENABLE_GPS_PROVIDER = ON
-else
-        # disable GPS temporarily as platform-api is not available
         LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
+else
+        LOCATION_SERVICE_ENABLE_GPS_PROVIDER = ON
 endif
 endif
 
