@@ -29,7 +29,6 @@ Build-Depends: cmake,
                lsb-release,
                trust-store-bin,
                cmake-extras,
-               libubuntu-application-api-dev (>= 3.0.1),
                qtbase5-dev,
                qtlocation5-dev,
                qtpositioning5-dev,
@@ -45,7 +44,6 @@ Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
-         ubuntu-application-api3-desktop,
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .

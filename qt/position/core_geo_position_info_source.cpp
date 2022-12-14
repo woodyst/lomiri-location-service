@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 Canonical Ltd.
+ * Copyright 2022 UBports Foundation.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Author: Thomas Voß <thomas.voss@canonical.com>
+ *         Marius Gripsgard <marius@ubports.com>
  */
 
 #include "core_geo_position_info_source.h"
@@ -23,12 +25,16 @@
 #include <QGuiApplication>
 #include <QtCore>
 
-#include <ubuntu/application/location/service.h>
-#include <ubuntu/application/location/session.h>
+#include "instance.h"
 
-#include <ubuntu/application/location/heading_update.h>
-#include <ubuntu/application/location/position_update.h>
-#include <ubuntu/application/location/velocity_update.h>
+#include <com/lomiri/location/service/session/interface.h>
+#include <com/lomiri/location/heading.h>
+#include <com/lomiri/location/position.h>
+#include <com/lomiri/location/velocity.h>
+#include <com/lomiri/location/update.h>
+
+namespace cll = com::lomiri::location;
+namespace cllss = com::lomiri::location::service::session;
 
 struct core::GeoPositionInfoSource::Private
 {
@@ -37,35 +43,14 @@ struct core::GeoPositionInfoSource::Private
     // 10 seconds.
     static const unsigned int default_timeout_in_ms = 10 * 1000;
 
-    // Our session flags for connecting to the backend service.
-    static const unsigned int empty_creation_flags = 0;
-    
-    // Translates a backend service error to a QGeoPositionInfoSource::Error
-    static QGeoPositionInfoSource::Error ua_location_error_to_qt(UALocationServiceError error);
-
-    // Called for every new position update arriving from the backend service.
-    static void processPositionUpdate(
-        UALocationPositionUpdate* position,
-        void* context);
-
-    // Called for every new heading update arriving from the backend service.
-    static void processHeadingUpdate(
-        UALocationHeadingUpdate* heading,
-        void* context);
-
-    // Called for every new heading update arriving from the backend service.
-    static void processVelocityUpdate(
-        UALocationVelocityUpdate* velocity,
-        void* context);
-
     // Processes the incoming position update and translates it to Qt world.
-    void handlePositionUpdate(UALocationPositionUpdate* position);
+    void handlePositionUpdate(const cll::Update<cll::Position>& position);
 
     // Processes the incoming heading update and translates it to Qt world.
-    void handleHeadingUpdate(UALocationHeadingUpdate* heading);
+    void handleHeadingUpdate(const cll::Update<cll::Heading>& heading);
 
     // Processes the incoming velocity update and translates it to Qt world.
-    void handleVelocityUpdate(UALocationVelocityUpdate* velocity);
+    void handleVelocityUpdate(const cll::Update<cll::Velocity>& velocity);
 
     void createLocationServiceSession();
     void destroyLocationServiceSession();
@@ -76,7 +61,8 @@ struct core::GeoPositionInfoSource::Private
     ~Private();
 
     core::GeoPositionInfoSource* parent;
-    UALocationServiceSession* session;
+    cllss::Interface::Ptr session;
+    std::shared_ptr<Instance> instance;
     QMutex lastKnownPositionGuard;
     QGeoPositionInfo lastKnownPosition;
     QTimer timer;
@@ -206,9 +192,15 @@ void core::GeoPositionInfoSource::startUpdates()
         return;
     }
 
-    ua_location_service_session_start_position_updates(d->session);
-    ua_location_service_session_start_heading_updates(d->session);
-    ua_location_service_session_start_velocity_updates(d->session);
+    d->session->updates().position_status.set(
+                cllss::Interface::Updates::Status::enabled);
+
+    d->session->updates().heading_status.set(
+                cllss::Interface::Updates::Status::enabled);
+
+    d->session->updates().velocity_status.set(
+                cllss::Interface::Updates::Status::enabled);
+
 
     if (m_state != State::one_shot)
         m_state = State::running;
@@ -228,9 +220,14 @@ int core::GeoPositionInfoSource::minimumUpdateInterval() const {
 
 void core::GeoPositionInfoSource::stopUpdates()
 {
-    ua_location_service_session_stop_position_updates(d->session);
-    ua_location_service_session_stop_heading_updates(d->session);
-    ua_location_service_session_stop_velocity_updates(d->session);
+    d->session->updates().position_status.set(
+                cllss::Interface::Updates::Status::disabled);
+
+    d->session->updates().heading_status.set(
+                cllss::Interface::Updates::Status::disabled);
+
+    d->session->updates().velocity_status.set(
+                cllss::Interface::Updates::Status::disabled);
 
     m_state = State::stopped;
 }
@@ -271,94 +268,35 @@ QGeoPositionInfoSource::Error core::GeoPositionInfoSource::error() const
     return d->error;
 }
 
-QGeoPositionInfoSource::Error core::GeoPositionInfoSource::Private::ua_location_error_to_qt(UALocationServiceError error)
-{
-    switch (error)
-    {
-    case UA_LOCATION_SERVICE_ERROR_NONE:
-        return QGeoPositionInfoSource::NoError;
-    case UA_LOCATION_SERVICE_ERROR_NO_CONNECTION:
-        return QGeoPositionInfoSource::UnknownSourceError;
-    case UA_LOCATION_SERVICE_ERROR_NO_ACCESS:
-        return QGeoPositionInfoSource::AccessError;
-    case UA_LOCATION_SERVICE_ERROR_GENERIC_ERROR:
-        return QGeoPositionInfoSource::UnknownSourceError;
-    }
-
-    return QGeoPositionInfoSource::UnknownSourceError;
-}
-
-// Called for every new position update arriving from the backend service.
-void core::GeoPositionInfoSource::Private::processPositionUpdate(UALocationPositionUpdate* position, void* context)
-{
-    if (!position)
-        return;
-
-    Private* thiz = static_cast<Private*>(context);
-
-    if (!thiz)
-        return;
-
-    thiz->handlePositionUpdate(position);
-}
-
-// Called for every new heading update arriving from the backend service.
-void core::GeoPositionInfoSource::Private::processHeadingUpdate(UALocationHeadingUpdate* heading, void* context)
-{
-    if (!heading)
-        return;
-
-    Private* thiz = static_cast<Private*>(context);
-
-    if (!thiz)
-        return;
-
-    thiz->handleHeadingUpdate(heading);
-}
-
-// Called for every new heading update arriving from the backend service.
-void core::GeoPositionInfoSource::Private::processVelocityUpdate(UALocationVelocityUpdate* velocity, void* context)
-{
-    if (!velocity)
-        return;
-
-    Private* thiz = static_cast<Private*>(context);
-
-    if (!thiz)
-        return;
-
-    thiz->handleVelocityUpdate(velocity);
-}
-
 // Processes the incoming position update and translates it to Qt world.
-void core::GeoPositionInfoSource::Private::handlePositionUpdate(UALocationPositionUpdate* position)
+void core::GeoPositionInfoSource::Private::handlePositionUpdate(const cll::Update<cll::Position>& position)
 {
     QGeoCoordinate coord(
-        ua_location_position_update_get_latitude_in_degree(position),
-        ua_location_position_update_get_longitude_in_degree(position),
-        ua_location_position_update_has_altitude(position) ? ua_location_position_update_get_altitude_in_meter(position) : 0);
+        position.value.latitude.value.value(),
+        position.value.longitude.value.value(),
+        position.value.altitude ? position.value.altitude->value.value() : 0);
 
     QMutexLocker lock(&lastKnownPositionGuard);
 
     lastKnownPosition.setCoordinate(coord);
 
-    if (ua_location_position_update_has_horizontal_accuracy(position))
+    if (position.value.accuracy.horizontal)
     {
-        double accuracy = ua_location_position_update_get_horizontal_accuracy_in_meter(position);
+        double accuracy = position.value.accuracy.horizontal->value();
         if (!std::isnan(accuracy))
             lastKnownPosition.setAttribute(QGeoPositionInfo::HorizontalAccuracy, accuracy);
     }
 
-    if (ua_location_position_update_has_vertical_accuracy(position))
+    if (position.value.accuracy.vertical)
     {
-        double accuracy = ua_location_position_update_get_vertical_accuracy_in_meter(position);
+        double accuracy = position.value.accuracy.vertical->value();
         if (!std::isnan(accuracy))
             lastKnownPosition.setAttribute(QGeoPositionInfo::VerticalAccuracy, accuracy);
     }
 
     lastKnownPosition.setTimestamp(
-        QDateTime::fromMSecsSinceEpoch(
-            ua_location_position_update_get_timestamp(position)/1000));
+        QDateTime::fromSecsSinceEpoch(
+            position.when.time_since_epoch().count()));
 
     QGeoPositionInfo info{lastKnownPosition};
 
@@ -376,17 +314,17 @@ void core::GeoPositionInfoSource::Private::handlePositionUpdate(UALocationPositi
 }
 
 // Processes the incoming heading update and translates it to Qt world.
-void core::GeoPositionInfoSource::Private::handleHeadingUpdate(UALocationHeadingUpdate* heading)
+void core::GeoPositionInfoSource::Private::handleHeadingUpdate(const cll::Update<cll::Heading>& heading)
 {
     QMutexLocker lock(&lastKnownPositionGuard);
 
     lastKnownPosition.setAttribute(
         QGeoPositionInfo::Direction,
-        ua_location_heading_update_get_heading_in_degree(heading));
+        heading.value.value());
 
     lastKnownPosition.setTimestamp(
-        QDateTime::fromMSecsSinceEpoch(
-            ua_location_heading_update_get_timestamp(heading)/1000));
+        QDateTime::fromSecsSinceEpoch(
+            heading.when.time_since_epoch().count()));
 
     QGeoPositionInfo info{lastKnownPosition};
 
@@ -398,17 +336,17 @@ void core::GeoPositionInfoSource::Private::handleHeadingUpdate(UALocationHeading
 }
 
 // Processes the incoming velocity update and translates it to Qt world.
-void core::GeoPositionInfoSource::Private::handleVelocityUpdate(UALocationVelocityUpdate* velocity)
+void core::GeoPositionInfoSource::Private::handleVelocityUpdate(const cll::Update<cll::Velocity>& velocity)
 {
     QMutexLocker lock(&lastKnownPositionGuard);
 
     lastKnownPosition.setAttribute(
         QGeoPositionInfo::GroundSpeed,
-        ua_location_velocity_update_get_velocity_in_meters_per_second(velocity));
+        velocity.value.value());
 
     lastKnownPosition.setTimestamp(
-        QDateTime::fromMSecsSinceEpoch(
-            ua_location_velocity_update_get_timestamp(velocity)/1000));
+        QDateTime::fromSecsSinceEpoch(
+            velocity.when.time_since_epoch().count()));
 
     QGeoPositionInfo info{lastKnownPosition};
 
@@ -421,48 +359,56 @@ void core::GeoPositionInfoSource::Private::handleVelocityUpdate(UALocationVeloci
 
 void core::GeoPositionInfoSource::Private::createLocationServiceSession()
 {
-    UALocationServiceError e;
-    session = ua_location_service_try_create_session_for_high_accuracy(core::GeoPositionInfoSource::Private::empty_creation_flags, &e);
+    instance = std::make_shared<Instance>();
 
-    error = core::GeoPositionInfoSource::Private::ua_location_error_to_qt(e);
+    try {
+        session = instance->getService()->create_session_for_criteria(cll::Criteria{});
+        error = QGeoPositionInfoSource::NoError;
+    } catch(...)
+    {
+        error = QGeoPositionInfoSource::AccessError;
+        return;
+    }
 
-    ua_location_service_session_set_position_updates_handler(
-        session,
-        core::GeoPositionInfoSource::Private::processPositionUpdate,
-        this);
-
-    ua_location_service_session_set_heading_updates_handler(
-        session,
-        core::GeoPositionInfoSource::Private::processHeadingUpdate,
-        this);
-
-    ua_location_service_session_set_velocity_updates_handler(
-        session,
-        core::GeoPositionInfoSource::Private::processVelocityUpdate,
-        this);
+    session->updates().position.changed().connect(
+        [this](const cll::Update<cll::Position>& new_position)
+        {
+            try
+            {
+                this->handlePositionUpdate(new_position);
+            } catch(...)
+            {
+                // We silently ignore the issue and keep going.
+            }
+        });
+    session->updates().heading.changed().connect(
+        [this](const cll::Update<cll::Heading>& new_heading)
+        {
+            try
+            {
+                this->handleHeadingUpdate(new_heading);
+            } catch(...)
+            {
+                // We silently ignore the issue and keep going.
+            }
+        });
+    session->updates().velocity.changed().connect(
+        [this](const cll::Update<cll::Velocity>& new_velocity)
+        {
+            try
+            {
+                this->handleVelocityUpdate(new_velocity);
+            } catch(...)
+            {
+                // We silently ignore the issue and keep going.
+            }
+        });
 }
 
 void core::GeoPositionInfoSource::Private::destroyLocationServiceSession()
 {
-    if (session != nullptr) {
-        ua_location_service_session_set_position_updates_handler(
-            session,
-            nullptr,
-            nullptr);
-
-        ua_location_service_session_set_heading_updates_handler(
-            session,
-            nullptr,
-            nullptr);
-
-        ua_location_service_session_set_velocity_updates_handler(
-            session,
-            nullptr,
-            nullptr);
-
-        ua_location_service_session_unref(session);
+    if (session)
         session = nullptr;
-    }
 }
 
 // Creates a new instance and attempts to connect to the background service.

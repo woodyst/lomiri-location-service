@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Author: Thomas Voß <thomas.voss@canonical.com>
+ *         Marius Gripsgard <marius@ubports.com>
  */
 
 #ifndef CORE_GEO_POSITION_INFO_SOURCE_H
@@ -46,7 +47,7 @@ public:
         suspended,
     };
 
-public slots:
+public Q_SLOTS:
     void applicationStateChanged();
     virtual void startUpdates();
     virtual void stopUpdates();
