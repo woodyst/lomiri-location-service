@@ -27,9 +27,6 @@ set(PLUGIN_INSTALL_LOCATION "${CMAKE_INSTALL_LIBDIR}/qt5/plugins/position")
 
 message(STATUS "Installing Qt5 location plugin to: ${PLUGIN_INSTALL_LOCATION}")
 
-qt5_use_modules(qtposition_lomiri Core Gui Location)
-qt5_use_modules(qtposition_lomiri Gui Location)
-
 target_link_libraries(
   qtposition_lomiri
 
