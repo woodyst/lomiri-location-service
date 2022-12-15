@@ -27,11 +27,11 @@ Build-Depends: cmake,
                libubuntu-platform-hardware-api-dev [!ppc64el !powerpc] <!noplatformapi>,
                libproperties-cpp-dev,
                lsb-release,
-               trust-store-bin,
-               cmake-extras,
                qtbase5-dev,
                qtlocation5-dev,
                qtpositioning5-dev,
+               trust-store-bin,
+               cmake-extras,
 Standards-Version: 3.9.4
 Homepage: https://gitlab.com/ubports/development/core/location-service
 Vcs-Git: https://gitlab.com/ubports/development/core/location-service.git
