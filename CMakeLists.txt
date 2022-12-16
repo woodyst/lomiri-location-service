@@ -6,6 +6,11 @@ set(LOMIRI_LOCATION_SERVICE_VERSION_MAJOR 3)
 set(LOMIRI_LOCATION_SERVICE_VERSION_MINOR 0)
 set(LOMIRI_LOCATION_SERVICE_VERSION_PATCH 0)
 
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+
 message(STATUS "${CMAKE_PROJECT_NAME} ${LOMIRI_LOCATION_SERVICE_VERSION_MAJOR}.${LOMIRI_LOCATION_SERVICE_VERSION_MINOR}.${LOMIRI_LOCATION_SERVICE_VERSION_PATCH}")
 
 set(LOMIRI_LOCATION_SERVICE_TRUST_STORE_SERVICE_NAME "LomiriLocationService")
@@ -100,6 +105,7 @@ add_subdirectory(include)
 add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(tests)
+add_subdirectory(qt)
 
 # There's no nice way to format this. Thanks CMake.
 add_test(LGPL-required

@@ -1,0 +1,7 @@
+{
+    "Keys": ["lomiri"],
+    "Provider": "lomiri",
+    "Position": true,
+    "Satellite": false,
+    "Priority": 2000
+}
