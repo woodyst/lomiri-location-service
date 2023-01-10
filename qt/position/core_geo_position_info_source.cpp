@@ -220,6 +220,15 @@ int core::GeoPositionInfoSource::minimumUpdateInterval() const {
 
 void core::GeoPositionInfoSource::stopUpdates()
 {
+
+    if (error() != QGeoPositionInfoSource::NoError || !d->session)
+    {
+        // Don't emit an error from stopUpdates(). Applications usually call
+        // stop() in response to an error, thus emitting one here could lead
+        // to an infinite call cycle (and maybe stack overflow).
+        return;
+    }
+
     d->session->updates().position_status.set(
                 cllss::Interface::Updates::Status::disabled);
 
