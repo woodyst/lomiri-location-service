@@ -16,7 +16,7 @@ message(STATUS "${CMAKE_PROJECT_NAME} ${LOMIRI_LOCATION_SERVICE_VERSION_MAJOR}.$
 set(LOMIRI_LOCATION_SERVICE_TRUST_STORE_SERVICE_NAME "LomiriLocationService")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic -Wextra -fPIC")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -fno-strict-aliasing -pedantic -Wextra -fPIC -DBOOST_ASIO_DISABLE_EPOLL")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -fno-strict-aliasing -pedantic -Wextra -fPIC -DBOOST_ASIO_DISABLE_EPOLL")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
