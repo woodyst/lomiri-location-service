@@ -473,6 +473,10 @@ bool android::HardwareAbstractionLayer::is_capable_of(gps::Capability capability
 bool android::HardwareAbstractionLayer::start_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
+
+    // Re-register callbacks in case they have been overwritten (e.g. by Waydroid)
+    impl.register_callbacks();
+
     return u_hardware_gps_start(impl.gps_handle);
 }
 
@@ -576,6 +580,14 @@ android::HardwareAbstractionLayer::Impl::Impl(
     gps_params.request_refloc_cb = HardwareAbstractionLayer::on_ril_request_reference_location;
 
     gps_params.context = parent;
+
+    register_callbacks();
+}
+
+void android::HardwareAbstractionLayer::Impl::register_callbacks()
+{
+    if (gps_handle)
+        u_hardware_gps_delete(gps_handle);
 
     gps_handle = u_hardware_gps_new(std::addressof(gps_params));
 
