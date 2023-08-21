@@ -254,6 +254,9 @@ struct HardwareAbstractionLayer : public gps::HardwareAbstractionLayer
         // Bootstraps access to the GPS chipset, wiring up all callbacks.
         Impl(android::HardwareAbstractionLayer* parent, const android::HardwareAbstractionLayer::Configuration& configuration);
 
+        // Wires up all callbacks, (re)gaining access to the GPS chipset.
+        void register_callbacks();
+
         // Adjusts the assistance and positioning mode in one go, returning false in case of issues.
         bool dispatch_updated_modes_to_driver();
 
