@@ -52,7 +52,8 @@ clls::Implementation::Implementation(const clls::Implementation::Configuration& 
               {
                   new clls::Skeleton::DBusDaemonCredentialsResolver
                   {
-                      config.outgoing
+                      config.outgoing,
+                      clls::Skeleton::DBusDaemonCredentialsResolver::libapparmor_profile_resolver(),
                   }
               },
               clls::Skeleton::ObjectPathGenerator::Ptr
