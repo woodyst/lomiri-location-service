@@ -556,7 +556,8 @@ bool android::HardwareAbstractionLayer::inject_reference_time(const ReferenceTim
 android::HardwareAbstractionLayer::Impl::Impl(
         android::HardwareAbstractionLayer* parent,
         const android::HardwareAbstractionLayer::Configuration& configuration)
-    : capabilities(0),
+    : gps_handle(nullptr),
+      capabilities(0),
       assistance_mode(gps::AssistanceMode::mobile_station_based),
       position_mode(gps::PositionMode::periodic),
       supl_assistant(*parent),
