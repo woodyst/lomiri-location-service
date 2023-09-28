@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include <com/ubuntu/location/provider.h>
-#include <com/ubuntu/location/provider_factory.h>
+#include <com/lomiri/location/provider.h>
+#include <com/lomiri/location/provider_factory.h>
 
 #include <libgpsmm.h>
 
@@ -27,7 +27,7 @@
 
 namespace com
 {
-namespace ubuntu
+namespace lomiri
 {
 namespace location
 {
@@ -35,7 +35,7 @@ namespace providers
 {
 namespace gpsd
 {
-class Provider : public com::ubuntu::location::Provider
+class Provider : public com::lomiri::location::Provider
 {
   public:
     static Provider::Ptr create_instance(const ProviderFactory::Configuration&);

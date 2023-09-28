@@ -20,8 +20,8 @@
 
 #include <memory>
 
-namespace cul = com::ubuntu::location;
-namespace culpg = com::ubuntu::location::providers::gpsd;
+namespace cul = com::lomiri::location;
+namespace culpg = com::lomiri::location::providers::gpsd;
 
 void culpg::Provider::loop()
 {
@@ -137,7 +137,7 @@ cul::Provider::Ptr culpg::Provider::create_instance(const cul::ProviderFactory::
 }
 
 culpg::Provider::Provider(const culpg::Provider::Configuration& config) 
-        : com::ubuntu::location::Provider(config.features, config.requirements)
+        : com::lomiri::location::Provider(config.features, config.requirements)
  {
     std::cout << "GPSD DEBUG config: host " << config.host << " port: " << config.port << std::endl;
     m_gpsd = std::make_shared<gpsmm>(config.host.c_str(), config.port.c_str());
@@ -181,4 +181,4 @@ void culpg::Provider::start_heading_updates()
 void culpg::Provider::stop_heading_updates()
 {
     stop();
-}    
+}

@@ -73,6 +73,16 @@ static FactoryInjector gps_injector
 };
 #endif // COM_LOMIRI_LOCATION_SERVICE_PROVIDERS_GPS
 
+#if defined(COM_LOMIRI_LOCATION_SERVICE_PROVIDERS_GPSD)
+#include <com/lomiri/location/providers/gpsd/provider.h>
+static FactoryInjector gpsd_injector
+{
+    "gpsd::Provider",
+    com::lomiri::location::providers::gpsd::Provider::create_instance
+};
+#endif // COM_LOMIRI_LOCATION_SERVICE_PROVIDERS_GPSD
+
+
 #if defined(COM_LOMIRI_LOCATION_SERVICE_PROVIDERS_SKYHOOK)
 #include <com/lomiri/location/providers/skyhook/provider.h>
 static FactoryInjector skyhook_injector
