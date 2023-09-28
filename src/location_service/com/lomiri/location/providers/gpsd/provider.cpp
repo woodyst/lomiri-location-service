@@ -17,7 +17,7 @@
  */
 
 #include "provider.h"
-
+#include "math.h"
 #include <memory>
 
 namespace cul = com::lomiri::location;
@@ -34,15 +34,13 @@ void culpg::Provider::loop()
             auto gpsdata = m_gpsd->read();
 
             if(gpsdata){
-                if (gpsdata->status == STATUS_FIX) {
-                    if(gpsdata->fix.longitude!=gpsdata->fix.longitude || gpsdata->fix.altitude!=gpsdata->fix.altitude){
-                        std::cout << "GPSD could not get a GPS fix." << std::endl;
-                    } else {
-                        on_data(gpsdata);
-                    }
+                if(isfinite(gpsdata->fix.latitude) && isfinite(gpsdata->fix.longitude) && isfinite(gpsdata->fix.altitude)){
+                    on_data(gpsdata);
+                } else {
+                    std::cout << "GPSD could not get a GPS fix." << std::endl;
                 }
             } else {
-                std::cout << "GPSD Error" << std::endl;
+                std::cout << "GPSD Error: " << gps_errstr(errno) << std::endl;
             }
         } else {
             // gps_stream disables itself after a few seconds.. in this case, gps_waiting returns false.
