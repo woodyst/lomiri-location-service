@@ -2,6 +2,7 @@ add_subdirectory(dummy)
 add_subdirectory(remote)
 add_subdirectory(geoclue)
 add_subdirectory(gps)
+add_subdirectory(gpsd)
 add_subdirectory(skyhook)
 
 set(
