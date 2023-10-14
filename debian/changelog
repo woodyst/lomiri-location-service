@@ -1,13 +1,9 @@
-location-service (3.1.0) UNRELEASED; urgency=medium
+location-service (3.1.0) unstable; urgency=medium
 
-  * Port to focal
-  * Update to dh version 12
-  * Update homepage and VCS URLs
-  * Improved package descriptions
-  * Remove manual version specification
-  * Disable obsolete geoclue provider
+  * Upstream-provided Debian package for location-service. See upstream
+    ChangeLog for recent changes.
 
- -- Guido Berhoerster <guido+ubports@berhoerster.name>  Fri, 07 Jan 2022 13:59:51 +0100
+ -- UBports developers <developers@ubports.com>  Sun, 15 Oct 2023 01:12:57 +0200
 
 location-service (3.0.0+ubports1~16.04.1) xenial; urgency=medium
 

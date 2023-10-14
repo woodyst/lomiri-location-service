@@ -1,0 +1,3526 @@
+2023-10-15 Mike Gabriel
+
+        * Release 3.1.0 (HEAD -> main, tag: 3.1.0)
+
+2023-10-03 Mike Gabriel
+
+        * Merge branch 'focal_gpsd' into 'main' (9bf1c80)
+
+2023-09-28 Luigi311
+
+        * Providers: GPSD: Improve condition check (c4903f2)
+        * Providers: GPSD: Forward port for focal rename (4056b91)
+
+2020-05-09 Marius Gripsgard
+
+        * [WIP] Add gpsd provider (ca407b0)
+
+2023-08-21 NPL
+
+        * Translated using Weblate (Japanese) (939a99a)
+
+2023-08-26 Marius Gripsgard
+
+        * Merge branch 'personal/peat-psuwit/uninitialized_gps_handle' into
+          'main' (681ea63)
+
+2023-08-25 Ratchanan Srirattanamet
+
+        * gps: fix sproradic crash due to uninitialized memory
+          (666fbef)
+          Fixes: 13473aa70d68 ("gps: Re-register callbacks
+          in start_positioning")
+          Fixes:
+          https://gitlab.com/ubports/development/core/location-service/-/issues/16
+
+2023-08-23 Mike Gabriel
+
+        * Merge branch 'personal/gberh/locationbg' into 'main' (0a8a388)
+
+2021-04-20 Alberto Mardegan
+
+        * service: expose the list of active clients as a D-Bus property
+          (571d9c6)
+        * trust-store: move the AppArmor resolution to the Skeleton class
+          (b5eacb1)
+        * Formatting changes (4e0b283)
+
+2023-08-21 Mike Gabriel
+
+        * Merge branch 'main' into 'main' (2dc80d0)
+
+2023-08-21 j1xlte-gtelwifiue
+
+        * Merge branch location-service:main into main (d6eda1e)
+
+2023-08-13 Abdullah AL Shohag
+
+        * Translated using Weblate (Bengali (Bangladesh)) (48e2cfb)
+
+2023-07-26 j1xlte-gtelwifiue
+
+        * gps: Re-register callbacks in start_positioning This allows GPS to
+          be used after running Waydroid (which overwrites our
+          callbacks) and after the GNSS HAL restarts in Halium.
+          (13473aa)
+
+2023-06-30 Weblate
+
+        * Added translation using Weblate (Sanskrit) (e65c5d3)
+
+2023-04-12 Temuri Doghonadze
+
+        * Translated using Weblate (Georgian) (9598d0c)
+
+2023-04-23 Mike Gabriel
+
+        * Merge branch 'personal/fredldotme/restarttrustagent' into 'main'
+          (f27dd21)
+
+2023-04-23 Alfred Neumayer
+
+        * data: Always restart the trust-agent (5d2faa1)
+
+2023-03-27 Jozef Mlich
+
+        * Translated using Weblate (Czech) (875cece)
+
+2023-02-21 Heimen Stoffels
+
+        * Translated using Weblate (Dutch) (69cc5b1)
+
+2023-02-16 phlostically
+
+        * Translated using Weblate (Esperanto) (2e98600)
+
+2023-02-15 Mike Gabriel
+
+        * po/: Rename ku.po to ckb.po as suggested by Weblate. (ac372df)
+        * Merge branch 'c++17' into 'main' (f370c9d)
+
+2023-02-12 Luca Weiss
+
+        * Upgrade C++ standard to C++17 (5310b1b)
+
+2023-01-12 Sergii Horichenko
+
+        * Translated using Weblate (Russian) (e67c05f)
+
+2023-01-11 Dan
+
+        * Translated using Weblate (Ukrainian) (4e84297)
+
+2023-01-11 Guido Berhoerster
+
+        * Merge branch
+          'personal/peat-psuwit/14-focal-qt-plugin-crashes-the-app-if-the-location-is-denied'
+          into 'main' (1da8d00)
+
+2023-01-10 Ratchanan Srirattanamet
+
+        * qt/position: prevent crash when stopping a denied location request
+          (1bb1b66)
+          Fixes:
+          https://gitlab.com/ubports/development/core/location-service/-/issues/14
+
+2023-01-05 Mike Gabriel
+
+        * Revert "Deleted translation using Weblate (Chinese (Traditional,
+          Hong Kong))" (12eb7eb)
+        * Revert "Added translation using Weblate (Chinese (Traditional, Hong
+          Kong))" (6d76003)
+
+2023-01-04 Weblate
+
+        * Added translation using Weblate (Chinese (Traditional, Hong Kong))
+          (341c81d)
+
+2023-01-04 Mike Gabriel
+
+        * Deleted translation using Weblate (Chinese (Traditional, Hong
+          Kong)) (0b71219)
+
+2023-01-04 Weblate
+
+        * Added translation using Weblate (Pampanga) (7ef686d)
+        * Added translation using Weblate (Chinese (Min Nan)) (8db4a1b)
+        * Added translation using Weblate (Kurdish (Southern)) (138b594)
+        * Added translation using Weblate (French (Switzerland)) (cff9de3)
+        * Added translation using Weblate (Kurdish (Northern)) (413cce5)
+        * Added translation using Weblate (Shan) (32e848d)
+        * Added translation using Weblate (Bemba) (63d50f0)
+        * Added translation using Weblate (Oromo) (5597538)
+        * Added translation using Weblate (Dhivehi) (bf52af9)
+        * Added translation using Weblate (Bengali (Bangladesh)) (78246e5)
+        * Added translation using Weblate (Kabyle) (dc6b836)
+        * Added translation using Weblate (English (Canada)) (3b66005)
+        * Added translation using Weblate (Sindhi) (9254c49)
+        * Added translation using Weblate (Lojban) (91d9bd2)
+        * Added translation using Weblate (Sardinian) (488df00)
+        * Added translation using Weblate (English (United States)) (33ed371)
+        * Added translation using Weblate (Sinhala) (5ff1bac)
+        * Added translation using Weblate (Georgian) (9f4aaa7)
+        * Added translation using Weblate (Macedonian) (b723a74)
+        * Added translation using Weblate (Friulian) (7d2a21d)
+        * Added translation using Weblate (Pashto) (4302e57)
+        * Added translation using Weblate (Telugu) (01e1a0d)
+        * Added translation using Weblate (Turkmen) (ac98bcd)
+        * Added translation using Weblate (Lao) (915f282)
+        * Added translation using Weblate (Scots) (7a7727d)
+        * Added translation using Weblate (Gujarati) (d67f1ff)
+
+2023-01-03 Weblate
+
+        * Added translation using Weblate (Urdu) (235123c)
+
+2023-01-03 Hosted Weblate
+
+        * Update translation files (a145291)
+
+2022-12-16 Mike Gabriel
+
+        * Merge branch 'personal/mariogrip/qtplugin' into 'main' (46bbb1b)
+
+2022-12-15 Marius Gripsgard
+
+        * [debian] Sort build-depends (de56383)
+        * [qt] Remove uneeded qt5_use_modules (a7546da)
+
+2022-12-14 Marius Gripsgard
+
+        * [qt] Remove use of platfrom-api and use location-service api
+          directly (a292405)
+
+2020-05-17 Marius Gripsgard
+
+        * [qt] Move qt plugin from qtubuntu-sensors here (03a1a1f)
+
+2022-12-12 Mike Gabriel
+
+        * Merge branch 'revert-355b1663' into 'main' (69f89ac)
+
+2022-12-12 Marius Gripsgard
+
+        * debian/rules: Fix wrong if logic, should enable when not ppc64el or
+          powerpc (480e3e8)
+        * Revert "Enable build profile "noplatformapi"" (9c7957d)
+
+2022-11-22 Guido Berhoerster
+
+        * Merge branch 'personal/fredldotme/helloasiomyoldfriend' into 'main'
+          (e786f6f)
+
+2022-11-14 Alfred Neumayer
+
+        * CMake: Build with BOOST_ASIO_DISABLE_EPOLL (1790939)
+
+2022-10-17 Guido Berhoerster
+
+        * Merge branch 'personal/peat-psuwit/fix-systemd-execstart' into
+          'main' (3c9b43b)
+
+2022-10-03 Ratchanan Srirattanamet
+
+        * data: remove usage of command substitution in systemd unit
+          (609ab05)
+        * data: make trust-stored service a user unit (c059a3f)
+        * data/*.service.in: fix systemd units to use ExecStart (42d8377)
+
+2022-07-31 Marius Gripsgard
+
+        * Merge branch 'ubports/focal_-_modernize-location-service' into
+          'main' (2001db7)
+
+2022-07-21 Guido Berhoerster
+
+        * Enable build profile "noplatformapi" (355b166)
+        * Add build profile "noplatformapi" (304abff)
+        * Rename Ubuntu Location Service to Lomiri Location Service (8274d57)
+        * Temporarily exclude failing tests when building the package
+          (9d0f030)
+
+2022-01-12 Guido Berhoerster
+
+        * Fix multiarch packaging (c014fb6)
+
+2022-07-21 Guido Berhoerster
+
+        * Update Debian packaging for focal (200c80a)
+        * Remove obsolete snap packaging (a230e09)
+        * Remove leftover bzr-builddeb file (7f0c6a0)
+
+2022-01-12 Guido Berhoerster
+
+        * Do not install tests in a subdirectory below /usr/bin (2e87ad0)
+        * Convert upstart job to systemd unit file (2d14000)
+
+2022-07-21 Guido Berhoerster
+
+        * Remove support for vivid (7b34d5d)
+
+2022-01-10 Guido Berhoerster
+
+        * Explicitly include boost/optional/optional_io.hpp (c8d93ab)
+
+2022-07-18 Mike Gabriel
+
+        * Merge branch 'bionic_-_boost' into 'main' (0a63fd2)
+
+2022-03-20 Luca Weiss
+
+        * Add missing header for boost (ee4f8c1)
+
+2022-07-18 Mike Gabriel
+
+        * Merge branch 'main-fixes' into 'main' (66051e3)
+
+2020-08-04 filman230
+
+        * Add missing <string> header (f0dbd50)
+
+2019-01-01 Luca Weiss
+
+        * Add missing header include (43615a0)
+
+2018-06-14 Ivan Semkin
+
+        * Fix lsb_release if expression failing with empty output (4e22631)
+
+2022-06-20 Guido Berhoerster
+
+        * Move Jenkinsfile to debian/ (aed184f)
+
+2021-06-27 Florian Leeber
+
+        * Merge pull request #10 from mardy/nodoc (17a9645)
+
+2021-04-20 Alberto Mardegan
+
+        * debian: do not build documentation under the "nodoc" profile
+          (9db8e6e)
+        * CI: update Jenkinsfile (d7923e7)
+
+2019-06-28 Florian Leeber
+
+        * Merge pull request #7 from ubports/xenial_-_fix-build (6604443)
+
+2019-06-27 Rodney Dawes
+
+        * Clean up debian dir a bit. (db235cf)
+
+2019-06-28 Florian Leeber
+
+        * Merge pull request #6 from ubports/xenial_-_drop-espoo (b99a13a)
+
+2019-06-26 Rodney Dawes
+
+        * Remove all references to espoo backend. (22d014a)
+
+2018-02-18 Marius Gripsgard
+
+        * Build for xenial (7542f20)
+        * Depend on cmake-extras (9d47f6f)
+        * Fix GMock (25e1c7c)
+        * Fix gcc 7 (8cd2977)
+
+2017-07-14 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (d52d77c)
+
+2017-05-22 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (919d0e3)
+
+2016-10-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (085e082)
+
+2016-10-03 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (3a09f06)
+
+2016-09-29 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (7787f57)
+
+2016-09-28 Bileto Bot
+
+        * Resync trunk. (fd6bc13)
+
+2016-09-28 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (c403f50)
+
+2016-09-25 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e5a1239)
+
+2016-09-20 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (8b43a09)
+
+2016-09-12 Bileto Bot
+
+        * Releasing 3.0.0+16.10.20160912-0ubuntu1 (197b8e0)
+
+2016-09-12 Scott Sweeny
+
+        * Enable gps provider on arm64. (117662c)
+        * merge from trunk (b781f15)
+
+2016-09-12 Robert Bruce Park
+
+        * Migrate to bileto_pre_release_hook (dd972e7)
+
+2016-09-03 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (2120122)
+
+2016-08-30 You-Sheng Yang
+
+        * Enable gps provider on arm64. (05a5164)
+
+2016-08-23 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (681463e)
+
+2016-08-22 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e9de921)
+
+2016-08-20 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (c5d71f8)
+
+2016-08-11 Bileto Bot
+
+        * Releasing 3.0.0+16.10.20160811-0ubuntu1 (058a13a)
+
+2016-08-11 Thomas Voß
+
+        * Make sure that we are not racing with the timeout handler.
+          (b869cde)
+
+2016-08-11 Alberto Mardegan
+
+        * Don't sent last known position to new sessions (LP: #1604446)
+          (e031c70)
+
+2016-08-11 Scott Sweeny
+
+        * Enable running location-service on Snappy Ubuntu Core (d0ffe23)
+
+2016-08-10 Thomas Voß
+
+        * Make sure that we are not racing with the timeout handler.
+          (2031a58)
+
+2016-08-09 Scott Sweeny
+
+        * Change snap name to locationd and the daemon name to run (dac9a49)
+
+2016-08-08 Scott Sweeny
+
+        * Specify major version in snappy config to work around FTBFS on
+          Launchpad (e6b2c35)
+
+2016-08-04 Scott Sweeny
+
+        * Merge from trunk (7922136)
+
+2016-07-26 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (29d304a)
+
+2016-07-25 CI Train Bot
+
+        * Resync trunk. (ddf097a)
+
+2016-07-25 Alberto Mardegan
+
+        * Don't sent last known position to new sessions (ca12941)
+
+2016-07-21 Scott Sweeny
+
+        * snapcraft.yaml: update description and include license files
+          (43f02b7)
+        * Make snap version match debian version (3c4af80)
+        * Merge trunk (5b1b651)
+
+2016-07-19 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4b11beb)
+
+2016-07-18 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (7a457e3)
+
+2016-07-10 Bileto Bot
+
+        * Releasing 3.0.0+16.10.20160710-0ubuntu1 (97aee90)
+
+2016-07-10 Rex Tsai
+
+        * Reload trust-stored, when use switched locale in welcome wizard.
+          (b7b5041)
+
+2016-07-08 Rex Tsai
+
+        * restart trust-stored when indicator-services restart.
+          Fixes:
+          #1582148 (f4a355e)
+
+2016-07-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (fbc3e15)
+
+2016-07-03 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (3b78f07)
+
+2016-06-26 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (732d1a4)
+
+2016-06-22 Scott Sweeny
+
+        * Switch back to dummy provider (69c0019)
+        * Fix FTBFS (033f591)
+        * Merge from trunk (896e9ac)
+
+2016-06-16 Bileto Bot
+
+        * Releasing 3.0.0+16.10.20160616-0ubuntu1 (2465685)
+
+2016-06-16 Scott Sweeny
+
+        * Fusion provider: Always use an update that came from the same
+          source as the previous used update (fixes LP: #1570878)
+          (LP: #1570878) (c250b3a)
+
+2016-06-16 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e251b00)
+
+2016-06-15 CI Train Bot
+
+        * Resync trunk. (b7e010b)
+
+2016-06-15 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (58714c9)
+
+2016-06-13 Bileto Bot
+
+        * Releasing 3.0.0+16.10.20160613.1-0ubuntu1 (5894828)
+
+2016-06-13 Thomas Voß
+
+        * Expose service::State to the bus. (LP: #1536774) (2a4a695)
+
+2016-06-11 Thomas Voß
+
+        * Introduce a StateTrackingProvider enabling the engine to track
+          enabled/active state. (3a15f83)
+
+2016-06-08 Scott Sweeny
+
+        * FusionProvider behavior doesn't depend on the provider type
+          anymore, so clean up some tests (6d88cd0)
+        * Per tvoss' suggestion, compare sources without breaking ABI by
+          comparing pointers instead of trying to extract data
+          (aada611)
+        * Fix comment typo (ea641e5)
+        * Remove unused field from remote provider (97e6d8e)
+
+2016-06-06 Scott Sweeny
+
+        * Fusion provider: Always use an update that came from the same
+          source as the previous used update (c18439d)
+
+2016-06-02 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (668f35c)
+
+2016-06-01 Scott Sweeny
+
+        * Address review comments: make configuration methods const and use
+          more robust method of getting the SNAP_DATA env var
+          (efa3473)
+
+2016-06-01 Thomas Voß
+
+        * Fix copy'n'paste leftover. (41da299)
+
+2016-05-31 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (6f9535a)
+
+2016-05-24 CI Train Bot
+
+        * Releasing 3.0.0+16.10.20160524.3-0ubuntu1 (d1b7f0b)
+
+2016-05-24 Thomas Voß
+
+        * Fix #1584860. The NM update altered the type of LastSeen to int32.
+
+          Fixes: #1584860 Approved by: Scott Sweeny (0e47d81)
+        * Make json value extraction more robust. Adjust timing logic in test
+          case. (3972425)
+        * And another missing include <random>. (b783e9a)
+        * Add another missing include for <random>. (5f21a56)
+        * Add missing include <random>. (93ad4d1)
+
+2016-05-23 Thomas Voß
+
+        * Fix #1584860. The NM update altered the type of LastSeen to int32.
+          (3be3342)
+
+2016-05-23 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (86e7f59)
+
+2016-05-20 Scott Sweeny
+
+        * Remove example-service since it doesn't work yet (1e1124b)
+        * Snapcraft packaging (e6b7758)
+        * Changes necessary to run on Snappy Ubuntu Core (464ee2d)
+
+2016-05-20 Thomas Voß
+
+        * Expose service::State to the bus. (4af0384)
+
+2016-05-08 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (8f927f2)
+
+2016-05-05 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (d247132)
+
+2016-05-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (7396d32)
+
+2016-04-26 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e3b389d)
+
+2016-04-23 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (c8ac076)
+
+2016-04-21 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (33de8db)
+
+2016-04-20 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (bff879a)
+
+2016-04-19 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (03ec9bd)
+
+2016-04-18 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (bd45845)
+
+2016-04-17 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e0158fb)
+
+2016-04-14 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (0c89ab8)
+
+2016-04-11 Robert Bruce Park
+
+        * Fix ln. (c33085d)
+
+2016-04-10 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (5c9a402)
+
+2016-04-09 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (28a4263)
+
+2016-04-08 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (f5c8b16)
+
+2016-04-07 CI Train Bot
+
+        * Resync trunk. (1f6be7b)
+
+2016-04-07 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (2dfe60d)
+
+2016-04-06 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (3e2f3bb)
+
+2016-04-05 CI Train Bot
+
+        * Releasing 3.0.0+16.04.20160405-0ubuntu1 (3dc444f)
+
+2016-04-05 Scott Sweeny
+
+        * Small fixes around provider loading (8cdde20)
+        * Use a fusion engine provider to generate higher quality position
+          updates (a4f9455)
+        * Use a fusion engine provider to generate higher quality position
+          updates (b3b9da7)
+        * Small fixes around provider loading (ea26777)
+
+2016-04-05 Robert Bruce Park
+
+        * Simplify symlinks. (65aafa1)
+        * Commit results of bileto_pre_release_hook. (13fdfa9)
+        * Use new bileto_pre_release_hook. (06eaee2)
+
+2016-04-04 CI Train Bot
+
+        * Releasing 3.0.0+16.04.20160404-0ubuntu1 (69328c0)
+
+2016-04-04 Thomas Voß
+
+        * Lower number of concurrent clients to stabilize acceptance test on
+          loaded builders. Approved by: Scott Sweeny (b110a6e)
+        * Enable dual landings according to
+          https://wiki.ubuntu.com/citrain/LandingProcess#Dual-landing_for_stable_and_devel:
+            * Both vivid+overlay and xenial packages are built from
+          the same source.   * To account for differences in major
+          revisions (necessary to handle the g++ 5 ABI break),
+          we generate install files on the fly. Approved by: Łukasz
+          Zemczak (1a6c340)
+        * [ Alberto Mardegan ];  Make sure that injected time is given in
+          milliseconds [ Thomas Voß ];  Cherry-pick rev. 196 and 199
+          from lp:location-service. The changes   got accidentally
+          removed by merging the outstanding documentation   branch.
+          * Handle responses of clients to updates asynchronously.
+          Rely on   dummy::ConnectivityManager as harvesting is
+          disabled anyway. (LP:   #1462664, #1387643) [ Thomas Voß ]
+          * Add documentation for debugging, hacking and debugging
+          the location   service. Pull manual testing instructions
+          over from the wiki. Add   tools for formatting the source.
+          [ thomas-voss ];  Add documentation for debugging, hacking
+          and debugging the location   service. Pull manual testing
+          instructions over from the wiki. Add   tools for
+          formatting the source. Approved by: Alberto Mardegan
+          (e770f52)
+        * Pull in missing revisions to changelog. (64c75d8)
+
+2016-04-01 Thomas Voß
+
+        * Log to stderr by default, relying on upstart to rotate logs
+          appropriately. (LP: #1447110) (8d6010d)
+
+2016-03-31 Scott Sweeny
+
+        * Merge upstream 15.04 branch and fix conflicts (34efe09)
+
+2016-03-31 CI Train Bot
+
+        * Releasing 2.1+15.04.20160331.2-0ubuntu1 (2c666fe)
+
+2016-03-31 Thomas Voß
+
+        * Log to stderr by default, relying on upstart to rotate logs
+          appropriately.
+          Fixes: #1447110 Approved by: Scott Sweeny
+          (46a9c50)
+        * Add test ensuring correct behavior. (9c6d5cb)
+        * Remove directory even if not empty (ensure consistent semantics
+          across boost versions). (5c809e2)
+
+2016-03-30 Thomas Voß
+
+        * Remove obsolete /var/log/ubuntu-location-service on startup.
+          (a56b326)
+
+2016-03-29 Thomas Voß
+
+        * Dial down logging of issues in communicating updates to clients.
+          (333cd4e)
+
+2016-03-27 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (dc8b8f2)
+
+2016-03-23 Thomas Voß
+
+        * Fixes lp:1447110. (f63aec4)
+        * Log to stderr by default, relying on upstart to rotate logs
+          appropriately. (69d28bb)
+
+2016-03-20 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4e0f7fc)
+
+2016-03-17 Thomas Voß
+
+        * Resync to trunk. (8434c96)
+        * Add SntpClient for querying reference time information.;  Remove
+          explicit option to disable satellite-based positioning
+          services. (fd93185)
+        * Address review comments and tidy up line length. (0417ee0)
+
+2016-03-16 Thomas Voß
+
+        * Enable dual landings according to
+          https://wiki.ubuntu.com/citrain/LandingProcess#Dual-landing_for_stable_and_devel:
+            * Both vivid+overlay and xenial packages are built from
+          the same source.   * To account for differences in major
+          revisions (necessary to handle the g++ 5 ABI break), we
+          generate install files on the fly. (d330bc8)
+
+2016-03-15 Thomas Voß
+
+        * Remove explicit option to disable satellite-based positioning
+          services. [ Alberto Mardegan ];  Set debian source format
+          to "3.0 (native)" [ Scott Sweeny ];  Allow providers to
+          register themselves asynchronously (LP: #1415029.
+          Account for changes in trust-store w.r.t. assembling the
+          description   of a trust prompt.;  Fix settings not being
+          applied correctly. (e1c11f2)
+
+2016-03-13 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e4e1e32)
+
+2016-03-11 Thomas Voß
+
+        * Lower number of concurrent clients to stabilize acceptance test on
+          loaded builders. (91456b2)
+        * Remove obsolete install files. Adjust setup of major.minor.patch
+          triplet in CMakeLists.txt. (8e07d94)
+        * Add missing files. (db8d276)
+        * Enable dual landings according to
+          https://wiki.ubuntu.com/citrain/LandingProcess#Dual-landing_for_stable_and_devel:
+            * Both vivid+overlay and xenial packages are built from
+          the same source.   * To account for differences in major
+          revisions (necessary to handle the g++ 5 ABI break),
+          we generate install files on the fly.
+          libubuntu-location-service3: Replaces
+          libubuntu-location-service2,   config file /etc/gps.conf
+          in both packages.;  Bump major revision and fix
+          LP:#1478750 to account for toolchain update. (aea7bd9)
+
+2016-03-10 Thomas Voß
+
+        * Resync to trunk. (aa6ff5b)
+        * Remove explicit option to disable satellite-based positioning
+          services. [ Alberto Mardegan ];  Set debian source format
+          to "3.0 (native)" [ Scott Sweeny ];  Allow providers to
+          register themselves asynchronously (LP: #1415029.
+          Account for changes in trust-store w.r.t. assembling the
+          description   of a trust prompt.;  Fix settings not being
+          applied correctly. (0a355e5)
+
+2016-03-10 Scott Sweeny
+
+        * Prettify the last_position update code (7d5cc0a)
+
+2016-03-09 Scott Sweeny
+
+        * Small changes addressing review comments (5abb2bb)
+
+2016-03-08 Scott Sweeny
+
+        * Remove a couple of debug statements (ce200e9)
+
+2016-03-08 CI Train Bot
+
+        * Releasing 2.1+15.04.20160308.1-0ubuntu1 (7d825de)
+
+2016-03-08 Thomas Voß
+
+        * Add SntpClient for querying reference time information. Approved
+          by: Łukasz Zemczak, Simon Fels (8a1def1)
+        * Gracefully handle exceptions thrown from the reference time source.
+          (2f26708)
+
+2016-03-07 Scott Sweeny
+
+        * Fix up inconsistent '&' placement in parameters (fe49843)
+        * Pass UpdateSelectors and return Updates by reference (add2956)
+        * Per review comments, eliminate BagOfProviders and use a helper to
+          select update strategies for FusionProvider (1ddd7f9)
+
+2016-03-07 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4be770b)
+
+2016-03-06 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (54b0bad)
+
+2016-03-03 Scott Sweeny
+
+        * FusionProvider: make last_position optional for a more robust test
+          of its validity (2113e60)
+
+2016-03-03 Thomas Voß
+
+        * Do not call std::future<T>::get twice to get hold of an iterator
+          over all resolved endpoints. (36b0e27)
+        * Ensure that the local service::Runtime instance is started.
+          (b18f5ea)
+        * Start up a location::service::Runtime instance during runtime
+          tests. (1823dcc)
+
+2016-03-02 CI Train Bot
+
+        * Releasing 2.1+15.04.20160302.1-0ubuntu1 (71a008c)
+
+2016-03-02 Thomas Voß
+
+        * Remove explicit option to disable satellite-based positioning
+          services. (9d4c3e2)
+        * Adjust test case and remove expectations on satellite-based
+          positioning state. (6206d24)
+        * Remove explicit option to disable satellite-based positioning
+          services. (0bc98cf)
+
+2016-02-25 Scott Sweeny
+
+        * Add selection policy for fusion provider and use it by default
+          (15e6832)
+        * Add test for FusionProvider (d1b99d7)
+        * Add fusion provider based on BagOfProviders (e13f4cf)
+
+2016-02-17 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (82a2dca)
+
+2016-02-09 Thomas Voß
+
+        * Rely on async and cancellable operations. (175ee3d)
+
+2016-02-08 Scott Sweeny
+
+        * Factor BagOfProviders out into its own class so it can be reused
+          (6448a89)
+
+2016-02-03 Thomas Voß
+
+        * Pump up number of threads in pool running
+          location::service::Runtime. (6f0e98b)
+
+2016-02-02 Thomas Voß
+
+        * Relax SntpClient::succeeds_in_querying_time_from_server. (5e2853b)
+        * EXPECT_GE really is EXPECT_LE. (24af91e)
+        * Adjust test-case and make it more robust in-case of hitting
+          non-stratum-1 ntp servers. (14d00b2)
+        * Add local copy of boost::endian as vivid+o only has boost 1.55. Add
+          missing includes for std exceptions. (cf8a653)
+
+2016-02-01 Thomas Voß
+
+        * Factor out query of time since boot. (e392cd2)
+        * Wire up android::HardwareAbstractionLayer to an SNTP-based
+          ReferenceTimeSource. (6a90c80)
+
+2016-02-01 Scott Sweeny
+
+        * Add a copyright header to mock_engine.h (d917ef7)
+
+2016-01-28 Scott Sweeny
+
+        * Add a quick test for undecorated name extraction (fee7b37)
+        * Add a couple of tests for provider loading (0ad4e00)
+        * Clear program options before parsing to protect against them
+          persisting through multiple runs (3476686)
+
+2016-01-26 Thomas Voß
+
+        * Add SntpClient for querying reference time information. (9e575c1)
+
+2016-01-14 Thomas Voß
+
+        * [ Alberto Mardegan ];  Set debian source format to "3.0 (native)" [
+          Scott Sweeny ];  Allow providers to register themselves
+          asynchronously (LP: #1415029);  Account for changes in
+          trust-store w.r.t. assembling the description   of a trust
+          prompt.;  Fix settings not being applied correctly.
+          Ensure that event connections are cleaned up on
+          destruction. (LP:   #1480877) [ Alberto Mardegan ];  Send
+          last known position on session start [ CI Train Bot .
+          New rebuild forced. [ Thomas Voß ];  Factor out
+          service::Runtime from daemon.cpp into its own .h/.cpp
+          pair of files. Add test cases around correct operation of
+           service::Runtime. added:
+          src/location_service/com/ubuntu/location/service/runtime.cpp
+
+          src/location_service/com/ubuntu/location/service/runtime.h
+            tests/runtime_test.cpp [ thomas-voss ];  Factor out
+          service::Runtime from daemon.cpp into its own .h/.cpp
+          pair of files. Add test cases around correct operation of
+           service::Runtime. added:
+          src/location_service/com/ubuntu/location/service/runtime.cpp
+
+          src/location_service/com/ubuntu/location/service/runtime.h
+            tests/runtime_test.cpp (a893c09)
+
+2016-01-13 Scott Sweeny
+
+        * Factor out the extraction of undecorated provider names for easier
+          testing (fdd2d3b)
+
+2016-01-11 Scott Sweeny
+
+        * Factor out provider loading to its own function for easier testing
+          (7ebb78f)
+
+2016-01-06 CI Train Bot
+
+        * Releasing 2.1+15.04.20160106-0ubuntu1 (21d647e)
+
+2016-01-06 Scott Sweeny
+
+        * Allow providers to register themselves asynchronously
+          Fixes:
+          #1415029 Approved by: Thomas Voß (4cf38dd)
+
+2016-01-06 Alberto Mardegan
+
+        * Set debian source format to "3.0 (native)" (d95ce7e)
+
+2015-12-23 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (8d7437b)
+
+2015-12-11 CI Train Bot
+
+        * Releasing 2.1+15.04.20151211-0ubuntu1 (fe37630)
+
+2015-12-11 Thomas Voß
+
+        * Account for changes in trust-store w.r.t. assembling the
+          description of a trust prompt. Approved by: Alberto
+          Mardegan (5e523ce)
+
+2015-12-09 CI Train Bot
+
+        * Releasing 2.1+15.04.20151209-0ubuntu1 (1609677)
+
+2015-12-09 Thomas Voß
+
+        * Fix settings not being applied correctly. (3fc051e)
+        * Fix settings not being applied correctly. (2b79c12)
+
+2015-12-06 Thomas Voß
+
+        * Ensure that event connections are cleaned up on destruction. (LP:
+            #1480877) [ Alberto Mardegan ];  Send last known
+          position on session start [ CI Train Bot ];  New rebuild
+          forced. [ Thomas Voß ];  Factor out service::Runtime from
+          daemon.cpp into its own .h/.cpp   pair of files. Add test
+          cases around correct operation of   service::Runtime.
+          added:
+          src/location_service/com/ubuntu/location/service/runtime.cpp
+
+          src/location_service/com/ubuntu/location/service/runtime.h
+            tests/runtime_test.cpp [ thomas-voss ];  Factor out
+          service::Runtime from daemon.cpp into its own .h/.cpp
+          pair of files. Add test cases around correct operation of
+           service::Runtime. added:
+          src/location_service/com/ubuntu/location/service/runtime.cpp
+
+          src/location_service/com/ubuntu/location/service/runtime.h
+            tests/runtime_test.cpp (a36851a)
+
+2015-12-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (686b707)
+
+2015-12-02 CI Train Bot
+
+        * Releasing 2.1+15.04.20151202.1-0ubuntu1 (fe3a5a9)
+
+2015-12-02 Thomas Voß
+
+        * Ensure that event connections are cleaned up on destruction.
+          Fixes:
+          #1480877 Approved by: Alberto Mardegan (6b50449)
+        * Revert accidental changes. (25058b9)
+        * [ Alberto Mardegan ];  Send last known position on session start [
+          CI Train Bot ];  New rebuild forced. [ Thomas Voß .
+          Factor out service::Runtime from daemon.cpp into its own
+          .h/.cpp   pair of files. Add test cases around correct
+          operation of   service::Runtime. added:
+          src/location_service/com/ubuntu/location/service/runtime.cpp
+
+          src/location_service/com/ubuntu/location/service/runtime.h
+            tests/runtime_test.cpp [ thomas-voss ];  Factor out
+          service::Runtime from daemon.cpp into its own .h/.cpp
+          pair of files. Add test cases around correct operation of
+           service::Runtime. added:
+          src/location_service/com/ubuntu/location/service/runtime.cpp
+
+          src/location_service/com/ubuntu/location/service/runtime.h
+            tests/runtime_test.cpp;  Adjust default timeout for
+          downloading GPS XTRA data. [ Alberto Mardegan ];  Make
+          sure that injected time is given in milliseconds [ Thomas
+          Voß ];  Cherry-pick rev. 196 and 199 from
+          lp:location-service. The changes   got accidentally
+          removed by merging the outstanding documentation   branch.
+          * Handle responses of clients to updates asynchronously.
+          Rely on   dummy::ConnectivityManager as harvesting is
+          disabled anyway. (LP:   #1462664, #1387643) (7990701)
+
+2015-12-01 Scott Sweeny
+
+        * Use a condition variable to wait for the remote service instead of
+          a busy loop (1ef8069)
+        * Add myself as an author of the test that I stole/wrote (ab05483)
+        * Merge from 15.04 branch (91ede95)
+        * Use a DBus service watcher to detect when the remote service comes
+          up instead of abusing exceptions (2b533f8)
+
+2015-11-30 Scott Sweeny
+
+        * Factor MockEventReceiver into its own header (5b63fd6)
+
+2015-11-27 Thomas Voß
+
+        * Account for changes in trust-store w.r.t. assembling the
+          description of a trust prompt. (2f86d9f)
+
+2015-11-27 CI Train Bot
+
+        * Releasing 2.1+15.04.20151127-0ubuntu1 (2f7c79a)
+
+2015-11-27 Thomas Voß
+
+        * - Factor out service::Runtime from daemon.cpp into its own .h/.cpp
+          pair of files. - Add test cases around correct operation
+          of service::Runtime. (8d67a85)
+
+2015-11-27 Alberto Mardegan
+
+        * Send last known position on session start Approved by: Thomas Voß
+          (3ef0bec)
+
+2015-11-26 Thomas Voß
+
+        * Remove dependency on robustify-... (c94cfee)
+
+2015-11-25 Thomas Voß
+
+        * Ensure two distinct bus instances. (5004d54)
+        * Fix service::Runtime test cases to explicitly start the runtime.
+          (bc26342)
+
+2015-11-25 Alberto Mardegan
+
+        * Fix D-Bus session shutdown (94069f8)
+
+2015-11-25 Thomas Voß
+
+        * Support explicit starting of service::Runtime. (f825a73)
+        * Reuse service::Runtime in RemoteProviderDaemon. (c7e9b27)
+
+2015-11-24 Scott Sweeny
+
+        * Add test to exercise providers that take time to come up (0b9a5d8)
+        * Have the remote provider wait for its respective service to come up
+          before returning (0c67d0f)
+        * Make example service use the async provider registration (385fe07)
+        * Add a delayed dummy provider to help testing (82a7749)
+
+2015-11-20 Thomas Voß
+
+        * Adjust default timeout for downloading GPS XTRA data. (5ebbad1)
+
+2015-11-19 Scott Sweeny
+
+        * Make create_provider... call async (4ef70a6)
+        * Add async-friendly version of
+          ProviderFactory::create_provider_for_name_with_config
+          (3ac9252)
+
+2015-11-19 Alberto Mardegan
+
+        * Address review comments (b43e245)
+
+2015-11-19 Thomas Voß
+
+        * Add test for service::Runtime. (47e8a71)
+
+2015-11-18 Thomas Voß
+
+        * Revert accidental change to debian/source/format. (e345d51)
+        * [ Alberto Mardegan ];  Make sure that injected time is given in
+          milliseconds [ Thomas Voß ];  Cherry-pick rev. 196 and 199
+          from lp:location-service. The changes   got accidentally
+          removed by merging the outstanding documentation   branch.
+          * Handle responses of clients to updates asynchronously.
+          Rely on   dummy::ConnectivityManager as harvesting is
+          disabled anyway. (LP:   #1462664, #1387643) [ Thomas Voß ]
+          * Add documentation for debugging, hacking and debugging
+          the location   service. Pull manual testing instructions
+          over from the wiki. Add   tools for formatting the source.
+          [ thomas-voss ];  Add documentation for debugging, hacking
+          and debugging the location   service. Pull manual testing
+          instructions over from the wiki. Add   tools for
+          formatting the source. [ CI Train Bot ];  New rebuild
+          forced. [ Manuel de la Pena ];  Make sure that cached
+          modems are considered as well when calculating
+          connection characteristics. [ CI Train Bot ];  New rebuild
+          forced. [ Manuel de la Pena ];  Improve the selection of
+          the bag of providers to ensure that the   locations used
+          are within a reasonable time margin.;  Remove the pimpl
+          implementation from the providers and hide their   public
+          headers because they should only be used within the
+          project. [ Thomas Voß ];  Increase default timeout for
+          downloading gps xtra data. (LP:   #1447161) [ CI Train Bot
+          ];  New rebuild forced. [ Manuel de la Pena ];  If an
+          exception is thrown from the io_executor run method it
+          must be   caught, logger and continued with the main loop.
+          [ CI Train Bot ];  Launchpad automatic translations
+          update. added: po/af.po po/bg.po   po/sk.po;  New rebuild
+          forced. [ thomas-voss ];  Account for dbus interface
+          breakage in NM from 0.9.8.8 -> 0.9.10.0. [ thomas-voss .
+          Automatically clean up session store for dead clients.
+          (LP:   #1418033) [ thomas-voss ];  Make the
+          remote::Provider::Stub fail loudly on construction if the
+           other side is not reachable. Relax the exception in
+          location::Daemon::main and do not exit if instantiating a
+          provider   fails. (LP: #1414591) [ CI Train Bot ];  Resync
+          trunk [ thomas-voss ];  Add an interface for querying
+          settings by key. Add an implementation   leveraging
+          boost::property_tree to provide settings. (LP: #1362765.
+          Allow for enabling/disabling providers. Wire up engine
+          state changes   to enabling/disabling of providers. (LP:
+          #1392399) [ thomas-voss ];  Print details about visible
+          space vehicles to the gps provider test   case. (LP:
+          #1408984) [ thomas-voss ];  Fix #1394204 by: (LP:
+          #1394204) [ Ubuntu daily release ];  New rebuild forced [
+          thomas-voss ];  Make sure that devices being added/removed
+          by NetworkManager are   handled correctly. (LP: #1390490)
+          [ CI bot ];  Resync trunk [ Kevin DuBois ];  The headers
+          shipped in libubuntu-location-service-dev contain
+          includes that are provided in the libboost-dev package
+          (specifically   headers like boost/units/cmath.hpp). Make
+          the dev package depend on   libboost-dev so the
+          downstreams get what they need to compile   against the
+          libubuntu-location-service-dev headers;  New rebuild
+          forced [ thomas-voss ];  Bump build dependency.
+          Disconnect event connections for bag of providers. (LP:
+          #1387572) [ thomas-voss ];  Prevent multiple invocations
+          of start positioning on android GPS HAL   to prevent buggy
+          HAL implementations from blocking. Allow for   decorated
+          provider names to enable moving providers OOP. (LP:
+          #1382501) (228f9b7)
+
+2015-11-17 Thomas Voß
+
+        * Revert accidental change to debian/source/format. (8e45ebf)
+        * Remove temporary log output. (b02db11)
+
+2015-11-17 Alberto Mardegan
+
+        * Make position optional (c2aa0ab)
+
+2015-11-16 Alberto Mardegan
+
+        * Change source format to "native" (655251d)
+        * Send last known position on session start (2041096)
+
+2015-11-13 CI Train Bot
+
+        * Releasing 2.1+15.04.20151113-0ubuntu1 (e9d0655)
+
+2015-11-13 Thomas Voß
+
+        * Adjust default timeout for downloading GPS XTRA data. (9d6d1db)
+        * Adjust default timeout for downloading GPS XTRA data. (12bf294)
+
+2015-11-12 Thomas Voß
+
+        * Log destruction of CachedWirelessNetwork instances. (2de8862)
+        * Don't add, just use an existing object. (7d37c1e)
+        * One connection is more than enough. (c4dd6ac)
+        * Instrument on_access_point_{added, removed} with log messages.
+          (67b88a1)
+
+2015-11-11 Thomas Voß
+
+        * [ Alberto Mardegan ];  Make sure that injected time is given in
+          milliseconds [ Thomas Voß ];  Cherry-pick rev. 196 and 199
+          from lp:location-service. The changes   got accidentally
+          removed by merging the outstanding documentation   branch.
+          * Handle responses of clients to updates asynchronously.
+          Rely on   dummy::ConnectivityManager as harvesting is
+          disabled anyway. (LP:   #1462664, #1387643) [ Thomas Voß ]
+          * Add documentation for debugging, hacking and debugging
+          the location   service. Pull manual testing instructions
+          over from the wiki. Add   tools for formatting the source.
+          [ thomas-voss ];  Add documentation for debugging, hacking
+          and debugging the location   service. Pull manual testing
+          instructions over from the wiki. Add   tools for
+          formatting the source. (cb79893)
+
+2015-11-10 Thomas Voß
+
+        * Ensure that event connections are cleaned up on destruction.
+          (a191ba8)
+
+2015-11-09 CI Train Bot
+
+        * Releasing 2.1+15.04.20151109.2-0ubuntu1 (a804894)
+
+2015-11-09 Alberto Mardegan
+
+        * Make sure that injected time is given in milliseconds Approved by:
+          Thomas Voß (4b833a3)
+
+2015-11-09 Thomas Voß
+
+        * Handle responses of clients to updates asynchronously. Rely on
+          dummy::ConnectivityManager as harvesting is disabled
+          anyway.
+          Fixes: #1387643, #1462664 Approved by: Alberto
+          Mardegan (d377ba8)
+        * Cherry-pick rev. 196 and 199 from lp:location-service. The changes
+          got accidentally removed by merging the outstanding
+          documentation branch. (0728be6)
+        * Cherry-pick rev. 199 from lp:location-service. (2786730)
+        * Cherry pick rev. 196 from trunk. (06f0f9a)
+
+2015-11-05 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (2ddfa2b)
+
+2015-10-23 Thomas Voß
+
+        * Redirect all positions available for harvesting to
+          /dev/null(reporter). (0d90b39)
+
+2015-10-22 Thomas Voß
+
+        * Handly responses of clients to updates asynchronously. (420ff65)
+
+2015-10-22 CI Train Bot
+
+        * Releasing 2.1+15.04.20151022-0ubuntu1 (e75a3de)
+
+2015-10-22 Thomas Voß
+
+        * Add documentation for debugging, hacking and debugging the location
+          service. Pull manual testing instructions over from the
+          wiki. Add tools for formatting the source. Approved by:
+          Alberto Mardegan (1a017f5)
+
+2015-10-20 Thomas Voß
+
+        * Address reviewer comments. (253f77d)
+
+2015-10-19 Alberto Mardegan
+
+        * Make sure that time is in ms (03ebaef)
+
+2015-09-22 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (b9131d2)
+
+2015-09-03 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (6cd4fef)
+
+2015-08-18 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (f777dcd)
+
+2015-08-17 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (ca17030)
+
+2015-08-10 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (af79081)
+
+2015-08-09 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (97aa124)
+
+2015-08-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (93ef982)
+
+2015-07-27 CI Train Bot
+
+        * Releasing 2.1+15.10.20150727-0ubuntu1 (d76782d)
+
+2015-07-27 Charles Kerr
+
+        * drop build-dependency on g++-4.9
+          Fixes: #1452329 Approved by: Pete
+          Woods, PS Jenkins bot, Rodney Dawes (a8b98cb)
+
+2015-07-15 Charles Kerr
+
+        * drop build-dependency on g++-4.9 (24cb06c)
+
+2015-07-14 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (ee03a5c)
+
+2015-07-06 CI Train Bot
+
+        * Releasing 2.1+15.10.20150706-0ubuntu1 (073914e)
+
+2015-07-06 Alberto Aguirre
+
+        * No change rebuild against platform-api 3 Approved by: PS Jenkins
+          bot (cef6734)
+
+2015-06-29 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (1e5e3ee)
+
+2015-06-23 Alberto Aguirre
+
+        * No change rebuild against platform-api 3 (2dd1b43)
+
+2015-06-06 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (6211558)
+
+2015-06-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (9245504)
+
+2015-06-01 CI Train Bot
+
+        * Releasing 2.1+15.10.20150601.2-0ubuntu1 (c7a6e45)
+
+2015-06-01 Manuel de la Pena
+
+        * Ensure that the trust store is started when is needed. (8158482)
+        * Remerged with trunk. (275c549)
+
+2015-06-01 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (2bbcf25)
+
+2015-05-28 Manuel de la Pena
+
+        * Fix the trust store relaunch after the location service has been
+          killed or has crashed. (4661d48)
+
+2015-05-28 CI Train Bot
+
+        * Releasing 2.1+15.10.20150528.3-0ubuntu1 (0d80b7a)
+
+2015-05-28 Thomas Voß
+
+        * Make sure we always hand a lock owning its mutex to
+          on_access_point_added.
+          Fixes: #1426307 Approved by: PS
+          Jenkins bot (0c8c46e)
+        * btime in /proc/stat is seconds since epoch. (aa33061)
+        * Add comment explaining timestamp translation. (9fd054f)
+        * Translate timestamps. (eed91a5)
+
+2015-05-27 Thomas Voß
+
+        * Make sure we always hand a lock owning its mutex to
+          on_access_point_added. (1dcb576)
+
+2015-05-12 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (9099d76)
+
+2015-05-06 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (ebd29a2)
+
+2015-05-05 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (7096000)
+
+2015-04-27 CI Train Bot
+
+        * Releasing 2.1+15.04.20150427.1-0ubuntu1 (3848506)
+
+2015-04-27 Manuel de la Pena
+
+        * Make sure that cached modems are considered as well when
+          calculating connection characteristics. Approved by:
+          Michael Frey (b71d5cc)
+        * Link bug. (5ee9cb2)
+        * Merge fixes with trunk. (0a14eda)
+
+2015-04-25 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (2a3eaa0)
+
+2015-04-24 CI Train Bot
+
+        * Releasing 2.1+15.04.20150424-0ubuntu1 (c89f38f)
+
+2015-04-24 Thomas Voß
+
+        * Increase default timeout for downloading gps xtra data.
+          Fixes:
+          #1447161 Approved by: PS Jenkins bot (733fee6)
+
+2015-04-24 Manuel de la Pena
+
+        * Improve the selection of the bag of providers to ensure that the
+          locations used are within a reasonable time margin.
+          Approved by: PS Jenkins bot, Jim Hodapp (0e5a8de)
+        * Remove the pimpl implementation from the providers and hide their
+          public headers because they should only be used within the
+          project. Approved by: Thomas Voß, Jim Hodapp (ed58582)
+
+2015-04-23 Manuel de la Pena
+
+        * Set var to const. (36f51a7)
+        * Made changes following the code reviews. (7a4f5a4)
+        * Remove unused var. (367dfac)
+        * Merged remove-pimpl into better-position-selection. (5038d67)
+        * Merged with trunk. (19c8655)
+        * Add missing space. (b1db8f5)
+        * Made changes following the comments from the reviews. (c773a95)
+        * Add missing files. (d7e93a2)
+        * Move the heuristics to its own class to make it easier to have diff
+          options. Move the position selection to the engine.
+          (36fd0cb)
+        * Merged remove-pimpl into better-position-selection. (604c3b5)
+        * Made changes according to the reviews. (edfcf70)
+
+2015-04-22 Thomas Voß
+
+        * Increase default timeout for downloading gps xtra data. (a66ca0c)
+
+2015-04-22 Manuel de la Pena
+
+        * Ensure that we only use new updates that have the same or better
+          positioning. (c48b440)
+
+2015-04-20 Thomas Voß
+
+        * Reenable setting all remaining flags just to be sure. (dc03a9b)
+
+2015-04-20 Manuel de la Pena
+
+        * Improve the location chooser by ensuring that we send the best
+          valid one. (4367b2d)
+
+2015-04-17 CI Train Bot
+
+        * Releasing 2.1+15.04.20150417-0ubuntu1 (2611807)
+
+2015-04-17 Manuel de la Pena
+
+        * If an exception is thrown from the io_executor run method it must
+          be caught, logger and continued with the main loop.
+          Approved by: Jim Hodapp, Thomas Voß (3f25f13)
+
+2015-04-16 Manuel de la Pena
+
+        * Remove pimpl because it is not really needed. (a6cb09b)
+
+2015-04-16 Thomas Voß
+
+        * Make sure that cached modems are considered as well when
+          calculating connection characteristics. (0134a1b)
+
+2015-04-16 Manuel de la Pena
+
+        * Merged handle-exceptions into remove-pimpl. (1d4802f)
+        * Update log. (eef3b48)
+        * Remove the pimpl and merge with previous branch. (39551bd)
+        * Merged handle-exceptions into remove-pimpl. (b534ee2)
+        * Simplify the use of lambdas. (0b8a5a7)
+
+2015-04-15 Manuel de la Pena
+
+        * Remove not needed pimpl and move private headers out of the include
+          dir that is installed in the /usr/include (8762578)
+
+2015-04-14 Manuel de la Pena
+
+        * Fix small typos. (c394e11)
+        * Do print exceptions when the occur. (8b4fbb2)
+
+2015-04-13 Manuel de la Pena
+
+        * Make sure we do not leak exceptions to the dameon. (4367632)
+
+2015-04-06 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (1704030)
+
+2015-04-05 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (13659b1)
+
+2015-04-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (168aac8)
+
+2015-04-03 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (024a45d)
+
+2015-03-25 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (9437147)
+
+2015-03-11 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (eb4984d)
+
+2015-03-10 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (56d353c)
+
+2015-03-05 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (111ce43)
+
+2015-03-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4396b8c)
+
+2015-03-02 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (0180038)
+
+2015-02-26 CI Train Bot
+
+        * Releasing 2.1+15.04.20150226-0ubuntu1 (7647963)
+
+2015-02-26 thomas-voss
+
+        * Account for dbus interface breakage in NM from 0.9.8.8 -> 0.9.10.0.
+          Approved by: Ricardo Salveti, PS Jenkins bot (f8a1cb8)
+
+2015-02-26 CI Train Bot
+
+        * Launchpad automatic translations update. (90aab8e)
+
+2015-02-26 thomas-voss
+
+        * Account for dbus interface breakage in NM from 0.9.8.8 -> 0.9.10.0.
+          (9ff3a3e)
+
+2015-02-26 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (91f59e7)
+
+2015-02-24 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (15835de)
+
+2015-02-23 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (547bd72)
+
+2015-02-17 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (b1233b8)
+
+2015-02-13 CI Train Bot
+
+        * Releasing 2.1+15.04.20150213-0ubuntu1 (5474d1e)
+
+2015-02-13 thomas-voss
+
+        * Automatically clean up session store for dead clients.
+          Fixes:
+          #1418033 (cc5292e)
+        * Automatically clean up session store for dead clients. (b5f0852)
+
+2015-02-03 thomas-voss
+
+        * Remove formatting scripts. (8af8c49)
+        * Slightly different coding convention, relying exclusively on
+          clang-format. (a0f2718)
+
+2015-02-02 thomas-voss
+
+        * Add documentation for debugging, hacking and debugging the location
+          service. Pull manual testing instructions over from the
+          wiki. Add tools for formatting the source. (117142e)
+
+2015-02-01 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (623f1d3)
+
+2015-01-31 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4e4fe0b)
+
+2015-01-28 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (a3b55f5)
+
+2015-01-26 CI Train Bot
+
+        * Releasing 2.1+15.04.20150126.1-0ubuntu1 (a935d05)
+
+2015-01-26 thomas-voss
+
+        * Make the remote::Provider::Stub fail loudly on construction if the
+          other side is not reachable. Relax the exception in
+          location::Daemon::main and do not exit if instantiating a
+          provider fails.
+          Fixes: #1414591 Approved by: Charles Kerr,
+          Loïc Minier, PS Jenkins bot (31a1682)
+        * Add compile guards around runtime tests. (ba6d1a8)
+        * Implement ::ping(). (bbd8368)
+        * Make the remote::Provider::Stub fail loudly on construction if the
+          other side is not reachable. Relax the exception in
+          location::Daemon::main and do not exit if instantiating a
+          provider fails. (ed50be6)
+
+2015-01-25 CI Train Bot
+
+        * Releasing 2.1+15.04.20150125~rtm-0ubuntu1 (d6e664e)
+
+2015-01-25 thomas-voss
+
+        * Allow for enabling/disabling providers. Wire up engine state
+          changes to enabling/disabling of providers.
+          Fixes:
+          #1392399 Approved by: Loïc Minier (ea17cb1)
+        * Add an interface for querying settings by key. Add an
+          implementation leveraging boost::property_tree to provide
+          settings.
+          Fixes: #1362765 Approved by: Loïc Minier
+          (b1e4a0f)
+        * Make sure that newly added providers are disabled, too. (bb6bf98)
+
+2015-01-23 thomas-voss
+
+        * Merge pre-req branch. (b2da811)
+        * A minor niggle. (4e7947d)
+        * Revert auto-enablement. (e94617f)
+        * Need this as context of the lamdba. (0b095f3)
+        * Make sure that we only enable providers that really should be
+          enabled. (85814af)
+        * Anything lt 0 means: Provider is disabled. (33e83e8)
+        * Only stop provider updates if they have been running. (3bebf4b)
+
+2015-01-22 thomas-voss
+
+        * Make sure that the provider is really stopped when disabling it.
+          (e7da960)
+
+2015-01-22 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (1fc4d2c)
+
+2015-01-21 thomas-voss
+
+        * Make enable and disable non-virtual for now. (de6ba5b)
+        * Refactor the change to make it ABI stable. (80523e2)
+
+2015-01-15 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e563185)
+
+2015-01-14 CI Train Bot
+
+        * Resync trunk (9949999)
+
+2015-01-14 thomas-voss
+
+        * Make the Engine configuration keys non-parseable as a path.
+          (3498d56)
+
+2015-01-14 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (0664465)
+
+2015-01-13 thomas-voss
+
+        * Make sure that settings are always saved whenever their value
+          changes. (433940a)
+        * Sync settings for every change of value. (8c8b5cf)
+        * Sync only after the engine has had a chance to store its state.
+          (4022520)
+
+2015-01-13 CI Train Bot
+
+        * Releasing 2.1+15.04.20150113~rtm-0ubuntu1 (dbd3218)
+
+2015-01-13 thomas-voss
+
+        * Print details about visible space vehicles to the gps provider test
+          case.
+          Fixes: #1408984 Approved by: Loïc Minier (c8ae285)
+        * Ignore result of attempting to stop a location service instance
+          when executing runtime tests. (13f22e9)
+
+2015-01-12 thomas-voss
+
+        * Add the ability to execute runtime tests from the cli executable.
+          (77132f1)
+        * Make sure that state caching directory is created during
+          installation. (adf6904)
+        * Merge pre-requisite branch. Fix FTBFS in test cases. (ab5d36c)
+        * Print details about visible space vehicles to the gps provider test
+          case. (74b0ac3)
+
+2015-01-06 CI Train Bot
+
+        * Releasing 2.1+15.04.20150106~rtm-0ubuntu1 (a743b72)
+
+2015-01-06 thomas-voss
+
+        * Fix #1394204 by: (28d8e45)
+        * Make sure that the settings are synced back after the daemon has
+          finished. (c5c3e30)
+        * Fix #1394204 by: (3ced761)
+
+2014-12-17 thomas-voss
+
+        * Make sure that DaemonAndCli* test cases have a valid settings
+          objects available. (946b975)
+
+2014-12-16 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4d9a027)
+
+2014-12-07 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (b5f046e)
+
+2014-11-19 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (d672444)
+
+2014-11-14 thomas-voss
+
+        * Address review comments. (f273290)
+        * Account for location::Engine being internalized. (9b0099d)
+        * Wire up settings correctly. Provide testing around
+          location::Settings. (802473c)
+        * Internalize location::Engine. (4dba8f6)
+        * Add an interface for querying settings by key. Add an
+          implementation leveraging boost::property_tree to provide
+          settings. (7dd4fd4)
+
+2014-11-13 thomas-voss
+
+        * Expose interface changes to remote providers, too. (b016364)
+        * Allow for enabling/disabling providers. Wire up engine state
+          changes to enabling/disabling of providers. (9511b2b)
+
+2014-11-12 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (ab4adb5)
+
+2014-11-10 CI bot
+
+        * Releasing 2.1+15.04.20141110.1-0ubuntu1 (a5114dd)
+
+2014-11-10 thomas-voss
+
+        * Make sure that devices being added/removed by NetworkManager are
+          handled correctly.
+          Fixes: 1390490 (39311c4)
+        * Make sure that locking is done correctly. (d260b3d)
+        * Disconnect from properties changed signal on destructin, as
+          mentioned in the TODO. (f2bfeef)
+
+2014-11-10 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (c2eb5d5)
+
+2014-11-07 thomas-voss
+
+        * Add missing ;. (b08bb28)
+        * Bail out if the cache already knows about the device. (f365bbd)
+        * Do not recalculate connection characteristics for every new device.
+          Instead, rely on the established way of listening for
+          changes to the active connection obect. (70b4011)
+        * Lock the cache when accessing it from signal handlers. (c6aeb62)
+        * Make sure that devices being added/removed by NetworkManager are
+          handled correctly. (db305b1)
+
+2014-11-05 CI bot
+
+        * Releasing 2.1+15.04.20141105.1-0ubuntu1 (f87b358)
+
+2014-11-05 Kevin DuBois
+
+        * The headers shipped in libubuntu-location-service-dev contain
+          includes that are provided in the libboost-dev package
+          (specifically headers like boost/units/cmath.hpp). Make
+          the dev package depend on libboost-dev so the downstreams
+          get what they need to compile against the
+          libubuntu-location-service-dev headers (4ef7f6f)
+
+2014-11-05 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (656a2cb)
+
+2014-11-04 CI bot
+
+        * Resync trunk (c91a8f2)
+
+2014-11-04 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (ccf28a8)
+
+2014-11-04 CI bot
+
+        * Releasing 2.1+15.04.20141104-0ubuntu1 (b174b7c)
+        * Sync from RTM (228373d)
+
+2014-11-03 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (9332a3b)
+
+2014-11-02 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (4d2531e)
+
+2014-10-30 CI bot
+
+        * Releasing 2.1+14.10.20141030~rtm-0ubuntu1 (c080a01)
+
+2014-10-30 thomas-voss
+
+        * Disconnect event connections for bag of providers.
+          Fixes: 1387572
+          Approved by: Alberto Aguirre, PS Jenkins bot (1eb6f21)
+        * Bump build dependency. (4f8da0a)
+
+2014-10-30 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e02fb54)
+
+2014-10-29 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (0db7a79)
+
+2014-10-28 thomas-voss
+
+        * Disconnect event connections for bag of providers. (7816bec)
+
+2014-10-27 Robert Bruce Park
+
+        * Releasing 2.1+14.10.20141023-0ubuntu1. (a8caaa8)
+
+2014-10-24 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (2527a74)
+
+2014-10-23 thomas-voss
+
+        * Bump build dependency. (d1dbab5)
+
+2014-10-23 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (d02a96c)
+
+2014-10-18 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (8b7298b)
+
+2014-10-17 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (653075c)
+
+2014-10-16 thomas-voss
+
+        * And some further fixes. (df076ff)
+        * Introduce a dispatching provider that leverages a functor to hand
+          over updates and invocations to/from providers. Adjust
+          acceptance tests to account for multiple providers.
+          (836132c)
+
+2014-10-16 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (59d3d55)
+
+2014-10-15 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (750444b)
+
+2014-10-14 CI bot
+
+        * Releasing 2.1+14.10.20141014-0ubuntu1 (b3a1aed)
+
+2014-10-14 thomas-voss
+
+        * Switch to a NonSelectingProviderSelectionPolicy by default.
+          (968bc81)
+        * [ thomas-voss ];  Allow for creation of initially invalid radio
+          cells. (LP: #1380668) [ thomas-voss ];  Prefer
+          /system/etc/gps.conf over /etc/gps.conf. [ thomas-voss .
+          Make sure that modems are cached, no matter if they come
+          with a   valid NetworkRegistration. [ thomas-voss ];  Make
+          the service translateable. (LP: #1354092) [ Alberto
+          Aguirre ];  Ensure Engine::for_each_provider fulfills the
+          noexcept promise [ thomas-voss ];  Implement heuristic to
+          invalidate 3G cells after 60 seconds. (LP:   #1371514) [
+          thomas-voss ];  Expose remote::Interface and respective
+          stub/skeleton for using and   exposing remote location
+          providers.;  Add a standalone daemon for executing
+          providers out of process. [ Loïc Minier ];  Update upstart
+          job start conditions; workaround startup issue with a
+          sleep. (LP: #1356468) [ thomas-voss ];  Somewhat clean up
+          remote provider and add an acceptance-style test.
+          (5370b30)
+
+2014-10-14 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (3b114c9)
+
+2014-10-13 CI bot
+
+        * Releasing 2.1+14.10.20141013-0ubuntu1 (6082449)
+
+2014-10-13 thomas-voss
+
+        * Allow for creation of initially invalid radio cells.
+          Fixes: 1380668
+          Approved by: Loïc Minier (94e278e)
+        * Fix typo discovered in review. (42b71ea)
+        * Move subscription to signal earlier in the ctor. (e459b5c)
+        * Make sure that we correctly listen to property changed signals.
+          (0f043cc)
+        * Do not unsubscribe from signal explicitly. (2440353)
+        * Add function tracing to on_modem_added/on_modem_removed. (61a14c6)
+        * Make sure that we only subscribe to property changes once overall
+          setup is done in ctor. (af2e19e)
+        * Remove subscription. (237d87c)
+        * Allow for creation of initially invalid radio cells. (9f02bd3)
+
+2014-10-13 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (c021bb7)
+
+2014-10-12 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (e2da24f)
+
+2014-10-11 Launchpad Translations on behalf of phablet-team
+
+        * Launchpad automatic translations update. (71d468d)
+
+2014-10-10 CI bot
+
+        * Releasing 2.1+14.10.20141010-0ubuntu1 (89366da)
+
+2014-10-10 thomas-voss
+
+        * Prefer /system/etc/gps.conf over /etc/gps.conf. Approved by: Loïc
+          Minier, Ondrej Kubik, PS Jenkins bot (7efd047)
+
+2014-10-09 CI bot
+
+        * Releasing 2.1+14.10.20141009.1-0ubuntu1 (fd59fb7)
+
+2014-10-09 thomas-voss
+
+        * Make sure that modems are cached, no matter if they come with a
+          valid NetworkRegistration. Approved by: Loïc Minier, PS
+          Jenkins bot (876c603)
+        * Temporarily disable tests. (61c28e9)
+        * Dispatch initialization of newly found network registration.
+          (1e0ea27)
+        * Make sure that org::Ofono::Modem ctor does not throw in case of
+          missing NetworkRegistration. (9c5508c)
+        * Prefer /system/etc/gps.conf over /etc/gps.conf. (de84eeb)
+
+2014-10-08 thomas-voss
+
+        * Add a dummy implement of ConnectivityManager to handle errors
+          during initialization gracefully. (5e21d2c)
+        * Also consider updates to NetworkRegistration::Status as trigger for
+          querying connection characteristics. (2e83881)
+        * Always initialize the radio stack prior to the networking stack.
+          (d1f9e16)
+        * If either network manager or ofono are not present, postpone
+          initialization until the name is registered on the bus.
+          Add first cut of automated acceptance tests for
+          connectivity API. (70eb3f5)
+
+2014-10-08 CI bot
+
+        * Releasing 2.1+14.10.20141008-0ubuntu1 (e467e06)
+
+2014-10-08 thomas-voss
+
+        * Make the service translateable.
+          Fixes: 1354092, 1367707 Approved
+          by: Loïc Minier, Alberto Aguirre, Manuel de la Peña,
+          Martin Pitt (d287804)
+        * Remove langpack marker as location-service is in main. (0ec4b0f)
+        * Mark source package as using langpacks. (771d46f)
+
+2014-10-06 CI bot
+
+        * Releasing 2.1+14.10.20141006-0ubuntu1 (ade827c)
+
+2014-10-06 Alberto Aguirre
+
+        * Ensure Engine::for_each_provider fulfills the noexcept promise
+          Approved by: Thomas Voß (4cda20d)
+
+2014-10-06 thomas-voss
+
+        * [ thomas-voss ];  Implement heuristic to invalidate 3G cells after
+          60 seconds. (LP:   #1371514) [ thomas-voss ];  Expose
+          remote::Interface and respective stub/skeleton for using
+          and   exposing remote location providers.;  Add a
+          standalone daemon for executing providers out of process.
+          (a750347)
+
+2014-10-03 Alberto Aguirre
+
+        * Ensure Engine::for_each_provider fulfill noexcept promise (375633c)
+
+2014-10-02 thomas-voss
+
+        * Adjust printing of connectivity::Characteristics. Robustify
+          querying of modems for roaming status. (90ff3aa)
+
+2014-10-01 thomas-voss
+
+        * Fix FTBFS after merging trunk. (82a72b7)
+        * [ thomas-voss ] Implement heuristic to invalidate 3G cells after 60
+          seconds. (LP: #1371514) (a7fe728)
+        * Make sure that modems are cached, no matter if they come with a
+          valid NetworkRegistration. (48227a2)
+
+2014-09-25 CI bot
+
+        * Releasing 2.1+14.10.20140925.2-0ubuntu1 (9cf7678)
+
+2014-09-25 thomas-voss
+
+        * Implement heuristic to invalidate 3G cells after 60 seconds.
+          Fixes:
+          1371514 Approved by: PS Jenkins bot (1651f18)
+        * Add debugging option to cell identity change heuristic. (273ca57)
+        * Also setup timeout on construction of cached radio cells. (9198ce9)
+        * Add missing glog cmake setup. (4806078)
+        * Add FindGLog to standalone example. (ec4eaa8)
+        * Adjust cmake setup. (8288f39)
+        * Rely on google logging in standalone example. Add indication
+          whether cell has been added or removed. (38b018f)
+        * Do not invalidate the timer prematurely. (d376db6)
+
+2014-09-24 thomas-voss
+
+        * Only emit changed signal for valid cells. (1fc5c85)
+        * Make sure that all newly created radio cells are subscribed to
+          invalidation signals. Adjust connectivity standalone
+          example. (4b50948)
+
+2014-09-23 thomas-voss
+
+        * Refactor impl. and add documentation to make it easier to track it.
+          (3736684)
+
+2014-09-22 thomas-voss
+
+        * Make the timeout duration available via an env variable. (4d2e98b)
+        * Implement heuristic to invalidate 3G cells after 60 seconds.
+          (00d302e)
+
+2014-09-19 thomas-voss
+
+        * Only mark strings for translation, leave actual translation to
+          trust-store. (145449e)
+        * Replace auto-generated boilerplate with correct values in .pot and
+          .po file. (9f37903)
+        * Install generated .mo files. (281e9b3)
+        * Add translation for german. (286a026)
+        * Make the service translateable. (7fb16ab)
+
+2014-09-18 Kevin DuBois
+
+        * include libboost-dev in the libubuntu-location-service-dev package
+          Depends: (5e891bf)fixes: LP #1371146
+
+2014-09-18 thomas-voss
+
+        * Switch to a NonSelectingProviderSelectionPolicy by default.
+          (3aee051)
+
+2014-09-17 CI bot
+
+        * Releasing 2.1+14.10.20140917.1-0ubuntu1 (dc8abbc)
+
+2014-09-17 thomas-voss
+
+        * Add a standalone daemon for executing providers out of process.
+          Approved by: Manuel de la Peña (0a03468)
+        * Expose remote::Interface and respective stub/skeleton for using and
+          exposing remote location providers. Approved by: PS
+          Jenkins bot, Manuel de la Peña (258a818)
+        * Install provider daemon. (70ebad2)
+        * Adjust copyright years. (047d6e9)
+        * Acceptance tests are passing. (a8c493a)
+
+2014-09-16 thomas-voss
+
+        * Add a standalone daemon for executing providers out of process.
+          (084657e)
+
+2014-09-15 CI bot
+
+        * Releasing 2.1+14.10.20140915-0ubuntu1 (dd5d807)
+
+2014-09-15 Loïc Minier
+
+        * Update upstart job start conditions; workaround startup issue with
+          a sleep.
+          Fixes: 1356468 Approved by: PS Jenkins bot,
+          Thomas Voß (f242d47)
+
+2014-09-15 thomas-voss
+
+        * Somewhat clean up remote provider and add an acceptance-style test.
+          Approved by: Loïc Minier, PS Jenkins bot (d11a329)
+
+2014-09-15 Loïc Minier
+
+        * Update upstart job start conditions; workaround startup issue with
+          a sleep. (a78bb89)
+
+2014-09-15 thomas-voss
+
+        * Remove commented out sections pointed out in review. (5615d0f)
+        * Compile in remote::Provider sources to make sure that all symbols
+          are picked up correctly. (3163999)
+
+2014-09-12 thomas-voss
+
+        * Fix remaining test cases. (0796f1e)
+        * Fix FTBFS. (ca693b7)
+        * Wire up further functions in the remote provider. (4cb3aba)
+        * Expose remote::Interface and respective stub/skeleton for using and
+          exposing remote location providers. (d1c3839)
+
+2014-09-11 thomas-voss
+
+        * Adjust reporting format. (607a609)
+        * Make sure the signal trap is setup prior to connectivty worker
+          thread being started. (32e78b7)
+        * Add a standalone test for integration with the espoo provider.
+          (d9189b9)
+
+2014-09-10 thomas-voss
+
+        * Somewhat clean up remote provider and add an acceptance-style test.
+          (422b11b)
+
+2014-08-29 CI bot
+
+        * Releasing 2.1+14.10.20140829-0ubuntu1 (c5fd267)
+
+2014-08-29 Manuel de la Peña
+
+        * Improve the accuracy reported by the remote provider. Approved by:
+          Thomas Voß (45f38f5)
+        * Add a new provider that uses the espoo project. Approved by: PS
+          Jenkins bot, Thomas Voß (555fb92)
+        * Include the codec to be 100% sure that it is added. (9bee8d5)
+
+2014-08-28 Manuel de la Peña
+
+        * Do not use the update template. (d3db405)
+
+2014-08-27 Manuel de la Peña
+
+        * Use the cul::Position object rather than an udocumented tuple.
+          (1e199cb)
+        * Improve accuracy in the remote provider. (1cfee0f)
+
+2014-08-26 Manuel de la Peña
+
+        * Do not use dbus-test-runner. (af1660e)
+        * Merged with trunk. (f015380)
+        * Changes aggording to peer review. (57130df)
+        * Changes according to the peer review. (5122869)
+        * Merged with changes pushed to the parent mr. (9ea5d45)
+        * Make method public and then remove the need of the helper
+          DummyProvider class. (e971e72)
+        * Improve the accurancy reported by the remote provider. (7e64731)
+        * Use the correct author. (ac24680)
+        * Remove small typo. (0987799)
+        * Added extra tests and remove as much metions as possible of the
+          espoo project. More will come once the espoo project is
+          updated. (2239a14)
+
+2014-08-25 CI bot
+
+        * Releasing 2.0.1+14.10.20140825-0ubuntu1 (1161e56)
+
+2014-08-25 thomas-voss
+
+        * Add request for wireless scans to load test threads. Make sure that
+          cached devices are considered instead of recreating device
+          instances. Make sure that scan done signals are relayed
+          correctly. Approved by: PS Jenkins bot, Manuel de la Peña
+          (127dfe3)
+
+2014-08-22 Manuel de la Peña
+
+        * Clean up code to make it more generic. (dbe828f)
+
+2014-08-22 thomas-voss
+
+        * Add request for wireless scans to load test threads. Make sure that
+          cached devices are considered instead of recreating device
+          instances. Make sure that scan done signals are relayed
+          correctly. (3ea2c86)
+
+2014-08-20 Manuel de la Peña
+
+        * Added a new provider that will use the signals provided by the
+          espoo service. (58abc08)
+
+2014-08-18 CI bot
+
+        * Releasing 2.0.1+14.10.20140818-0ubuntu1 (dc79d03)
+
+2014-08-18 thomas-voss
+
+        * Map edge -> gsm. Map hspa -> umts.
+          Fixes: 1357042 Approved by: PS
+          Jenkins bot, Manuel de la Peña (35ed6ea)
+        * Clean up CachedRadioCell and CachedWirelessNetwork. Switch to
+          logging to syslog.
+          Fixes: 1356814 Approved by: PS Jenkins
+          bot (645e349)
+        * Make sure the per-user trust-store instances are restarted on
+          location service restarts. Approved by: PS Jenkins bot,
+          Oliver Grawert, Brendan Donegan (e64a427)
+        * Add a demultiplexing reporter implementation. Adjust daemon config
+          to instantiate a demultiplexing reporter instance,
+          together with two ichnaea reporters feeding to Mozilla's
+          and Ubuntu's location service instances. Approved by: PS
+          Jenkins bot, Manuel de la Peña (e2d1d9c)
+
+2014-08-14 thomas-voss
+
+        * Map edge -> gsm. Map hspa -> umts. (889986c)
+        * Add missing files. (aaf3740)
+        * SYS_LOG really is SYSLOG. (0a2b177)
+        * Clean up CachedRadioCell and CachedWirelessNetwork. Switch to
+          logging to syslog. (3662362)
+
+2014-08-13 thomas-voss
+
+        * Add a demultiplexing reporter implementation. Adjust daemon config
+          to instantiate a demultiplexing reporter instance,
+          together with two ichnaea reporters feeding to Mozilla's
+          and Ubuntu's location service instances. (cad5e4d)
+        * Make sure the per-user trust-store instances are restarted on
+          location service restarts. (2eadd00)
+
+2014-08-11 CI bot
+
+        * Releasing 2.0.1+14.10.20140811-0ubuntu1 (b3fbdf5)
+
+2014-08-11 thomas-voss
+
+        * Make sure that state property changes are correctly reported to the
+          bus.
+          Fixes: 1348334, 1353413 Approved by: PS Jenkins bot
+          (48cddf5)
+
+2014-08-08 CI bot
+
+        * Releasing 2.0.1+14.10.20140808.1-0ubuntu1 (b5f415f)
+
+2014-08-08 thomas-voss
+
+        * Adjust naming of properties as exposed by NetworkManager. Approved
+          by: Manuel de la Peña (a759c24)
+        * Ensure that connections to events are properly cut on destruction.
+          (bd0561a)
+
+2014-08-08 CI bot
+
+        * Releasing 2.0.1+14.10.20140808-0ubuntu1 (47470fa)
+
+2014-08-08 Nick Dedekind
+
+        * Revert hotfix for bug#1352977 Approved by: Thomas Voß (3c1ac78)
+        * reverted hotfix for bug#1352977 (89c1fa8)
+
+2014-08-08 thomas-voss
+
+        * Ensure that connections to events are properly cut on destruction.
+          (b2a91eb)
+
+2014-08-07 CI bot
+
+        * Releasing 2.0.1+14.10.20140807.1-0ubuntu1 (ab0dcda)
+
+2014-08-07 thomas-voss
+
+        * Add camera app and osm touch to the whitelist for permission mgmt.
+          (ca40a7e)
+        * Adjust camera-app version. (9cfc903)
+        * Add camera app and osm touch to the whitelist for permission mgmt.
+          (c4217a7)
+        * Adjust standalone connectivity example. (362341e)
+        * Adjust naming of properties as exposed by NetworkManager. (5c1b7de)
+
+2014-08-06 thomas-voss
+
+        * Make sure that state property changes are correctly reported to the
+          bus. (2581222)
+
+2014-08-06 CI bot
+
+        * Releasing 2.0.1+14.10.20140806-0ubuntu1 (8f4aae7)
+
+2014-08-06 thomas-voss
+
+        * Make the location service a trusted helper. Approved by: Seth
+          Arnold (dc0547a)
+
+2014-08-05 thomas-voss
+
+        * We really should store the app id, not the service name. (c81b10e)
+        * Adjust description strings. (ee64630)
+        * Finishing touches to the user-session upstart job for starting the
+          trust-stored skeleton. (a328a57)
+        * Add trust-store-bin as build- and runtime-dependency. (6406761)
+        * Asynchronously deliver position/heading/velocity updates. (0fc7c7e)
+
+2014-08-01 thomas-voss
+
+        * Adjust timeout for session creation. (17cac5c)
+        * Revert dispatcher changes. (d6a597c)
+        * Dispatch updates from providers instead of calling directly into
+          the client. (d5bc542)
+        * Wait at most 60 seconds for creating a session with the location
+          service. (f105903)
+
+2014-07-31 thomas-voss
+
+        * Adjust dispatching policy for service implementation. (4e9b372)
+        * Execute the incoming connection on a pool of 3 threads. (408138b)
+
+2014-07-31 CI bot
+
+        * Releasing 2.0.1+14.10.20140731-0ubuntu1 (6a61bf1)
+
+2014-07-31 thomas-voss
+
+        * Expose connectivity state and primary connection characteristics.
+
+          Fixes: 1337102 Approved by: Heikki Holstila, PS Jenkins
+          bot (48c4c78)
+        * 42 as a pid really does not work well, use getpid() instead.
+          (2dc8b42)
+        * Make sure that upstart configuration for trust-stored is shipped
+          with -bin package. (ef88e01)
+        * Make sure that acceptance tests do not fail due to missing trust.
+          (36c12a7)
+        * [ thomas-voss ];  Make sure that logging directories are created on
+          service startup.   (LP: #1349704);  Fix build warnings.
+          Add a vanilla gps.conf file and install it to
+          /etc/gps.conf. Make   sure that expections thrown while
+          trying to download GPS Xtra data   do not abort the
+          service. (LP: #1347887) [ Pete Woods ];  Add libdbus-cpp
+          and libdbus as dependencies on devel package.;  Enable
+          building on arm64, powerpc and ppc64el.;  No-change
+          rebuild to get dbgsyms for all binaries onto
+          ddebs.ubuntu.com [ Thomas Voß ];  Bump major revision and
+          so name to account for toolchain update. [ thomas-voss .
+          Switch to json-c for json parsing/generation purposes.
+          New rebuild forced (c30eabb)
+        * [ thomas-voss ];  Make sure that logging directories are created on
+          service startup.   (LP: #1349704);  Fix build warnings.
+          Add a vanilla gps.conf file and install it to
+          /etc/gps.conf. Make   sure that expections thrown while
+          trying to download GPS Xtra data   do not abort the
+          service. (LP: #1347887) [ Pete Woods ];  Add libdbus-cpp
+          and libdbus as dependencies on devel package.;  Enable
+          building on arm64, powerpc and ppc64el. (57ab4e5)
+        * Add missing build dependencies. Add tests for
+          TrustStorePermissionManager. Add tests for
+          AppArmorProfileResolver together with testing apparmor
+          profiles. (b853026)
+
+2014-07-30 thomas-voss
+
+        * Switch to a trust-store-based implementation for the permission
+          manager. (1e5671d)
+
+2014-07-30 CI bot
+
+        * Releasing 2.0.1+14.10.20140730.1-0ubuntu1 (a6874ed)
+
+2014-07-30 thomas-voss
+
+        * Add a vanilla gps.conf file and install it to /etc/gps.conf. Make
+          sure that expections thrown while trying to download GPS
+          Xtra data do not abort the service.
+          Fixes: 1347887
+          Approved by: Ricardo Salveti, PS Jenkins bot (c2b5695)
+        * Fix build warnings. Approved by: Manuel de la Peña (4d6bbeb)
+        * Make sure that logging directories are created on service startup.
+
+          Fixes: 1349704 Approved by: PS Jenkins bot, Manuel de la
+          Peña (bccc3f5)
+        * Switch to dpkg-source 3.0. (5d56415)
+        * Only install /etc/gps.conf on architectures that support it.
+          (d7c83d4)
+        * Make sure that /etc/gps.conf is only opened for reading when the
+          HAL is actually instantiated. (98a3b83)
+
+2014-07-29 thomas-voss
+
+        * Merge in prerequisite branch. (ed4cf22)
+        * Fix build warnings. (083db59)
+        * Add comment in the code pointing to boost documentation for error
+          reporting details. (e096947)
+
+2014-07-29 CI bot
+
+        * Releasing 2.0.1+14.10.20140729.1-0ubuntu1 (8e5dbeb)
+
+2014-07-29 Pete Woods
+
+        * Add missing dependencies to devel package
+          Fixes: 1349746 Approved
+          by: PS Jenkins bot, Robert Bruce Park (8932d51)
+        * Add info about building on other platforms (152107c)
+        * Merge trunk (27bbe6f)
+        * Only build the GPS provider on supported platforms (3555d38)
+        * Don't require hardware headers on unsupported platforms (5a4aac6)
+
+2014-07-28 thomas-voss
+
+        * Add a vanilla gps.conf file and install it to /etc/gps.conf. Make
+          sure that expections thrown while trying to download GPS
+          Xtra data do not abort the service. (8343eac)
+
+2014-07-28 Steve Langasek
+
+        * Sync with distro (0f23177)
+
+2014-07-28 Pete Woods
+
+        * Bump changelog (707e824)
+        * Add missing dependencies to devel package (b15d353)
+
+2014-07-18 CI bot
+
+        * Releasing 2.0.0+14.10.20140718.2-0ubuntu1 (d0c230b)
+
+2014-07-18 thomas-voss
+
+        * Bump major revision and so name to account for toolchain update.
+          Approved by: Colin Watson (6036aa0)
+        * Adjust library names. (487ae46)
+        * Adjust versioned build-dependency to force rebuild against correct
+          libdbus-cpp version. Adjust installation of header files.
+          (03bc302)
+        * Bump major revision and so name to account for toolchain update.
+          (c0da496)
+        * [ thomas-voss ];  Switch to json-c for json parsing/generation
+          purposes.;  New rebuild forced [ Thomas Voß ];  Bump major
+          version. (983bed9)
+
+2014-07-17 CI bot
+
+        * Releasing 1.0.0+14.10.20140717.1-0ubuntu1 (0383151)
+
+2014-07-17 thomas-voss
+
+        * Switch to json-c for json parsing/generation purposes. Approved by:
+          PS Jenkins bot, Manuel de la Peña (f9eb585)
+        * Adjust value type for LastSeen timestamp. (95a84bc)
+        * Remove duplicate Google logging initializer. (eeeb538)
+
+2014-07-16 Timo Jyrinki
+
+        * Releasing 1.0.0+14.10.20140715 (47d668d)
+
+2014-07-16 thomas-voss
+
+        * Adjust include for json-c in test-case, too. (2bd21dd)
+
+2014-07-15 thomas-voss
+
+        * Fix include for json-c header file. (e04ebe1)
+        * Re-enable net-cpp based implementations with net-cpp being in main
+          now. (f019b5d)
+
+2014-07-15 CI bot
+
+        * Releasing 1.0.0+14.10.20140715-0ubuntu1 (876511e)
+        * Needed rebuild due to ABI changes in dbus-cpp. Approved by: PS
+          Jenkins bot (35e76a1)
+
+2014-07-11 thomas-voss
+
+        * Switch to json-c for json parsing/generation purposes. (d6f2655)
+
+2014-07-10 thomas-voss
+
+        * Characteristics really is a bitfield. (ac15a97)
+        * Expose further connection characteristics. (a740579)
+        * Add properties indicating whether wifi/wwan (hardware) is enabled.
+          (91a74d8)
+
+2014-07-09 thomas-voss
+
+        * Add some comments to the implementation. (52af242)
+        * Factor out connection characteristics calculation. (e8a9460)
+        * Make enumeration of devices on an active connection more robust.
+          (f20fbc7)
+        * Rename property. (fcc1fa2)
+        * Fix standalone connectivity example. (f5d9ce4)
+        * Expose connectivity state and primary connection characteristics.
+          (a6dc3a1)
+
+2014-06-30 CI bot
+
+        * Releasing 1.0.0+14.10.20140630-0ubuntu1 (1497def)
+
+2014-06-30 thomas-voss
+
+        * This MP consolidates multiple related changes together, with the
+          goal of: (25e1879)
+
+2014-06-27 thomas-voss
+
+        * Comment out header for GpsXtraDownloader. (ff8bc52)
+        * Adjust expected type for LastSeen timestamps on wifis. (893c69e)
+        * Remove build dependency on json-cpp and net-cpp. (de45007)
+        * Bump major revision and so name to account for toolchain update.
+          (29e1778)
+        * Make sure that the daemon logs to /var/log/ubuntu-location-service.
+          Make sure that the CLI logs to stderr. Make sure that the
+          client library logs to stderr. (51f690c)
+
+2014-06-24 thomas-voss
+
+        * Make sure that the dummy provider thread is correctly joined when
+          stopped. (33f38eb)
+        * Add dependency on library package. (5282fe1)
+        * Bump major version. (ae5b626)
+        * Make sure to install the versioned include directory. (79f35c5)
+        * Bump so name to account for api change. (69d77bd)
+        * Make sure that session counter is incremented on access. (d46615f)
+        * Factor out resolution of client credentials and object path
+          creation into interfaces. (2ec744f)
+
+2014-06-23 thomas-voss
+
+        * Send reply via the same dbus connection. (0bc16ad)
+        * Make sure that the testing web server is up before executing client
+          requests. (3e9d17e)
+        * Remove UNRELEASED changelog artifact. (a027f0d)
+        * Factor out wap-headers for GPS Xtra Data Downloader. Add checks for
+          header in GpsXtraDownloader test cases. (15e9e68)
+        * Refactor skeletons for service and session, getting rid of the
+          pimpl-pattern. Introduce a dedicated outgoing dbus
+          connection for integrating with other services. Factor out
+          testing webserver into its own class and adjust test
+          cases. (3f5eae0)
+
+2014-06-20 thomas-voss
+
+        * Disable gps xtra downloader test against external URL as the test
+          fails in CI. (d462ed7)
+        * Factor out GPS Xtra Downloader implementations and add tests around
+          them. (6223cd2)
+        * Add an end-to-end acceptance test exercising the service with
+          hundreds of clients randomly dying away. Adjust
+          implementation to correctly disconnect from core::Signal's
+          by levering RAII as provided by core::ScopedConnection.
+          (092a875)
+
+2014-06-17 thomas-voss
+
+        * Refactored command line parsing to take a factory functor for
+          creating connections to the bus (used in testing).
+          (31354ed)
+        * Refactor and clean up gps provider test case. (97ebaa8)
+
+2014-06-16 thomas-voss
+
+        * Adjust install directories. (ec86bc2)
+        * Fix type in debian/control. (30a9127)
+        * Address build warning for ichnaea reporter test. Add net-cpp as
+          build-dependency. (733eb29)
+        * Refactor setup to make daemon and cli testable. Add nickname
+          property to ichnaea reporter. (56ab20d)
+
+2014-06-13 thomas-voss
+
+        * Make reference position more readable. (502c101)
+        * [ Ubuntu daily release ];  New rebuild forced [ Ricardo Mendoza .
+          Platform API V2 rebuild (e1a7803)
+        * Shrink the directory name for installed tests. (253fc36)
+
+2014-06-12 thomas-voss
+
+        * Make sure that missing last_seen property is not fatal. (3a62040)
+        * Make reporting to ichnaea from gps provider test cases opt-in.
+          (8fd7e5d)
+        * Make the harvester more chatty in logs if verbose logging is
+          enabled. (83b891e)
+        * Refactor the harvester to make it usable for reporting in test
+          cases. (a76f744)
+        * Remove unneeded implementation file. (7be0860)
+        * Refactor the android-specific implementation of the
+          HardwareAbstractionLayer interface. (b5f4ac4)
+
+2014-06-12 CI bot
+
+        * Releasing 0.0.3+14.10.20140612-0ubuntu1 (a93cc90)
+
+2014-06-12 Ricardo Mendoza
+
+        * Platform API V2 rebuild (f9af9c8)
+
+2014-06-12 thomas-voss
+
+        * network-manager models last seen updates as strength updates,
+          account for that. (8f59d63)
+        * Subscribe to last seen updates in standalone connectivity example.
+          Adjust formatting of enumerated wifis in standalone
+          connectivity example. (a3afe13)
+        * Report last seen as raw timestamps. (40b2023)
+        * Fix reporting of agps status enum. Correctly extract last seen
+          timestamp for property updates. (a4ce4ed)
+
+2014-06-11 thomas-voss
+
+        * Put the injector thread to sleep for a second. (763f752)
+        * Make the supl benchmark inject reference position on a thread while
+          positioning is active. (f710298)
+        * Make sure that the xtra downloader is initialized. (cfdfc9c)
+        * First cut at support for GPS XTRA data. (a10d4df)
+
+2014-06-10 thomas-voss
+
+        * Inject ref position on nmea update. (9fa5d22)
+        * Adjust APN for testing purposes. (eafb1f2)
+        * Print more verbose cell information on changes. (662f0a4)
+        * Make sure that technology changes are wired up correctly. (283ba5c)
+        * Print last seen timestamp. (c5bbe4c)
+        * Adding last_seen property to WirelessNetwork. Adding signal
+          indicating end of wifi scan. (922d0f9)
+        * Just a test. (1eea7e7)
+        * Make sure that we always set a supl server and port. (94f1486)
+        * Allow for reference position injection into gps hal test cases.
+          (5404179)
+        * Correct apn name. (19ba420)
+
+2014-06-09 thomas-voss
+
+        * Clean up supl test case. (6d73b3b)
+        * Add accuracy for reference location. (a098110)
+        * Make sure to report APN to gps chipset. (9a1ee66)
+        * Inject reference location. (f402725)
+
+2014-06-08 thomas-voss
+
+        * Ensure to set supl server when data connection is requested.
+          (bd898bf)
+        * Make sure to reinitialize all agps flags after dropping adding data
+          in trial setup. (995a49b)
+        * mobile_station_based is the default for assisted GPS. Relax
+          requirements on time to first fix. (00a29ff)
+
+2014-06-07 thomas-voss
+
+        * Set apn for gps chipset. (90395b0)
+        * Reenable reference location injection. (76b9ad5)
+        * Remove unneccessary apn reporting. (eb28f38)
+        * Switch to "internet" apn for access to supl servers. (88698cd)
+        * Add first cut at handling agps status updates. (4d3a6da)
+        * Format IP triplet as ints. (dd1304d)
+        * Switch to mobile station based positioning. (e43687b)
+
+2014-06-06 thomas-voss
+
+        * Entirely remove stream out operator to fix ice for gcc. (9930fed)
+        * Make operator<< inline friend to circumvent icl for gcc on arm.
+          (806a7b0)
+        * Add missing include <iosfwd>. (e5bc0c2)
+        * Add logging for agps status updates in the hardware abstraction
+          layer. (3c173f6)
+        * Add pretty printing for SuplAssistant::Status. (0a75748)
+        * Make sure to announce open data connection on agps status update.
+          (1abf35d)
+        * Notify network connectivity to GPS chipset. (312380c)
+        * Make sure to switch assistance mode on in the chipset driver.
+          (23c4f00)
+        * Enable AGPS support in the GPS HAL. (5512d2a)
+
+2014-06-05 thomas-voss
+
+        * Remove overly-verbose logs for satellite visibility reporting.
+          (44ca645)
+        * Disable test cases instead of commenting them out. (8013a11)
+        * Comment out test case.< (b2e7b86)
+        * Temporarily disable space vehicle reporting. (215e444)
+        * Add a missing include for logging in the location engine. (505150f)
+        * More logging output. (edc72ec)
+        * Add more debugging output to the gps provider. (36843fb)
+        * Add missing typename. (5ac8366)
+        * Replace unguarded .at access to maps with guarded .find(). Add
+          verbose logging line to gps hal for tracking satellite
+          visibility updates. (e3544eb)
+        * Make the gps provider more verbose when reporting satellite
+          visibility. (87f7776)
+        * Wire up network registration property updates. (4d66ccc)
+        * Split out property updates for wifi's. (a88bf02)
+        * Factor out Ofono/NetworkManager-based implementation into header
+          and impl. file. (71f532b)
+        * Clean up Ofono/NM-based connectivity::Manager implementation.
+          (925e76c)
+
+2014-06-04 thomas-voss
+
+        * Factor out WirelessNetwork and RadioCell implementations into their
+          own header files. (51e02d9)
+        * Wire up cell added/removed signals. (7223a5c)
+        * Remove noisy std::cout's in query threads. (7827582)
+        * Add missing include <thread> in standalone example. Keep threads
+          running until cancelled in standalone example. (afac268)
+        * Add threading stress-tests to standalone example. (0eae5c9)
+        * Wire up to property changes on network registrations. (b7a4827)
+        * Further glue for wiring up interface changes on a modem. (24da3c2)
+        * Wire up to a modem's PropertyChanged signal. (3901e30)
+        * First cut at exposing modem properties for tracking network
+          registrations. (73c4a79)
+        * Refactor implementation and consolidate ofono -> connectivity
+          translation in one place. (2d226f7)
+        * Refactor location::connectivity::RadioCell to prepare for
+          fine-grained update propagation. (f47c1ce)
+
+2014-06-03 thomas-voss
+
+        * Adjust standalone connectivity example. (5b3e4af)
+        * Refactor connectivity API for visible wireless networks. (b1fc4ed)
+        * Add signals for wifi's being added and removed to
+          connectivity::Manager. (0fb0aba)
+        * Log property changes on network registration. (6478723)
+        * Adjust argument type for signal PropertyChanged. (f98aa64)
+        * Rename signal to account for ofono conventions. (c44e353)
+        * Replace std::cerr with LOG(ERROR) in connectivity manager
+          implementation. Wire up to properties changed signal for
+          Ofono's NetworkRegistration interface. (84261e8)
+        * Replace std::cout with proper logging. (3cf1cad)
+        * Add test cases for GPS provider construction. (99eb31e)
+        * Ensure that NetworkRegistration properties are always up to date.
+          (5aab548)
+        * Refactor property handling for ofono NetworkRegistration interface.
+          (89cb661)
+
+2014-06-02 thomas-voss
+
+        * Add test case for repeatedly querying visible cells. (5c12274)
+        * Remove obsolete dependency on boost threads. (61d8514)
+        * Fix diagnostic message. (fde9308)
+        * Add diagnostic message for boost libraries. (6f2d795)
+        * Fix missing link directive for boost program-options. (7df8253)
+        * Conditionally include sources for ichnaea reporter. (45e400f)
+        * Remove obsolete header from service implementation. (ab2d641)
+        * Requesting network scans is now async. (3ee366b)
+        * Add build-dep on jsoncpp. Make elements based on net-cpp optional
+          for now. Default to a NullReporter for harvesting.
+          (fd8daa1)
+
+2014-06-01 thomas-voss
+
+        * Add a reporter sending off harvested location data to the mozilla
+          location service. Add test-cases for the reporter. Adjust
+          debian/copyright to include mongoose. (8192fe6)
+
+2014-05-29 Ricardo Mendoza
+
+        * Name (5f66352)
+        * Platform API V2 (6219af8)
+
+2014-05-22 thomas-voss
+
+        * Fix test-case. (b272b0f)
+        * Remove primary scrambling code from UMTS details. Make wireless
+          network properties observable. (bea8072)
+
+2014-05-20 thomas-voss
+
+        * Add standalone examples to debian package. (06c444c)
+        * Add standalone example for using the connectivity API. (5d148a0)
+        * Remove dbus-test runner setups as dbus-cpp provides its own fixture
+          now. Add documentation for space vehicle. Adjust LTE radio
+          cell to carry an attribute TAC instead of LAC. Add
+          test-cases for location::connectivity::RadioCell.
+          (66be2dd)
+
+2014-05-19 thomas-voss
+
+        * Extract ssid and mode from NetworkManager. Make sure that a missing
+          ofono instance is handled gracefully. (aeff98a)
+        * Fix installation of pkgconfig-file for connectivity API. (cc2c10c)
+        * Adjust debian installation setup to account for pkgconfig files now
+          correctly being installed to arch-specific subdirs.
+          (ff46145)
+        * Add more documentation to RadioCell.h. (e2637d6)
+        * Add documentation for BoundedInteger::from_percent. (e3e915c)
+        * Adjust radio cell information to reflect information and values
+          available from Android. Add missing build dependency on
+          process-cpp. (08d3134)
+        * Add missing pkgconfig file. (2a406bb)
+        * Add pkgconfig setup for connectivity API. Adjust acceptance tests
+          to rely on private bus connection without
+          dbus-test-runner. (8f62205)
+        * [ Thomas Voß ];  Patch version bump reflecting the toolchain
+          switch.;  No change rebuild against boost1.55. [
+          thomas-voss ];  Re-enable onSessionDied(). [ Łukasz
+          'sil2100' Zemczak ];  Bump the build-dependency on
+          dbus-cpp due to the ABI change [ thomas-voss ];  Backport
+          dummy provider and accompanying tests. [ thomas-voss .
+          Force compilation against gcc 4.7. [ thomas-voss ];  Fix
+          a race when a session is created while another one ends.
+            Ensure a sensible minimum interval between consecutive
+          location   updates in the GPS provider. (LP: #1240878.
+          Adjust to changes in new dbus-cpp version. (c8b4594)
+        * Split out connectivity API for provider-integration purposes. Make
+          sure that the invalid value for a bounded integer range is
+          available. (422a0fe)
+
+2014-05-12 CI bot
+
+        * Releasing 0.0.3+14.10.20140512-0ubuntu1 (ead064f)
+
+2014-05-12 thomas-voss
+
+        * Patch version bump reflecting the toolchain switch. (c3527ba)
+        * Rename visible_radio_cells to connected_radio_cells. Add function
+          to trigger a scan for visible wifis. Add missing
+          attributes in WirelessNetwork. (3d7d474)
+
+2014-05-07 Ricardo Mendoza
+
+        * Merge trunk (0187480)
+        * Fix ubuntu ver (bbbb2fc)
+
+2014-05-06 Ricardo Salveti de Araujo
+
+        * releasing package location-service version
+          0.0.2+14.04.20140307-0ubuntu2 (9a8e9df)
+
+2014-05-06 thomas-voss
+
+        * Version build deps on platform API hardware portions. (fbb65b6)
+
+2014-05-05 thomas-voss
+
+        * Patch version bump reflecting the toolchain switch.;  Re-enable
+          onSessionDied(). (d2ecfac)
+
+2014-03-10 CI bot
+
+        * Resync trunk (acca8db)
+
+2014-03-07 CI bot
+
+        * Releasing 0.0.2+14.04.20140307-0ubuntu1 (535aede)
+
+2014-03-07 thomas-voss
+
+        * Reenable onSessionDied(). (a99f639)
+
+2014-03-07 Łukasz 'sil2100' Zemczak
+
+        * Bump the build-dependency on dbus-cpp due to the ABI change
+          (bc5fafb)
+
+2014-03-05 thomas-voss
+
+        * Reenable onSessionDied(). (e70aac7)
+        * Remove calls to invoke_method_synchronously. Reenable acceptance
+          tests. Add robustness test for client timing out during
+          updates. (6922e95)
+
+2014-02-25 Łukasz 'sil2100' Zemczak
+
+        * Change of approach - let's base on 2.0.0 instead (cef14fd)
+        * Bump the build-dependency on dbus-cpp due to the ABI change
+          (e401bf1)
+
+2014-02-11 CI bot
+
+        * Releasing 0.0.2+14.04.20140211-0ubuntu1 (98f8cab)
+
+2014-02-11 thomas-voss
+
+        * Backport dummy provider and accompanying tests. (39756c2)
+
+2014-02-10 thomas-voss
+
+        * Add correct timestamps to location updates. (d8af813)
+
+2014-02-09 thomas-voss
+
+        * Fix session cleanup. (3831e21)
+
+2014-02-08 thomas-voss
+
+        * Make state changes of the dummy provider atomic. Fix build error on
+          gcc 4.7. (b4c4e04)
+
+2014-02-07 thomas-voss
+
+        * Backport dummy provider and accompanying tests. (39c3d6d)
+
+2014-02-05 CI bot
+
+        * Releasing 0.0.2+14.04.20140205.1-0ubuntu1 (e6779bb)
+
+2014-02-05 thomas-voss
+
+        * Force compilation against gcc 4.7. (61f1905)
+        * Force compilation against gcc 4.7. (7273f9b)
+
+2014-02-04 CI bot
+
+        * Releasing 0.0.2+14.04.20140204-0ubuntu1 (d352996)
+
+2014-02-04 thomas-voss
+
+        * Adjust to changes in new dbus-cpp version. (d2c0953)
+
+2014-02-03 thomas-voss
+
+        * Merge prerequisite branch. (47b3004)
+
+2014-01-31 thomas-voss
+
+        * Disable acceptance tests as they fail under fakeroot environments.
+          Patch will be added after this MP. (f8bf0ed)
+        * Address indentation issues. (905f22a)
+        * Add build-dep on properties-cpp. (96ff65e)
+        * Adjust to changes in new dbus-cpp version. (28dc1be)
+
+2014-01-29 thomas-voss
+
+        * Disable tests failing on the builders. (0d06b56)
+
+2014-01-24 thomas-voss
+
+        * Remove obsolete directory gps in include. (ae02b16)
+        * Remove obsolete and wrong test case for adjusting the space vehicle
+          property. (7fe97f5)
+        * Remove link dependency on ubuntu application api. (553ec26)
+        * Disable features relying on platform api changes to break cycle in
+          landing procedure. (7f5faa4)
+
+2014-01-23 thomas-voss
+
+        * Adopt to core::dbus::Variant not being a template anymore.
+          (f5353ea)
+
+2014-01-21 thomas-voss
+
+        * Revert changes to gps provider test setup. (bd2fcc0)
+
+2014-01-20 thomas-voss
+
+        * Refactor gps::Provider to rely on a mockable interface
+          HardwareAbstractionLayer. Add test-cases and benchmarks
+          for ttff with and without SUPL support. Adjust testing
+          cmake-macros to exclude all tests that are named
+          *requires_hardware*. (12db1bd)
+
+2014-01-15 thomas-voss
+
+        * Make sure that location updates are started. (15ee2a9)
+        * Add doc package again. (de2cd07)
+        * Adjust terminal output to correctly reflect property being set.
+          (a94be35)
+        * Add test cases for adjusting property values of the service via the
+          cli. (b6419b5)
+
+2014-01-13 thomas-voss
+
+        * Version bump (803b8a8)
+        * Factor out connectivity manager tests. (fe1c3d1)
+
+2014-01-12 thomas-voss
+
+        * Factor out radio cell and wireless network definition. Add tests
+          for criteria. (3d1dbe0)
+
+2014-01-05 thomas-voss
+
+        * Refactor connectivity api and split out ofono and nm specific
+          parts. (06b9e49)
+
+2014-01-04 thomas-voss
+
+        * Factor out service definitions for NetworkManager and Ofono.
+          (0e640f5)
+
+2014-01-02 thomas-voss
+
+        * Make sure that an exception does not stop the build process.
+          (b5c3224)
+        * Add build dependencies on libdbus-cpp-dev Prevent system-bus access
+          on library shutdown (breaks CI and archive builds) Limit
+          dot threads for diagram generation to 1. (95b3335)
+        * Fix indentation in codec.h Install and package test executables
+          (904eeb6)
+
+2014-01-01 thomas-voss
+
+        * Refactored to automatic lifetime mgmt of slot connections.
+          (96c0295)
+
+2013-12-30 thomas-voss
+
+        * Switch to process-cpp for cross-process testing facilities. Remove
+          boost-based channel implementation. (de81fd9)
+
+2013-12-26 thomas-voss
+
+        * Document class PermissionManager. Refactor skeleton implementation
+          to make use of core::dbus::Property. (5986cf3)
+
+2013-12-24 thomas-voss
+
+        * Switch to dbus-cpp 1.0 (800824c)
+
+2013-12-17 thomas-voss
+
+        * Fixed indent in gps::Provider. Added command line option to
+          documentation. (3b1c2fc)
+
+2013-12-16 thomas-voss
+
+        * Added cli for the service daemon to the binary package. (4a202c0)
+        * Added tests for daemon and cli. (9007986)
+        * Unified daemon and cli heade and implementation files. (01a9166)
+        * Add a command-line interface to the service. (9f75db7)
+
+2013-12-14 thomas-voss
+
+        * Split up provider selection policy to rely on an interface
+          ProviderEnumerator to ease in testing. (de203f6)
+
+2013-12-12 thomas-voss
+
+        * Trimmed down on types. (c3acec7)
+
+2013-12-10 thomas-voss
+
+        * Removed connectivity API draft to prepare for simpler approach.
+          (2f184ab)
+        * Refactored includes. Added a configuration option to handle cell
+          and wifi ID reporting. (02191b1)
+
+2013-11-19 thomas-voss
+
+        * Add a mock for a connectivity API exposed to providers and
+          reporters. (fc5736f)
+
+2013-11-17 thomas-voss
+
+        * Add units for connectivity api. Refactor cell class into namespace
+          radio. (895972e)
+
+2013-11-15 thomas-voss
+
+        * Another step. (5c49cc8)
+
+2013-11-14 thomas-voss
+
+        * Add engine configuration. Refactor feature and requirements flags
+          handling. (e2c1bb3)
+
+2013-10-22 Łukasz 'sil2100' Zemczak
+
+        * Sync trunk with distro. (0046cfc)
+        * Sync trunk with distro (b0b0f69)
+
+2013-10-18 thomas-voss
+
+        *  * Fix a race when a session is created while another one ends.  *
+          Ensure a sensible minimum interval between consecutive
+          location updates in the GPS provider.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1240878. (a035e3a)
+
+2013-10-17 thomas-voss
+
+        *  * Fix a race when a session is created while another one ends.  *
+          Ensure a sensible minimum interval between consecutive
+          location updates in the GPS provider. (891ebee)
+
+2013-10-16 Automatic PS uploader
+
+        * Releasing 0.0.2+13.10.20131016.1-0ubuntu1 (revision 47 from
+          lp:location-service). (1632b0d)
+        * Releasing 0.0.2+13.10.20131016.1-0ubuntu1, based on r47 (aecb8f3)
+
+2013-10-15 Olivier Tilloy
+
+        * Ensure the service is restarted if ended unexpectedly.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1240025. (9a21a20)
+
+2013-10-15 Automatic PS uploader
+
+        * Releasing 0.0.2+13.10.20131015.2-0ubuntu1 (revision 45 from
+          lp:location-service). (5fb96e0)
+
+2013-10-15 Olivier Tilloy
+
+        * Ensure the service is restarted if ended unexpectedly. (1918d45)
+
+2013-10-15 Automatic PS uploader
+
+        * Releasing 0.0.2+13.10.20131015.2-0ubuntu1, based on r45 (a559728)
+
+2013-10-15 Didier Roche
+
+        * cleanup packaging (it's not multiarched) (724d6f5)
+
+2013-10-15 thomas-voss
+
+        * Refactor packaging of service executable.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1235419. (ef11e42)
+        * Remove -doc depending on -dev, add -dev recommending -doc.
+          (343a72f)
+        * Refactor packaging of service executable.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1235419. (019e2be)
+        * Really bump version number in debian/changelog. (37df103)
+        * Added Replaces hint to -bin package as per review comment.
+          (6479732)
+
+2013-10-14 thomas-voss
+
+        * Address reviewer comments and bump package version. (488fbb0)
+
+2013-10-11 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20131011-0ubuntu1 (revision 41 from
+          lp:location-service). (f075b70)
+        * Releasing 0.0.1+13.10.20131011-0ubuntu1, based on r41 (fba1e04)
+
+2013-10-10 Olivier Tilloy
+
+        * Really fulfil the noexcept promise.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1182658. (b2b0f43)
+        * Really fulfil the noexcept promise. (0375409)
+
+2013-10-09 thomas-voss
+
+        * Replace throwing an exception with logging, fulfill the noexcept
+          promise.
+          Fixes: https://bugs.launchpad.net/bugs/1182658.
+          (4ddd276)
+        * Replace throwing an exception with logging, fulfill the noexcept
+          promise. (b904b77)
+
+2013-10-08 thomas-voss
+
+        * Refactor packaging of service executable. (adcee4c)
+
+2013-09-04 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130904-0ubuntu1 (revision 38 from
+          lp:location-service). (7599df2)
+        * Releasing 0.0.1+13.10.20130904-0ubuntu1, based on r38 (d04a3b1)
+
+2013-09-03 thomas-voss
+
+        * Correctly link against gflags.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1218896. (f981167)
+        * Correctly link against gflags. (88f7198)
+
+2013-09-03 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130903-0ubuntu1 (revision 36 from
+          lp:location-service). (1f05460)
+        * Releasing 0.0.1+13.10.20130903-0ubuntu1, based on r36 (54343e2)
+
+2013-09-03 thomas-voss
+
+        *  * Remove build-dependency on lcov.  * Add build-dependency on
+          graphviz.  * Add "Pre-Depends: ${misc:Pre-Depends}" for
+          libubuntu-location-service0.  * Add MultiArch: foreign for
+          ubuntu-location-service-doc.  * Disable JS-based search
+          engine in doxygen setup to address lintian warning.
+          Fixes:
+          https://bugs.launchpad.net/bugs/1218896. (db890eb)
+
+2013-08-31 thomas-voss
+
+        *  * Remove build-dependency on lcov.  * Add build-dependency on
+          graphviz.  * Add "Pre-Depends: ${misc:Pre-Depends}" for
+          libubuntu-location-service0.  * Add MultiArch: foreign for
+          ubuntu-location-service-doc.  * Disable JS-based search
+          engine in doxygen setup to address lintian warning.
+          (c882dca)
+
+2013-08-29 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130829.1-0ubuntu1 (revision 34 from
+          lp:location-service). (ef55dbb)
+        * Releasing 0.0.1+13.10.20130829.1-0ubuntu1, based on r34 (2dcc953)
+
+2013-08-29 thomas-voss
+
+        * Remove ruby-ronn from the build-dependencies. (eeaa4ca)
+        * Remove ruby-ronn from the build-dependencies. (c710cbf)
+
+2013-08-27 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130827-0ubuntu1 (revision 32 from
+          lp:location-service). (1fda2e4)
+        * Releasing 0.0.1+13.10.20130827-0ubuntu1, based on r32 (784cf2d)
+
+2013-08-23 thomas-voss
+
+        * Log gps::Provider status updates to syslog, but only every 20th
+          satellite visibility update. (dce5897)
+        * Log gps::Provider status updates to syslog, but only every 20th
+          satellite visibility update. (370d1b0)
+
+2013-08-21 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130821-0ubuntu1 (revision 30 from
+          lp:location-service). (36db9b9)
+        * Releasing 0.0.1+13.10.20130821-0ubuntu1, based on r30 (ddc2065)
+
+2013-08-20 Thomas Voß
+
+        * Switch to gcc 4.7. (cb08d98)
+        * Move comments to beginning of file. (99323fc)
+        * Note down reason for switching to gcc 4.7. (cb37db4)
+        * Add gcc/g++ 4.7 as build-dependency. (f330061)
+
+2013-08-19 Thomas Voß
+
+        * Switch to gcc 4.7. (7c6e4c7)
+
+2013-08-19 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130819-0ubuntu1 (revision 28 from
+          lp:location-service). (49deac1)
+        * Releasing 0.0.1+13.10.20130819-0ubuntu1, based on r28 (a039daf)
+
+2013-08-19 Thomas Voß
+
+        * Add linker flags to pkgconfig setup. (959ca44)
+        * Add linker flags to pkgconfig setup. (db469ad)
+
+2013-08-15 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130815.1-0ubuntu1 (revision 26 from
+          lp:location-service). (8fa8bb9)
+        * Releasing 0.0.1+13.10.20130815.1-0ubuntu1, based on r26 (9e458a8)
+
+2013-08-14 Thomas Voß
+
+        * Adjust path to service executable. (cb56fac)
+        * Adjust path to service executable. (0732b99)
+
+2013-08-14 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130814-0ubuntu1 (revision 24 from
+          lp:location-service). (f4d7b20)
+        * Releasing 0.0.1+13.10.20130814-0ubuntu1, based on r24 (84c6e4e)
+
+2013-08-14 Ted Gould
+
+        * Add an upstart config file to examples, adjust path to service
+          executable. (28e476b)
+
+2013-08-14 Thomas Voß
+
+        * Adjust path to service executable. (1f6d5da)
+
+2013-08-13 Ted Gould
+
+        * Adding the upstart config to examples (4da115a)
+        * Add an upstart config file (510492d)
+
+2013-08-13 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130813-0ubuntu1 (revision 22 from
+          lp:location-service). (ea0d92f)
+        * Releasing 0.0.1+13.10.20130813-0ubuntu1, based on r22 (3f78a07)
+
+2013-08-13 Thomas Voß
+
+        * Adjust build and runtime dependency to use the hardware bits of the
+          platform API. (987d0b5)
+        * Reenable tests again. (9d226ba)
+        * Adjust build and runtime dependency to use the hardware bits of the
+          platform API. (a6e17c6)
+
+2013-07-11 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130711-0ubuntu1 (revision 20 from
+          lp:location-service). (2fabf48)
+        * Releasing 0.0.1+13.10.20130711-0ubuntu1, based on r20 (e982c87)
+
+2013-07-10 Didier Roche
+
+        * Adapt to new gmock snapshot (which doesn't ship anymore shared
+          lib).
+          Fixes: https://bugs.launchpad.net/bugs/1185265.
+          (5094a3f)
+
+2013-07-09 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130709-0ubuntu1 (revision 18 from
+          lp:location-service). (76bd58c)
+        * Releasing 0.0.1+13.10.20130709-0ubuntu1, based on r18 (2433f3f)
+
+2013-07-08 Didier Roche
+
+        * -dev package should suggests -doc. (a64aa41)
+
+2013-07-05 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130705-0ubuntu1 to ubuntu. (e530876)
+
+2013-07-05 Didier Roche
+
+        * add a trailing comma (afed205)
+        * -dev package should suggests -doc (a5c8088)
+
+2013-07-05 Automatic PS uploader
+
+        * Releasing 0.0.1+13.10.20130705-0ubuntu1, based on r16 (5b34767)
+
+2013-07-04 Didier Roche
+
+        * Ship a -doc package now to install the documentation. In addition
+          to it, build in parallel as well as check for missing
+          files. (a8a1737)
+        * ship an additional -doc package and handle --fail-missing
+          gracefully (bcaf4a0)
+        * change arch:all -> any for the -dev package and build in parallel
+          and check for fail-missing (9f6b13e)
+        * fix small typo (cf23b07)
+        * build with latest google-mock and force using the internal gtest
+          (025868b)
+
+2013-06-18 Automatic PS uploader
+
+        * Releasing 0.0.1daily13.06.18-0ubuntu1 to ubuntu. (a336c0e)
+        * Releasing 0.0.1daily13.06.18-0ubuntu1, based on r14 (e498d26)
+
+2013-06-17 Automatic PS uploader
+
+        * Releasing 0.0.1daily13.06.17-0ubuntu1 to ubuntu. (fcc9742)
+        * Releasing 0.0.1daily13.06.17-0ubuntu1, based on r13 (28a015c)
+
+2013-06-14 Automatic PS uploader
+
+        * Releasing 0.0.1daily13.06.14.1-0ubuntu1 to ubuntu. (4c24fcc)
+        * Releasing 0.0.1daily13.06.14.1-0ubuntu1, based on r12 (d173ca2)
+
+2013-06-14 Thomas Voß
+
+        * Fix test-cases to rely on proper floating point comparisons.
+          (d77bcd9)
+        *  * Fix test-cases to rely on proper floating point comparisons.
+          (8fec3fe)
+
+2013-06-14 Łukasz 'sil2100' Zemczak
+
+        * Change name to the project name. (8327489)
+        * Change name to the project name (12472c5)
+
+2013-06-13 Łukasz 'sil2100' Zemczak
+
+        * Fix the FTBFS due to the new saucy toolchain. Add multi-arch
+          support, fix the binary paths (libexec). Fix some lintian
+          issues. (eb6a964)
+        * Fix dep (af3f438)
+
+2013-06-13 Didier Roche
+
+        * fix weak dependency error (b18ad2f)
+
+2013-06-13 Łukasz 'sil2100' Zemczak
+
+        * Fix some lintian issues (a338969)
+        * Enable multiarch, fix libexec directories (3f55791)
+        * Fix the FTBFS (71fb233)
+
+2013-06-11 Didier Roche
+
+        * add section and -dev -> binary dep (aaeb390)
+
+2013-06-10 Thomas Voß
+
+        * Clean up the overall source tree and add additional tests.
+          (faa52d4)
+        * Add the doc target to ALL. (b1366f0)
+        * Clean up the overall source tree and add additional tests.
+          (dd7feb3)
+
+2013-06-07 Łukasz 'sil2100' Zemczak
+
+        * Modifications related to compliance with our packaging standards.
+          (7a4eb23)
+
+2013-06-06 Łukasz 'sil2100' Zemczak
+
+        * Add split, also, add proper COPYRIGHT files to the source (f2d6ea1)
+
+2013-06-05 Łukasz 'sil2100' Zemczak
+
+        * Add a COPYING file, modify debian/copyright to include the cmake/
+          copyrights (e8b2168)
+
+2013-06-04 Łukasz 'sil2100' Zemczak
+
+        * Since the first version got never released anywhere, let's remove
+          that changelog entry (a351071)
+        * Modifications related to compliance with our packaging standards
+          (ab59d7a)
+
+2013-05-30 Thomas Voß
+
+        * Remove obsolete default provider set. (fed53af)
+        * Remove obsolete default provider set. (5ff276b)
+        * Removing graphviz dependency. (cc4354a)
+        * Minor patch. (2a99b5f)
+
+2013-05-29 Thomas Voß
+
+        * Remove dependency on wpsapi. (e975b54)
+        * Removing graphviz dependency. (a7172b2)
+        *  * Enabled coverage reporting.  * Consolidated init and shutdown.
+          (6f64c78)
+        *  * Refactored the default configuration object.  * Accounted for
+          warnings when constructing cached updates. (4672415)
+
+2013-05-28 Thomas Voß
+
+        * Fixed copyright. (d48a7ec)
+        * Initial push. (fbd3a2c)
