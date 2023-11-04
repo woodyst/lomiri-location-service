@@ -18,6 +18,7 @@
 
 #include <com/lomiri/location/satellite_based_positioning_state.h>
 
+#include <cstdint>
 #include <iostream>
 #include <unordered_map>
 
