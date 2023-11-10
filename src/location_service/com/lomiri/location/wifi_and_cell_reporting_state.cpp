@@ -18,6 +18,7 @@
 
 #include <com/lomiri/location/wifi_and_cell_reporting_state.h>
 
+#include <cstdint>
 #include <iostream>
 #include <unordered_map>
 
