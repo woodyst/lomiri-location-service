@@ -19,10 +19,6 @@
 #include <com/lomiri/location/time_since_boot.h>
 #include <com/lomiri/location/logging.h>
 
-#if defined(COM_LOMIRI_LOCATION_SERVICE_HAVE_UBUNTU_PLATFORM_HARDWARE_API)
-#include <ubuntu/hardware/alarm.h>
-#endif // COM_LOMIRI_LOCATION_SERVICE_HAVE_UBUNTU_PLATFORM_HARDWARE_API
-
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -32,47 +28,6 @@ namespace location = com::lomiri::location;
 
 namespace
 {
-bool have_ubuntu_hardware_alarm()
-{
-#if defined(COM_LOMIRI_LOCATION_SERVICE_HAVE_UBUNTU_PLATFORM_HARDWARE_API)
-    return true;
-#else
-    return false;
-#endif // COM_LOMIRI_LOCATION_SERVICE_HAVE_UBUNTU_PLATFORM_HARDWARE_API
-}
-
-std::chrono::nanoseconds from_ubuntu_hardware_alarm()
-{
-#if defined(COM_LOMIRI_LOCATION_SERVICE_HAVE_UBUNTU_PLATFORM_HARDWARE_API)
-    struct Scope
-    {
-        Scope() : alarm{u_hardware_alarm_create()}
-        {
-        }
-
-        ~Scope()
-        {
-            u_hardware_alarm_unref(alarm);
-        }
-
-        UHardwareAlarm alarm{nullptr};
-    };
-
-    static Scope scope;
-
-    ::timespec ts;
-    if (not scope.alarm)
-        throw std::runtime_error{"Failed to access UHardwareAlarm subsystem."};
-
-    if (U_STATUS_SUCCESS != u_hardware_alarm_get_elapsed_real_time(scope.alarm, &ts))
-        throw std::runtime_error{"Failed to query time since boot from UHardwareAlarm."};
-
-    return std::chrono::seconds{ts.tv_sec} + std::chrono::nanoseconds{ts.tv_nsec};
-#else
-    throw std::logic_error{"not implemented"};
-#endif // COM_LOMIRI_LOCATION_SERVICE_HAVE_UBUNTU_PLATFORM_HARDWARE_API
-}
-
 
 std::chrono::nanoseconds from_clock_boottime()
 {
@@ -115,18 +70,6 @@ std::chrono::nanoseconds from_proc_stat()
 
 std::chrono::nanoseconds location::time_since_boot()
 {
-    if (have_ubuntu_hardware_alarm())
-    {
-        try
-        {
-            return from_ubuntu_hardware_alarm();
-        }
-        catch (const std::exception& e)
-        {
-            VLOG(1) << e.what();
-        }
-    }
-
     try
     {
         return from_clock_boottime();
