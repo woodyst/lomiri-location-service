@@ -24,7 +24,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(cmake/EnableCoverageReport.cmake)
 include(cmake/FindGFlags.cmake)
 include(cmake/FindGLog.cmake)
-include(cmake/PrePush.cmake)
 include(CTest)
 
 include(GNUInstallDirs)
