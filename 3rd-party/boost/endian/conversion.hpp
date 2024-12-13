@@ -9,7 +9,7 @@
 #define BOOST_ENDIAN_CONVERSION_HPP
 
 #include <boost/config.hpp>
-#include <boost/predef/detail/endian_compat.h>
+#include <boost/predef/other/endian.h>
 #include <boost/cstdint.hpp>
 #include <boost/endian/detail/intrinsic.hpp>
 #include <boost/core/scoped_enum.hpp>

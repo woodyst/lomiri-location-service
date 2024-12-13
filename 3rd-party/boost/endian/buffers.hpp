@@ -35,7 +35,7 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/predef/detail/endian_compat.h>
+#include <boost/predef/other/endian.h>
 #include <boost/endian/conversion.hpp>
 #include <boost/type_traits/is_signed.hpp>
 #include <boost/cstdint.hpp>
