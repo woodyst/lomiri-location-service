@@ -15,15 +15,15 @@ export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
 include /usr/share/dpkg/default.mk
 
+LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
+
 ifneq ($(filter noplatformapi,$(DEB_BUILD_PROFILES)),)
-        # platform-api disabled by build profile
-        LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
-else
-ifneq (,$(filter $(DEB_HOST_ARCH),ppc64el powerpc))
-        LOCATION_SERVICE_ENABLE_GPS_PROVIDER = OFF
-else
-        LOCATION_SERVICE_ENABLE_GPS_PROVIDER = ON
-endif
+    # platform-api disabled by build profile
+    # Do nothing, remains OFF
+else ifneq ($(filter $(DEB_HOST_ARCH),ppc64el powerpc),)
+    # Do nothing, remains OFF
+else ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo yes),yes)
+    LOCATION_SERVICE_ENABLE_GPS_PROVIDER = ON
 endif
 
 %:
