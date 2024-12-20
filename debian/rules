@@ -37,7 +37,7 @@ override_dh_missing:
 override_dh_install:
 	dh_install -Xlomiri-location-service.1
 ifeq ($(filter $(LOCATION_SERVICE_ENABLE_GPS_PROVIDER),ON),ON)
-	dh_install etc/gps.conf debian/liblomiri-location-service3/
+	dh_install etc/gps.conf debian/liblomiri-location-service3/etc/
 endif
 
 override_dh_auto_configure:
