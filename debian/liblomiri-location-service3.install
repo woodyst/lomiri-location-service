@@ -1,5 +1,3 @@
-#!/usr/bin/dh-exec
 usr/lib/*/liblomiri-location-service.so.*
 usr/lib/*/liblomiri-location-service-connectivity.so.*
-etc/gps.conf <!noplatformapi>
 usr/lib/*/qt5/plugins/position/*
