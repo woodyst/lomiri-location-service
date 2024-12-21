@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Canonical Ltd.
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the lomiri-location-service package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ubuntu-location-service\n"
+"Project-Id-Version: lomiri-location-service\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-27 14:07+0100\n"
+"POT-Creation-Date: 2024-12-21 21:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/tvoss/ubuntu/scratch/fix-prompt-string/src/location_service/com/ubuntu/location/service/trust_store_permission_manager.cpp:149
+#: src/location_service/com/lomiri/location/service/trust_store_permission_manager.cpp:96
 msgid "wants to access your current location."
 msgstr ""
