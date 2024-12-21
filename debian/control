@@ -1,4 +1,4 @@
-Source: location-service
+Source: lomiri-location-service
 Section: utils
 Priority: optional
 Maintainer: UBports developers <devs@ubports.com>
@@ -32,10 +32,10 @@ Build-Depends: cmake,
                trust-store-bin,
                cmake-extras,
                libgps-dev
-Standards-Version: 3.9.4
-Homepage: https://gitlab.com/ubports/development/core/location-service
-Vcs-Git: https://gitlab.com/ubports/development/core/location-service.git
-Vcs-Browser: https://gitlab.com/ubports/development/core/location-service
+Standards-Version: 4.7.0
+Homepage: https://gitlab.com/ubports/development/core/lomiri-location-service
+Vcs-Git: https://gitlab.com/ubports/development/core/lomiri-location-service.git
+Vcs-Browser: https://gitlab.com/ubports/development/core/lomiri-location-service
 
 Package: liblomiri-location-service3
 Section: libs
