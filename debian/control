@@ -53,7 +53,6 @@ Package: liblomiri-location-service-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Recommends: lomiri-location-service-doc,
 Depends: liblomiri-location-service3 (= ${binary:Version}),
          libdbus-1-dev,
          libdbus-cpp-dev,
