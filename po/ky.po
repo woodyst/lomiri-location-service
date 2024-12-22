@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-location-service\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-27 14:07+0100\n"
+"POT-Creation-Date: 2024-12-21 21:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,6 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/tvoss/ubuntu/scratch/fix-prompt-string/src/location_service/com/ubuntu/location/service/trust_store_permission_manager.cpp:149
+#: src/location_service/com/lomiri/location/service/trust_store_permission_manager.cpp:96
 msgid "wants to access your current location."
 msgstr ""

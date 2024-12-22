@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ubuntu-location-service\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-27 14:07+0100\n"
+"POT-Creation-Date: 2024-12-21 21:51+0000\n"
 "PO-Revision-Date: 2016-04-17 17:16+0000\n"
 "Last-Translator: Matthias Seidel <matthias.seidel@hamburg.de>\n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Launchpad-Export-Date: 2016-09-29 06:44+0000\n"
 "X-Generator: Launchpad (build 18204)\n"
 
-#: /home/tvoss/ubuntu/scratch/fix-prompt-string/src/location_service/com/ubuntu/location/service/trust_store_permission_manager.cpp:149
+#: src/location_service/com/lomiri/location/service/trust_store_permission_manager.cpp:96
 msgid "wants to access your current location."
 msgstr "möchte auf Ihren derzeitigen Standort zugreifen."
 
