@@ -1,6 +1,165 @@
+2024-12-22 Mike Gabriel
+
+        * Release 3.2.0 (HEAD -> main, tag: 3.2.0)
+
+2024-12-22 Marius Gripsgard
+
+        * Merge branch 'personal/sunweaver/fully-rename' into 'main'
+          (d5e0f3c)
+
+2024-12-21 Mike Gabriel
+
+        * po/: Modernize i18n. (713c600)
+        * debian/: Fully rename src:pkg from location-service to
+          lomiri-location-service. (18ba981)
+        * d/control: Drop lomiri-location-service-doc from R:, already in S:.
+          (ffc7ced)
+        * d/copyright: No duplicate Copyright: field in second stanza.
+          (d990212)
+        * d/copyright: Move global globbing license stanza to the top.
+          (6c1881d)
+        * d/lomiri-location-service-doc.install: Adjust to new target dir for
+          doc files. (17887de)
+        * doc/CMakeLists.txt: Put doc files into
+          /usr/share/doc/<project-name>. (bbbdf3c)
+        * CMakeLists.txt: Bump to 3.2.0. Add LANGUAGES parameter to project()
+          macro. (ee25662)
+
+2024-12-21 Marius Gripsgard
+
+        * Merge branch 'personal/peat-psuwit/fix-etc-gps.conf' into 'main'
+          (f0ef972)
+
+2024-12-21 Ratchanan Srirattanamet
+
+        * d/rules: fix the way /etc/gps.conf is installed (dc87f5a)
+
+2024-12-20 Mike Gabriel
+
+        * Merge branch 'personal/mariogrip/fixgps' into 'main' (73c1ebf)
+
+2024-12-20 Marius Gripsgard
+
+        * debian: make sure gps.conf ends up in etc (2480df8)
+
+2024-12-20 Mike Gabriel
+
+        * debian/{liblomiri-location-service3.install,rules}: Install
+          gps.conf only if LOCATION_SERVICE_ENABLE_GPS_PROVIDER is
+          set to ON. (bc60a38)
+        * debian/rules: Make dh_auto_configure call more readable. (e0401aa)
+
+2024-12-20 Marius Gripsgard
+
+        * debian: Make gps.conf optional (1467206)
+
+2024-12-14 Marius Gripsgard
+
+        * debian: Only enable gps provider on ubuntu (0edaee8)
+
+2024-12-13 Marius Gripsgard
+
+        * cmake: Remove prepush as this is bzr and debian spesific and not
+          used (9fff715)
+        * 3rd-party: Use correct import path for newer boost (c6c9a2e)
+
+2024-12-16 Distant Prince
+
+        * Translated using Weblate (English (Canada)) (219fe85)
+
+2024-12-13 Marius Gripsgard
+
+        * Merge branch 'remove-hardware-alarm-dependency-1' into 'main'
+          (a152c3d)
+
+2024-10-25 Alexander Richards
+
+        * com/lomiri/location: remove hardware alarm use for time_since_boot
+          (677b49b)
+
+2024-08-16 Jack Torrent
+
+        * Translated using Weblate (Turkish) (f614403)
+
+2024-08-05 umesaburo sagawa
+
+        * Translated using Weblate (Japanese) (52593b8)
+
+2024-05-16 Daniel Soohan Park
+
+        * Translated using Weblate (Korean) (1605d7f)
+
+2024-03-26 naizena
+
+        * Translated using Weblate (Basque) (808a491)
+
+2024-01-27 Mike Gabriel
+
+        * CMakeLists.txt: Set PROJECT_VERSION in project() macro, marks
+          'other' version as library SOVERSION / API version.
+          (c093828)
+        * CMakeLists.txt: Bump cmake_minimum_required() to version 3.5.
+          (d196e8a)
+
+2023-12-27 Weblate
+
+        * Added translation using Weblate (Chinese (Simplified)
+          (zh_LATN@pinyin)) (6da951a)
+        * Added translation using Weblate (Tamil (Sri Lanka)) (358d711)
+        * Added translation using Weblate (Meadow Mari) (42b81cc)
+        * Added translation using Weblate (Crimean Tatar) (8dc137b)
+        * Added translation using Weblate (Chuvash) (2b7a081)
+        * Added translation using Weblate (Silesian) (fd8cdf9)
+        * Added translation using Weblate (Venetian) (861efd6)
+        * Added translation using Weblate (Ossetian) (acaa497)
+        * Added translation using Weblate (Sami (Northern)) (5be95c5)
+        * Added translation using Weblate (Greenlandic) (c888fed)
+        * Added translation using Weblate (Assamese) (60e8b9c)
+        * Added translation using Weblate (Haitian) (8fe795a)
+        * Added translation using Weblate (Cornish) (3f93139)
+        * Added translation using Weblate (Frisian) (51e8295)
+        * Added translation using Weblate (Kashubian) (1812733)
+        * Added translation using Weblate (Aragonese) (e692b07)
+        * Added translation using Weblate (Tibetan) (72fe048)
+        * Added translation using Weblate (Tigrinya) (50567d0)
+
+2023-12-26 Weblate
+
+        * Added translation using Weblate (Tatar) (a16afa8)
+        * Added translation using Weblate (German (Walser)) (0abee56)
+        * Added translation using Weblate (Italian (it_CARES)) (2aa69af)
+        * Added translation using Weblate (Latin) (50ecb70)
+        * Added translation using Weblate (Filipino) (3e6a7da)
+
+2023-12-04 Reza Almanda
+
+        * Translated using Weblate (Indonesian) (1788c3a)
+
+2023-11-10 Marius Gripsgard
+
+        * Merge branch 'missing-headers' into 'main' (4900473)
+
+2023-11-04 Brandon Boese
+
+        * Add cstdint to location includes (38806f7)
+
+2023-10-18 Weblate
+
+        * Added translation using Weblate (Xhosa) (37f17c4)
+        * Added translation using Weblate (Manx) (93fb3ba)
+        * Added translation using Weblate (Chechen) (b632708)
+        * Added translation using Weblate (Wolof) (fe192f3)
+        * Added translation using Weblate (Uzbek) (04c95a6)
+        * Added translation using Weblate (Kyrgyz) (cff99e6)
+        * Added translation using Weblate (Kurdish) (954fa15)
+        * Added translation using Weblate (Sotho (Southern)) (4c7d429)
+        * Added translation using Weblate (Norwegian Nynorsk) (8d16a52)
+        * Added translation using Weblate (Swahili) (77922c3)
+        * Added translation using Weblate (Odia) (74bb77b)
+
 2023-10-15 Mike Gabriel
 
-        * Release 3.1.0 (HEAD -> main, tag: 3.1.0)
+        * Release 3.1.0 (9a6f48d) (tag: 3.1.0)
 
 2023-10-03 Mike Gabriel
 
