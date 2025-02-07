@@ -1,6 +1,31 @@
+2025-02-07 Mike Gabriel
+
+        * Release 3.3.0 (HEAD -> main, tag: 3.3.0)
+
+2025-02-07 Ratchanan Srirattanamet
+
+        * Merge branch 'personal/gberh/optional-trust-store' into 'main'
+          (a54c75d)
+
+2025-02-05 Guido Berhoerster
+
+        * Add compile-time option for trust-store support (74c0e46)
+
+2025-01-12 தமிழ்நேரம்
+
+        * Translated using Weblate (Tamil) (1118f26)
+
+2024-12-28 Hosted Weblate
+
+        * Update translation files (e762442)
+
+2024-12-22 Hosted Weblate
+
+        * Update translation files (ea3a35d)
+
 2024-12-22 Mike Gabriel
 
-        * Release 3.2.0 (HEAD -> main, tag: 3.2.0)
+        * Release 3.2.0 (cf3527a) (tag: 3.2.0)
 
 2024-12-22 Marius Gripsgard
 
