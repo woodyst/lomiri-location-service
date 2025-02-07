@@ -12,11 +12,7 @@ configure_file(
 
 include_directories(${UBUNTU_PLATFORM_HARDWARE_API_INCLUDE_DIRS})
 
-add_library(
-  lomiri-location-service SHARED
-
-  ${LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS}
-
+set(LOMIRI_LOCATION_SERVICE_SRCS
   default_provider_selection_policy.cpp
   fusion_provider_selection_policy.cpp
   non_selecting_provider_selection_policy.cpp
@@ -49,7 +45,6 @@ add_library(
   service/runtime_tests.cpp
   service/state.cpp
   service/system_configuration.cpp
-  service/trust_store_permission_manager.cpp
 
   service/implementation.cpp
   service/skeleton.cpp
@@ -67,6 +62,20 @@ add_library(
   providers/remote/stub.cpp
 
   ${ICHNAEA_REPORTER_SRCS}
+)
+if(ENABLE_TRUST_STORE)
+  set(LOMIRI_LOCATION_SERVICE_SRCS
+   ${LOMIRI_LOCATION_SERVICE_SRCS}
+   service/trust_store_permission_manager.cpp
+  )
+endif(ENABLE_TRUST_STORE)
+
+add_library(
+  lomiri-location-service SHARED
+
+  ${LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS}
+
+  ${LOMIRI_LOCATION_SERVICE_SRCS}
 )
 
 add_library(
@@ -106,6 +115,10 @@ set_target_properties(
 )
 
 add_definitions(${ENABLED_PROVIDER_TARGETS_DEFINITIONS})
+
+if(ENABLE_TRUST_STORE)
+  target_compile_definitions(lomiri-location-service PRIVATE ENABLE_TRUST_STORE)
+endif(ENABLE_TRUST_STORE)
 
 target_link_libraries(
   lomiri-location-service-connectivity

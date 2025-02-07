@@ -21,6 +21,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -fno-strict-aliasing -p
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+option (ENABLE_TRUST_STORE "Enable support for trust-store" ON)
+
 include(cmake/EnableCoverageReport.cmake)
 include(cmake/FindGFlags.cmake)
 include(cmake/FindGLog.cmake)
@@ -40,7 +42,9 @@ pkg_check_modules(LIBAPPARMOR libapparmor REQUIRED)
 pkg_check_modules(NET_CPP net-cpp REQUIRED)
 pkg_check_modules(PROCESS_CPP process-cpp REQUIRED)
 pkg_check_modules(PROPERTIES_CPP properties-cpp REQUIRED)
-pkg_check_modules(TRUST_STORE trust-store REQUIRED)
+if (ENABLE_TRUST_STORE)
+    pkg_check_modules(TRUST_STORE trust-store REQUIRED)
+endif (ENABLE_TRUST_STORE)
 pkg_check_modules(UBUNTU_PLATFORM_HARDWARE_API ubuntu-platform-hardware-api)
 pkg_check_modules(GPSD libgps)
 #####################################################################
@@ -97,7 +101,56 @@ include_directories(
   ${CMAKE_BINARY_DIR}/src/location_service
 )
 
-file(GLOB_RECURSE LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR} *.h)
+set(LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/boost_ptree_settings.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/connectivity/cached_radio_cell.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/connectivity/cached_wireless_network.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/connectivity/dummy_connectivity_manager.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/connectivity/nm.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/connectivity/ofono.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/connectivity/ofono_nm_connectivity_manager.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/engine.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/non_selecting_provider_selection_policy.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/dummy/delayed_provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/dummy/provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/geoclue/geoclue.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/geoclue/provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/android_hardware_abstraction_layer.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/hardware_abstraction_layer.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/net_cpp_gps_xtra_downloader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/null_gps_xtra_downloader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/sntp_client.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gps/sntp_reference_time_source.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/gpsd/provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/remote/provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/providers/skyhook/provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/always_granting_permission_manager.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/daemon.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/dbus_connection_factory.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/default_configuration.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/demultiplexing_reporter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/harvester.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/ichnaea_reporter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/implementation.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/program_options.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/provider_daemon.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/runtime.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/runtime_tests.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/session/interface_p.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/set_name_for_thread.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/settings.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/state_tracking_provider.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/time_based_update_policy.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/time_since_boot.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/update_policy.h
+)
+if(ENABLE_TRUST_STORE)
+  set(LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS
+    ${LOMIRI_LOCATION_SERVICE_PUBLIC_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/location_service/com/lomiri/location/service/trust_store_permission_manager.h
+  )
+endif(ENABLE_TRUST_STORE)
 
 add_subdirectory(data)
 add_subdirectory(doc)
