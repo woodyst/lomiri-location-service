@@ -28,7 +28,7 @@ These options control the behavior of the geoclue provider:
 These options control the behavior of the Skyhook provider:
 
   * `--skyhook::Provider::username`=<username>:
-  Username for authenicating with the Skyhook service.
+  Username for authenticating with the Skyhook service.
   
   * `--skyhook::Provider::realm`=<realm>:
   Realm for authenticating with the Skyhook service.

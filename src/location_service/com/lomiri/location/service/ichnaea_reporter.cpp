@@ -298,7 +298,7 @@ void location::service::ichnaea::Reporter::report(
                     if (response.status != ichnaea::submit::success)
                         SYSLOG(ERROR) << "Error submitting to ichnaea: " << response.body;
                     else
-                        VLOG(1) << "Succesfully submitted to ichnaea.";
+                        VLOG(1) << "Successfully submitted to ichnaea.";
                 })
                 .on_error([](const core::net::Error& e)
                 {
