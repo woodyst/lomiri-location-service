@@ -25,14 +25,13 @@ option (ENABLE_TRUST_STORE "Enable support for trust-store" ON)
 
 include(cmake/EnableCoverageReport.cmake)
 include(cmake/FindGFlags.cmake)
-include(cmake/FindGLog.cmake)
 include(CTest)
 
 include(GNUInstallDirs)
 
 find_package(PkgConfig)
 find_package(Boost COMPONENTS filesystem system program_options)
-find_package(GLog)
+find_package(glog REQUIRED)
 find_package(GFlags)
 find_package(Threads)
 pkg_check_modules(DBUS dbus-1 REQUIRED)
@@ -93,7 +92,6 @@ include_directories(
   ${PROPERTIES_CPP_INCLUDE_DIRS}
   ${PROCESS_CPP_INCLUDE_DIRS}
   ${TRUST_STORE_INCLUDE_DIRS}
-  ${GLog_INCLUDE_DIR}
   ${GFlags_INCLUDE_DIR}
 
   ${CMAKE_SOURCE_DIR}/include/location_service

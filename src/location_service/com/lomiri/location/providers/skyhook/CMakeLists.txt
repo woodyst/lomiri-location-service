@@ -23,6 +23,7 @@ if (LOCATION_SERVICE_ENABLE_SKYHOOK_PROVIDER)
 
       ${WPSAPI_LIBRARIES}
       iw
+      glog::glog
     )
 
     set(
