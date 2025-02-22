@@ -128,7 +128,7 @@ target_link_libraries(
   ${DBUS_LIBRARIES}
   ${DBUS_CPP_LDFLAGS}
   ${PROCESS_CPP_LDFLAGS}
-  ${GLog_LIBRARY}
+  glog::glog
   ${GFlags_LIBRARY}
 )
 
@@ -148,7 +148,7 @@ target_link_libraries(
   ${NET_CPP_LDFLAGS}
   ${TRUST_STORE_LDFLAGS}
   ${UBUNTU_PLATFORM_HARDWARE_API_LDFLAGS}
-  ${GLog_LIBRARY}
+  glog::glog
   ${GFlags_LIBRARY}
 )
 
@@ -214,7 +214,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${DBUS_LIBRARIES}
   ${DBUS_CPP_LIBRARIES}
-  ${GLog_LIBRARY}
+  glog::glog
   ${GFlags_LIBRARY}
 )
 
@@ -228,7 +228,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${DBUS_LIBRARIES}
   ${DBUS_CPP_LIBRARIES}
-  ${GLog_LIBRARY}
+  glog::glog
   ${GFlags_LIBRARY}
 )
 
@@ -242,7 +242,7 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${DBUS_LIBRARIES}
   ${DBUS_CPP_LIBRARIES}
-  ${GLog_LIBRARY}
+  glog::glog
   ${GFlags_LIBRARY}
 )
 

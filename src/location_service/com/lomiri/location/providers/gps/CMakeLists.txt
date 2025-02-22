@@ -31,7 +31,7 @@ if ((LOCATION_SERVICE_ENABLE_GPS_PROVIDER) AND (UBUNTU_PLATFORM_HARDWARE_API_FOU
         provider.h
         provider.cpp)
 
-    target_link_libraries(gps ${UBUNTU_PLATFORM_HARDWARE_API_LDFLAGS})
+    target_link_libraries(gps ${UBUNTU_PLATFORM_HARDWARE_API_LDFLAGS} glog::glog)
   
     set(
       ENABLED_PROVIDER_TARGETS
