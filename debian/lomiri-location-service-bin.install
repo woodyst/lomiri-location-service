@@ -1,5 +1,5 @@
 etc/dbus-1/system.d/
-lib/systemd/system/
+usr/lib/systemd/system/
 usr/lib/systemd/user/
 usr/bin/lomiri-location-serviced
 usr/bin/lomiri-location-serviced-cli

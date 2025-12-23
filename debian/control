@@ -36,7 +36,8 @@ Build-Depends: cmake,
                qt6-positioning-dev,
                trust-store-bin,
                cmake-extras,
-               libgps-dev
+               libgps-dev,
+               systemd-dev,
 Standards-Version: 4.7.0
 Homepage: https://gitlab.com/ubports/development/core/lomiri-location-service
 Vcs-Git: https://gitlab.com/ubports/development/core/lomiri-location-service.git
