@@ -1,4 +1,4 @@
-etc/dbus-1/system.d/
+usr/share/dbus-1/system.d/
 usr/lib/systemd/system/
 usr/lib/systemd/user/
 usr/bin/lomiri-location-serviced
