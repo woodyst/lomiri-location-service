@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
 project(lomiri-location-service VERSION 3.3.0 LANGUAGES C CXX)
 
@@ -22,6 +22,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -fno-strict-aliasing -p
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 option (ENABLE_TRUST_STORE "Enable support for trust-store" ON)
+
+option(ENABLE_QT6 "Enable Qt6 build" OFF)
+if(ENABLE_QT6)
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui Location)
+    set(QT_VERSION_MAJOR 6)
+else()
+    find_package(Qt5 REQUIRED COMPONENTS Core Gui Location)
+    set(QT_VERSION_MAJOR 5)
+endif()
 
 include(cmake/EnableCoverageReport.cmake)
 include(cmake/FindGFlags.cmake)

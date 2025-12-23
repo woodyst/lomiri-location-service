@@ -19,23 +19,42 @@
 #include "core_geo_position_info_source_factory.h"
 #include "core_geo_position_info_source.h"
 
-QGeoPositionInfoSource *core::GeoPositionInfoSourceFactory::positionInfoSource(QObject *parent)
+QGeoPositionInfoSource *core::GeoPositionInfoSourceFactory::positionInfoSource(QObject *parent
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    , const QVariantMap &parameters
+#endif
+)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    Q_UNUSED(parameters);
+#endif
     core::GeoPositionInfoSource *src = new core::GeoPositionInfoSource(parent);
     return src;
 }
 
-QGeoSatelliteInfoSource *core::GeoPositionInfoSourceFactory::satelliteInfoSource(QObject *parent)
+QGeoSatelliteInfoSource *core::GeoPositionInfoSourceFactory::satelliteInfoSource(QObject *parent
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    , const QVariantMap &parameters
+#endif
+)
 {
     Q_UNUSED(parent);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    Q_UNUSED(parameters);
+#endif
     return 0;
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
-QGeoAreaMonitorSource *core::GeoPositionInfoSourceFactory::areaMonitor(QObject *parent)
+QGeoAreaMonitorSource *core::GeoPositionInfoSourceFactory::areaMonitor(QObject *parent
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    , const QVariantMap &parameters
+#endif
+)
 {
     Q_UNUSED(parent);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    Q_UNUSED(parameters);
+#endif
     return 0;
 }
-#endif
 

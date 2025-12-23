@@ -30,15 +30,24 @@ class GeoPositionInfoSourceFactory
           public QGeoPositionInfoSourceFactory
 {
     Q_OBJECT
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Q_PLUGIN_METADATA(IID "org.qt-project.qt.position.sourcefactory/5.0"
                       FILE "plugin.json")
+#else
+    Q_PLUGIN_METADATA(IID "org.qt-project.qt.position.sourcefactory/6.0"
+                      FILE "plugin.json")
+#endif
     Q_INTERFACES(QGeoPositionInfoSourceFactory)
 
 public:
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QGeoPositionInfoSource *positionInfoSource(QObject *parent);
     QGeoSatelliteInfoSource *satelliteInfoSource(QObject *parent);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
     QGeoAreaMonitorSource *areaMonitor(QObject *parent);
+#else
+    QGeoPositionInfoSource *positionInfoSource(QObject *parent, const QVariantMap &parameters) override;
+    QGeoSatelliteInfoSource *satelliteInfoSource(QObject *parent, const QVariantMap &parameters) override;
+    QGeoAreaMonitorSource *areaMonitor(QObject *parent, const QVariantMap &parameters) override;
 #endif
 };
 }
