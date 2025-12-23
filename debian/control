@@ -5,7 +5,7 @@ Maintainer: UBports developers <devs@ubports.com>
 Build-Depends: cmake,
                curl,
                libdbus-cpp-dev (>= 4.1.0),
-               debhelper-compat (= 12),
+               debhelper-compat (= 13),
                doxygen <!nodoc>,
                google-mock (>= 1.6.0+svn437),
                graphviz <!nodoc>,
@@ -29,6 +29,9 @@ Build-Depends: cmake,
                qtbase5-dev,
                qtlocation5-dev,
                qtpositioning5-dev,
+               qt6-base-dev,
+               qt6-location-dev,
+               qt6-positioning-dev,
                trust-store-bin,
                cmake-extras,
                libgps-dev
@@ -48,6 +51,30 @@ Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains the shared library needed by client applications.
+
+Package: lomiri-location-service-qt5-plugin
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Description: location service aggregating position/velocity/heading
+ Aggregates position/velocity/heading updates and exports them over dbus.
+ .
+ Contains the Qt 5 positioning plugin.
+
+Package: lomiri-location-service-qt6-plugin
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Description: location service aggregating position/velocity/heading
+ Aggregates position/velocity/heading updates and exports them over dbus.
+ .
+ Contains the Qt 6 positioning plugin.
 
 Package: liblomiri-location-service-dev
 Section: libdevel
