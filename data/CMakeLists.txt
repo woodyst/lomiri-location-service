@@ -42,7 +42,7 @@ install(
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.lomiri.location.Service.conf
-  DESTINATION /etc/dbus-1/system.d/
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/system.d/
 )
 
 install(
