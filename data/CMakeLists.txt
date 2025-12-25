@@ -42,15 +42,17 @@ install(
 
 install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.lomiri.location.Service.conf
-  DESTINATION /etc/dbus-1/system.d/
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/system.d/
 )
 
-install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.service
-  DESTINATION /lib/systemd/system/
-)
+if(SYSTEMD_FOUND)
+    install(
+      FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.service
+      DESTINATION ${SYSTEMD_SYSTEM_UNITDIR}
+    )
 
-install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored.service
-  DESTINATION /usr/lib/systemd/user/
-)
+    install(
+      FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored.service
+      DESTINATION ${SYSTEMD_USER_UNITDIR}
+    )
+endif()

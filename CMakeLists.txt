@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
 project(lomiri-location-service VERSION 3.3.0 LANGUAGES C CXX)
 
@@ -23,6 +23,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 option (ENABLE_TRUST_STORE "Enable support for trust-store" ON)
 
+option(ENABLE_QT6 "Enable Qt6 build" OFF)
+if(ENABLE_QT6)
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui Location)
+    set(QT_VERSION_MAJOR 6)
+else()
+    find_package(Qt5 REQUIRED COMPONENTS Core Gui Location)
+    set(QT_VERSION_MAJOR 5)
+endif()
+
 include(cmake/EnableCoverageReport.cmake)
 include(cmake/FindGFlags.cmake)
 include(CTest)
@@ -44,6 +53,11 @@ pkg_check_modules(PROPERTIES_CPP properties-cpp REQUIRED)
 if (ENABLE_TRUST_STORE)
     pkg_check_modules(TRUST_STORE trust-store REQUIRED)
 endif (ENABLE_TRUST_STORE)
+pkg_check_modules(SYSTEMD systemd)
+if(SYSTEMD_FOUND)
+    pkg_get_variable(SYSTEMD_SYSTEM_UNITDIR systemd systemd_system_unit_dir)
+    pkg_get_variable(SYSTEMD_USER_UNITDIR systemd systemd_user_unit_dir)
+endif()
 pkg_check_modules(UBUNTU_PLATFORM_HARDWARE_API ubuntu-platform-hardware-api)
 pkg_check_modules(GPSD libgps)
 #####################################################################

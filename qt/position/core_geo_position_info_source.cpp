@@ -134,7 +134,11 @@ void core::GeoPositionInfoSource::setUpdateInterval(int msec)
     // with the source although we are in error state.
     if (error() != QGeoPositionInfoSource::NoError)
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Q_EMIT(QGeoPositionInfoSource::errorOccurred(d->error));
+#else
         Q_EMIT(QGeoPositionInfoSource::error(d->error));
+#endif
         return;
     }
 
@@ -147,7 +151,11 @@ void core::GeoPositionInfoSource::setPreferredPositioningMethods(PositioningMeth
     // with the source although we are in error state.
     if (error() != QGeoPositionInfoSource::NoError)
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Q_EMIT(QGeoPositionInfoSource::errorOccurred(d->error));
+#else
         Q_EMIT(QGeoPositionInfoSource::error(d->error));
+#endif
         return;
     }
 
@@ -188,7 +196,11 @@ void core::GeoPositionInfoSource::startUpdates()
     // with the source although we are in error state.
     if (error() != QGeoPositionInfoSource::NoError)
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Q_EMIT(QGeoPositionInfoSource::errorOccurred(d->error));
+#else
         Q_EMIT(QGeoPositionInfoSource::error(d->error));
+#endif
         return;
     }
 
@@ -247,7 +259,11 @@ void core::GeoPositionInfoSource::requestUpdate(int timeout)
     // with the source although we are in error state.
     if (error() != QGeoPositionInfoSource::NoError)
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Q_EMIT(QGeoPositionInfoSource::errorOccurred(d->error));
+#else
         Q_EMIT(QGeoPositionInfoSource::error(d->error));
+#endif
         return;
     }
 
@@ -269,7 +285,11 @@ void core::GeoPositionInfoSource::timeout()
     // Update timeout reached, clean up
     stopUpdates();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    Q_EMIT(QGeoPositionInfoSource::errorOccurred(QGeoPositionInfoSource::UpdateTimeoutError));
+#else
     Q_EMIT updateTimeout();
+#endif
 }
 
 QGeoPositionInfoSource::Error core::GeoPositionInfoSource::error() const
