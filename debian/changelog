@@ -1,3 +1,10 @@
+lomiri-location-service (3.4.0) unstable; urgency=medium
+
+  * Upstream-provided Debian package for lomiri-location-service. See
+    upstream ChangeLog for recent changes.
+
+ -- UBports developers <developers@ubports.com>  Mon, 02 Feb 2026 10:27:19 +0100
+
 lomiri-location-service (3.3.0) unstable; urgency=medium
 
   * Upstream-provided Debian package for lomiri-location-service. See

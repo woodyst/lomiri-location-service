@@ -1,6 +1,88 @@
+2026-02-02 Mike Gabriel
+
+        * Release 3.4.0 (HEAD -> main, tag: 3.4.0)
+
+2026-01-25 BoneNI
+
+        * Translated using Weblate (Lao) (1f8f3ee)
+
+2026-01-13 Guido Berhörster
+
+        * Merge branch 'personal/peat-psuwit/22-fix-truststore-register' into
+          'main' (fb2bd8b)
+
+2026-01-13 Ratchanan Srirattanamet
+
+        * data/: fix registering user-level Trust Store agent (a538dd7)
+          Fixes:
+          55e7aef15730 ("Remove send_interface without
+          send_destination from DBus policy")
+          Fixes:
+          https://gitlab.com/ubports/development/core/lomiri-location-service/-/issues/22
+
+2025-12-26 Ratchanan Srirattanamet
+
+        * Merge branch 'personal/gberh/qt6' into 'main' (2788e00)
+
+2025-12-23 Guido Berhoerster
+
+        * debian: enable hardening flags (735c6bd)
+        * debian: adjust installation path of DBus policy file (eb6db33)
+        * debian: add dependency on systemd-dev and adjust packaging list
+          (1a1655b)
+        * Do not hardcode systemd unit directories (33c5aa5)
+        * Do not hardcode DBus service policy path (5d46d11)
+        * Remove send_interface without send_destination from DBus policy
+          (55e7aef)
+        * debian: Add workaround for missing dependencies in qt6-location-dev
+          (19ac97f)
+        * debian: Build packages for both Qt 5 and 6 (3a253c6)
+        * Add optional support for building against Qt 6 (f27be33)
+
+2025-12-21 Vini Moraes
+
+        * Translated using Weblate (Portuguese (Brazil)) (a405cc3)
+
+2025-11-03 Wenwen Luo
+
+        * Translated using Weblate (Chinese (Simplified) (zh_LATN@pinyin))
+          (b30e47f)
+
+2025-09-02 Milo Ivir
+
+        * Translated using Weblate (Croatian) (fc9c434)
+
+2025-06-27 phmqXPD
+
+        * Translated using Weblate (Vietnamese) (8c98a84)
+
+2025-06-19 Øjvind Fritjof Arnfred
+
+        * Translated using Weblate (Danish) (9773240)
+
+2025-05-05 Priit Jõerüüt
+
+        * Translated using Weblate (Estonian) (295e9ee)
+
+2025-02-22 Marius Gripsgard
+
+        * Merge branch 'update/glogDependency' into 'main' (3c4d939)
+
+2025-02-19 OPNA2608
+
+        * treewide: Switch to upstream glog CMake module (6e3469d)
+
+2025-02-08 Ratchanan Srirattanamet
+
+        * Merge branch 'personal/sunweaver/typo-fixes' into 'main' (c7b312a)
+
+2025-02-08 Mike Gabriel
+
+        * Various typo fixes in comments and doc files. (409ce43)
+
 2025-02-07 Mike Gabriel
 
-        * Release 3.3.0 (HEAD -> main, tag: 3.3.0)
+        * Release 3.3.0 (2da2915) (tag: 3.3.0)
 
 2025-02-07 Ratchanan Srirattanamet
 
