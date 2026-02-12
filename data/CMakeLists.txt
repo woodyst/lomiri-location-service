@@ -45,7 +45,7 @@ install(
   DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/system.d/
 )
 
-if(SYSTEMD_FOUND)
+if(SYSTEMD_FOUND OR ENFORCE_SYSTEMD_SERVICE)
     install(
       FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.service
       DESTINATION ${SYSTEMD_SYSTEM_UNITDIR}
