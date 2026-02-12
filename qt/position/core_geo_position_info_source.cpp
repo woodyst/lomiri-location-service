@@ -21,6 +21,7 @@
 #include "core_geo_position_info_source.h"
 
 #include <cmath>
+#include <chrono>
 
 #include <QGuiApplication>
 #include <QtCore>
@@ -324,8 +325,8 @@ void core::GeoPositionInfoSource::Private::handlePositionUpdate(const cll::Updat
     }
 
     lastKnownPosition.setTimestamp(
-        QDateTime::fromSecsSinceEpoch(
-            position.when.time_since_epoch().count()));
+        QDateTime::fromMSecsSinceEpoch(
+            std::chrono::duration_cast<std::chrono::milliseconds>(position.when.time_since_epoch()).count()));
 
     QGeoPositionInfo info{lastKnownPosition};
 
@@ -352,8 +353,8 @@ void core::GeoPositionInfoSource::Private::handleHeadingUpdate(const cll::Update
         heading.value.value());
 
     lastKnownPosition.setTimestamp(
-        QDateTime::fromSecsSinceEpoch(
-            heading.when.time_since_epoch().count()));
+        QDateTime::fromMSecsSinceEpoch(
+            std::chrono::duration_cast<std::chrono::milliseconds>(heading.when.time_since_epoch()).count()));
 
     QGeoPositionInfo info{lastKnownPosition};
 
@@ -374,8 +375,8 @@ void core::GeoPositionInfoSource::Private::handleVelocityUpdate(const cll::Updat
         velocity.value.value());
 
     lastKnownPosition.setTimestamp(
-        QDateTime::fromSecsSinceEpoch(
-            velocity.when.time_since_epoch().count()));
+        QDateTime::fromMSecsSinceEpoch(
+            std::chrono::duration_cast<std::chrono::milliseconds>(velocity.when.time_since_epoch()).count()));
 
     QGeoPositionInfo info{lastKnownPosition};
 
