@@ -114,13 +114,13 @@ struct OfonoNmConnectivityManager : public com::lomiri::location::connectivity::
 
         struct
         {
-            // The io-service instance we use for dispatching invocations.
-            boost::asio::io_service service;
+            // The io_context instance we use for dispatching invocations.
+            boost::asio::io_context service;
 
-            // We keep the io_service object alive until someone stops it.
-            boost::asio::io_service::work keep_alive
+            // We keep the io_context object alive until someone stops it.
+            boost::asio::executor_work_guard<boost::asio::io_context::executor_type> keep_alive
             {
-                service
+                service.get_executor()
             };
 
             // And a dedicated worker thread.

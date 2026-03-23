@@ -79,18 +79,18 @@ const std::map<std::string, com::lomiri::location::connectivity::RadioCell::Type
 }
 
 detail::CachedRadioCell::CellChangeHeuristics::CellChangeHeuristics(
-        boost::asio::io_service& io_service,
+        boost::asio::io_context& io_context,
         bool needed)
     : needed(needed),
-      io_service(io_service),
-      invalidation_timer(io_service),
+      io_context(io_context),
+      invalidation_timer(io_context),
       valid(true)
 {
 }
 
-detail::CachedRadioCell::CachedRadioCell(const org::Ofono::Manager::Modem& modem, boost::asio::io_service& io_service)
-    : RadioCell(),      
-      cell_change_heuristics(io_service, is_running_on_problematic_modem_firmware(modem)),
+detail::CachedRadioCell::CachedRadioCell(const org::Ofono::Manager::Modem& modem, boost::asio::io_context& io_context)
+    : RadioCell(),
+      cell_change_heuristics(io_context, is_running_on_problematic_modem_firmware(modem)),
       roaming(false),
       radio_type(Type::gsm),
       modem(modem),
@@ -508,11 +508,11 @@ void detail::CachedRadioCell::execute_cell_change_heuristics_if_appropriate()
         (radio_type == com::lomiri::location::connectivity::RadioCell::Type::umts ||
          also_apply_cell_change_heuristics_to_gsm_cells)) // and if it's a 3G cell.
     {
-        static const boost::posix_time::seconds timeout{timeout_in_seconds()};
+        static const std::chrono::seconds timeout{timeout_in_seconds()};
 
         std::lock_guard<std::mutex> lg(cell_change_heuristics.guard);
 
-        cell_change_heuristics.invalidation_timer.expires_from_now(timeout);
+        cell_change_heuristics.invalidation_timer.expires_after(timeout);
         cell_change_heuristics.invalidation_timer.async_wait([this](boost::system::error_code ec)
         {
             if (not ec)
