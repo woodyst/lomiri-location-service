@@ -200,7 +200,7 @@ public:
     // timeout milliseconds.
     //
     // std::runtime_error is thrown in case of issues.
-    Response request_time(const std::string& host, const std::chrono::milliseconds& timeout, boost::asio::io_service& ios);
+    Response request_time(const std::string& host, const std::chrono::milliseconds& timeout, boost::asio::io_context& ios);
     sntp::Packet request(boost::asio::ip::udp::socket& socket);
 };
 }

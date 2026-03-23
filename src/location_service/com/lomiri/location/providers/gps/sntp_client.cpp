@@ -96,7 +96,7 @@ gps::sntp::Packet::LeapIndicatorVersionMode& gps::sntp::Packet::LeapIndicatorVer
     return *this;
 }
 
-gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& host, const std::chrono::milliseconds& timeout, boost::asio::io_service& ios)
+gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& host, const std::chrono::milliseconds& timeout, boost::asio::io_context& ios)
 {
     ip::udp::resolver resolver{ios};
     ip::udp::socket socket{ios};
@@ -105,8 +105,8 @@ gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& h
     std::promise<ip::udp::resolver::iterator> promise_resolve;
     auto future_resolve= promise_resolve.get_future();
 
-    boost::asio::deadline_timer timer{ios};
-    timer.expires_from_now(boost::posix_time::milliseconds{timeout.count()});
+    boost::asio::steady_timer timer{ios};
+    timer.expires_after(timeout);
     timer.async_wait([&timed_out, &resolver, &socket](const boost::system::error_code& ec)
     {
         if (ec) return;
@@ -135,7 +135,7 @@ gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& h
     // _before_ we have started connecting the socket. For that, we check whether we are
     // already past the deadline prior to establishing a connection. Once we are past this point,
     // the usual mechanisms for closed sockets kick in.
-    if (timer.expires_at() <= boost::asio::deadline_timer::traits_type::now())
+    if (timer.expiry() <= std::chrono::steady_clock::now())
         throw std::runtime_error{"Timed out"};
 
     socket.async_connect(*it, [&promise_connect](const boost::system::error_code& ec)
@@ -152,13 +152,13 @@ gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& h
 
     Now before;
     {
-        if (timer.expires_at() <= boost::asio::deadline_timer::traits_type::now())
+        if (timer.expiry() <= std::chrono::steady_clock::now())
             throw std::runtime_error{"Timed out"};
 
         packet = request(socket);
         timer.cancel();
 
-        if (timer.expires_at() <= boost::asio::deadline_timer::traits_type::now())
+        if (timer.expiry() <= std::chrono::steady_clock::now())
             throw std::runtime_error{"Timed out"};
     }
     Now after;
