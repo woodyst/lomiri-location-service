@@ -39,7 +39,7 @@ TEST(Runtime, executes_service)
 
     auto rt = clls::Runtime::create();
     rt->start();
-    boost::asio::deadline_timer timer{rt->service(), boost::posix_time::milliseconds(500)};
+    boost::asio::steady_timer timer{rt->service(), std::chrono::milliseconds(500)};
     timer.async_wait([&wc, &signaled](const boost::system::error_code&)
     {
         signaled = true;
@@ -60,13 +60,13 @@ TEST(Runtime, catches_exceptions_thrown_from_handlers)
 
     auto rt = clls::Runtime::create();
     rt->start();
-    boost::asio::deadline_timer fast{rt->service(), boost::posix_time::milliseconds(100)};
+    boost::asio::steady_timer fast{rt->service(), std::chrono::milliseconds(100)};
     fast.async_wait([](const boost::system::error_code&)
     {
         throw std::runtime_error{"Should not propagate"};
     });
 
-    boost::asio::deadline_timer slow{rt->service(), boost::posix_time::milliseconds(500)};
+    boost::asio::steady_timer slow{rt->service(), std::chrono::milliseconds(500)};
     slow.async_wait([&wc, &signaled](const boost::system::error_code&)
     {
         signaled = true;
@@ -77,12 +77,12 @@ TEST(Runtime, catches_exceptions_thrown_from_handlers)
     EXPECT_TRUE(result);
 }
 
-// sets_up_pool_of_threads ensures that the pool size 
+// sets_up_pool_of_threads ensures that the pool size
 // passed to the Runtime on construction is honored. The idea is simple:
 // We set up two deadline timers, fast and slow. fast fires before slow,
-// with fast blocking in a wait on a common condition_variable. When slow 
+// with fast blocking in a wait on a common condition_variable. When slow
 // fires, it notifies the condition variable, thereby unblocking the handler of fast,
-// enabling clean shutdown without errors and timeouts. This only works if the 
+// enabling clean shutdown without errors and timeouts. This only works if the
 // pool contains at least 2 threads. Otherwise, the handler of slow would not be executed
 // until the handler of fast times out in the wait, marking the test as failed.
 TEST(Runtime, sets_up_pool_of_threads)
@@ -98,14 +98,14 @@ TEST(Runtime, sets_up_pool_of_threads)
 
     auto rt = clls::Runtime::create(2);
     rt->start();
-    boost::asio::deadline_timer fast{rt->service(), boost::posix_time::milliseconds(100)};
+    boost::asio::steady_timer fast{rt->service(), std::chrono::milliseconds(100)};
     fast.async_wait([state](const boost::system::error_code&)
     {
         std::unique_lock<std::mutex> ul{state->m};
         EXPECT_TRUE(state->wc.wait_for(ul, std::chrono::seconds{1}, [state]() { return state->signaled; }));
     });
 
-    boost::asio::deadline_timer slow{rt->service(), boost::posix_time::milliseconds(500)};
+    boost::asio::steady_timer slow{rt->service(), std::chrono::milliseconds(500)};
     slow.async_wait([state](const boost::system::error_code&)
     {
         state->signaled = true;
