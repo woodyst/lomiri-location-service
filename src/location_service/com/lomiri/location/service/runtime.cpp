@@ -29,7 +29,7 @@ namespace
 // TODO(tvoss): Catching all exceptions is risky as they might signal unrecoverable
 // errors. We should enable calling code to decide whether an exception should be considered
 // fatal or not.
-void exception_safe_run(boost::asio::io_service& service)
+void exception_safe_run(boost::asio::io_context& service)
 {
     while (true)
     {
@@ -47,7 +47,7 @@ void exception_safe_run(boost::asio::io_service& service)
         }
         catch (...)
         {
-            LOG(WARNING) << "Unknown exception caught while executing boost::asio::io_service";
+            LOG(WARNING) << "Unknown exception caught while executing boost::asio::io_context";
         }
     }
 }
@@ -62,7 +62,7 @@ clls::Runtime::Runtime(std::uint32_t pool_size)
     : pool_size_{pool_size},
       service_{pool_size_},
       strand_{service_},
-      keep_alive_{service_}
+      keep_alive_{service_.get_executor()}
 {
 }
 
@@ -99,11 +99,11 @@ std::function<void(std::function<void()>)> clls::Runtime::to_dispatcher_function
     auto sp = shared_from_this();
     return [sp](std::function<void()> task)
     {
-        sp->strand_.post(task);
+        boost::asio::post(sp->strand_, task);
     };
 }
 
-boost::asio::io_service& clls::Runtime::service()
+boost::asio::io_context& clls::Runtime::service()
 {
     return service_;
 }
