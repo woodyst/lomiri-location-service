@@ -60,7 +60,7 @@ struct Runtime
         stop();
     }
 
-    void run(boost::asio::io_service& service)
+    void run(boost::asio::io_context& service)
     {
         while (running)
         {
@@ -98,18 +98,18 @@ struct Runtime
     bool running;
     struct
     {
-        boost::asio::io_service service;
-        boost::asio::io_service::work keep_alive
+        boost::asio::io_context service;
+        boost::asio::executor_work_guard<boost::asio::io_context::executor_type> keep_alive
         {
-            service
+            service.get_executor()
         };
     } io;
     struct
     {
-        boost::asio::io_service service;
-        boost::asio::io_service::work keep_alive
+        boost::asio::io_context service;
+        boost::asio::executor_work_guard<boost::asio::io_context::executor_type> keep_alive
         {
-            service
+            service.get_executor()
         };
     } task;
     std::thread worker1;
@@ -243,7 +243,7 @@ void remote::Provider::Stub::setup_event_connections()
         [wp](const remote::Interface::Signals::PositionChanged::ArgumentType& arg)
         {
             VLOG(50) << "remote::Provider::Stub::PositionChanged: " << arg;
-            Runtime::instance().task.service.post([wp, arg]()
+            boost::asio::post(Runtime::instance().task.service, [wp, arg]()
             {
                 auto sp = wp.lock();
 
@@ -258,7 +258,7 @@ void remote::Provider::Stub::setup_event_connections()
         [wp](const remote::Interface::Signals::HeadingChanged::ArgumentType& arg)
         {
             VLOG(50) << "remote::Provider::Stub::HeadingChanged: " << arg;
-            Runtime::instance().task.service.post([wp, arg]()
+            boost::asio::post(Runtime::instance().task.service, [wp, arg]()
             {
                 auto sp = wp.lock();
 
@@ -273,7 +273,7 @@ void remote::Provider::Stub::setup_event_connections()
         [wp](const remote::Interface::Signals::VelocityChanged::ArgumentType& arg)
         {
             VLOG(50) << "remote::Provider::Stub::VelocityChanged: " << arg;
-            Runtime::instance().task.service.post([wp, arg]()
+            boost::asio::post(Runtime::instance().task.service, [wp, arg]()
             {
                 auto sp = wp.lock();
 
@@ -323,7 +323,7 @@ void remote::Provider::Stub::on_wifi_and_cell_reporting_state_changed(cll::WifiA
 void remote::Provider::Stub::on_reference_location_updated(const cll::Update<cll::Position>& position)
 {
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp, position]()
+    boost::asio::post(Runtime::instance().task.service, [wp, position]()
     {
         auto sp = wp.lock();
 
@@ -344,7 +344,7 @@ void remote::Provider::Stub::on_reference_location_updated(const cll::Update<cll
 void remote::Provider::Stub::on_reference_velocity_updated(const cll::Update<cll::Velocity>& velocity)
 {
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp, velocity]()
+    boost::asio::post(Runtime::instance().task.service, [wp, velocity]()
     {
         auto sp = wp.lock();
 
@@ -365,7 +365,7 @@ void remote::Provider::Stub::on_reference_velocity_updated(const cll::Update<cll
 void remote::Provider::Stub::on_reference_heading_updated(const cll::Update<cll::Heading>& heading)
 {
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp, heading]()
+    boost::asio::post(Runtime::instance().task.service, [wp, heading]()
     {
         auto sp = wp.lock();
 
@@ -387,7 +387,7 @@ void remote::Provider::Stub::start_position_updates()
 {
     VLOG(10) << "> " << __PRETTY_FUNCTION__;
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp]()
+    boost::asio::post(Runtime::instance().task.service, [wp]()
     {
         auto sp = wp.lock();
 
@@ -403,7 +403,7 @@ void remote::Provider::Stub::stop_position_updates()
 {
     VLOG(10) << "> " << __PRETTY_FUNCTION__;
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp]()
+    boost::asio::post(Runtime::instance().task.service, [wp]()
     {
         auto sp = wp.lock();
 
@@ -419,7 +419,7 @@ void remote::Provider::Stub::start_heading_updates()
 {
     VLOG(10) << "> " << __PRETTY_FUNCTION__;
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp]()
+    boost::asio::post(Runtime::instance().task.service, [wp]()
     {
         auto sp = wp.lock();
 
@@ -435,7 +435,7 @@ void remote::Provider::Stub::stop_heading_updates()
 {
     VLOG(10) << "> " << __PRETTY_FUNCTION__;
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp]()
+    boost::asio::post(Runtime::instance().task.service, [wp]()
     {
         auto sp = wp.lock();
 
@@ -451,7 +451,7 @@ void remote::Provider::Stub::start_velocity_updates()
 {
     VLOG(10) << "> " << __PRETTY_FUNCTION__;
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp]()
+    boost::asio::post(Runtime::instance().task.service, [wp]()
     {
         auto sp = wp.lock();
 
@@ -468,7 +468,7 @@ void remote::Provider::Stub::stop_velocity_updates()
 {
     VLOG(10) << "> " << __PRETTY_FUNCTION__;
     std::weak_ptr<Private> wp{d};
-    Runtime::instance().task.service.post([wp]()
+    boost::asio::post(Runtime::instance().task.service, [wp]()
     {
         auto sp = wp.lock();
 

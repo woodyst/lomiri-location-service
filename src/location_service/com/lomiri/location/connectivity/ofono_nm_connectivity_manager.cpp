@@ -147,7 +147,7 @@ connectivity::OfonoNmConnectivityManager::Private::Private(const core::dbus::Bus
         modem_manager_watcher->service_registered().connect([this]()
         {
             VLOG(1) << org::Ofono::name() << " got registered on the bus.";
-            dispatcher.service.post([this]()
+            boost::asio::post(dispatcher.service, [this]()
             {
                 setup_radio_stack_access();
             });
@@ -171,7 +171,7 @@ connectivity::OfonoNmConnectivityManager::Private::Private(const core::dbus::Bus
         network_manager_watcher->service_registered().connect([this]()
         {
             VLOG(1) << xdg::NetworkManager::name() << " got registered on the bus.";
-            dispatcher.service.post([this]()
+            boost::asio::post(dispatcher.service, [this]()
             {
                 setup_network_stack_access();
             });
@@ -252,7 +252,7 @@ void connectivity::OfonoNmConnectivityManager::Private::on_modem_added(const cor
         {
             auto interfaces = std::get<1>(tuple).as<std::vector<std::string> >();
             if (VLOG_IS_ON(10)) for(const auto& interface : interfaces) VLOG(10) << interface;
-            dispatcher.service.post([this, path, interfaces]()
+            boost::asio::post(dispatcher.service, [this, path, interfaces]()
             {
                 on_modem_interfaces_changed(path, interfaces);
             });
@@ -358,7 +358,7 @@ void connectivity::OfonoNmConnectivityManager::Private::on_modem_interfaces_chan
         ul.unlock(); signals.connected_cell_removed(cell);
     } else if (not has_cell_for_modem and modem_has_network_registration)
     {
-        dispatcher.service.post([this, path]()
+        boost::asio::post(dispatcher.service, [this, path]()
         {
             std::unique_lock<std::mutex> ul(cached.guard);
 
@@ -421,7 +421,7 @@ void connectivity::OfonoNmConnectivityManager::Private::setup_network_stack_acce
     {
         // We dispatch determining the connection characteristics to unblock
         // the bus here.
-        dispatcher.service.post([this, path]()
+        boost::asio::post(dispatcher.service, [this, path]()
         {
             std::unique_lock<std::mutex> ul{cached.guard};
             on_device_added(path, ul);
@@ -432,7 +432,7 @@ void connectivity::OfonoNmConnectivityManager::Private::setup_network_stack_acce
     {
         // We dispatch determining the connection characteristics to unblock
         // the bus here.
-        dispatcher.service.post([this, path]()
+        boost::asio::post(dispatcher.service, [this, path]()
         {
             std::unique_lock<std::mutex> ul{cached.guard};
             on_device_removed(path, ul);
@@ -463,7 +463,7 @@ void connectivity::OfonoNmConnectivityManager::Private::setup_network_stack_acce
 
                 // We dispatch determining the connection characteristics to unblock
                 // the bus here.
-                dispatcher.service.post([this, path]()
+                boost::asio::post(dispatcher.service, [this, path]()
                 {
                     active_connection_characteristics = characteristics_for_connection(path);
                 });

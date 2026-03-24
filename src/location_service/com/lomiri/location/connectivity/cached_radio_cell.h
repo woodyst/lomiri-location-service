@@ -38,7 +38,7 @@ public:
 
     // Creates an instance of a cached radio cell, deduced from the network registration
     // associated to the modem.
-    CachedRadioCell(const org::Ofono::Manager::Modem& modem, boost::asio::io_service& io_service);
+    CachedRadioCell(const org::Ofono::Manager::Modem& modem, boost::asio::io_context& io_context);
 
     // Frees all resources and cuts all event connections.
     ~CachedRadioCell();
@@ -72,17 +72,17 @@ private:
     // cell change heuristics go here.
     struct CellChangeHeuristics
     {
-        CellChangeHeuristics(boost::asio::io_service& io_service,
+        CellChangeHeuristics(boost::asio::io_context& io_context,
                              bool needed);
         // True if the heuristic is needed
         const bool needed;
-        // The io_service for setting up timeouts.
-        boost::asio::io_service& io_service;
+        // The io_context for setting up timeouts.
+        boost::asio::io_context& io_context;
         // We might experience a race on construction, if a change
         // of a cell attribute arrives prior to setting up the timeout.
         std::mutex guard;
         // Our timer for invalidating cells.
-        boost::asio::deadline_timer invalidation_timer;
+        boost::asio::steady_timer invalidation_timer;
         // Property to indicate whether the current cell is
         // still valid according to the cell change heuristics.
         core::Property<bool> valid;
