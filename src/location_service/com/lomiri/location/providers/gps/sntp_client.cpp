@@ -102,7 +102,7 @@ gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& h
     ip::udp::socket socket{ios};
     bool timed_out{false};
 
-    std::promise<ip::udp::resolver::iterator> promise_resolve;
+    std::promise<ip::udp::resolver::results_type> promise_resolve;
     auto future_resolve= promise_resolve.get_future();
 
     boost::asio::steady_timer timer{ios};
@@ -116,17 +116,15 @@ gps::sntp::Client::Response gps::sntp::Client::request_time(const std::string& h
         socket.close();
     });
 
-    ip::udp::resolver::query query{ip::udp::v4(), host, "ntp"};
-
-    resolver.async_resolve(query, [&promise_resolve](const boost::system::error_code& ec, ip::udp::resolver::iterator it)
+    resolver.async_resolve(ip::udp::v4(), host, "ntp", [&promise_resolve](const boost::system::error_code& ec, ip::udp::resolver::results_type results)
     {
         if (ec)
             promise_resolve.set_exception(std::make_exception_ptr(boost::system::system_error(ec)));
         else
-            promise_resolve.set_value(it);
+            promise_resolve.set_value(results);
     });
 
-    auto it = sync_or_throw(future_resolve);
+    auto it = sync_or_throw(future_resolve).begin();
 
     std::promise<void> promise_connect;
     auto future_connect = promise_connect.get_future();
