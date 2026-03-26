@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(lomiri-location-service VERSION 3.4.0 LANGUAGES C CXX)
+project(lomiri-location-service VERSION 3.4.1 LANGUAGES C CXX)
 
 # This version is for the API version (i.e. library's SOVERSION).
 set(LOMIRI_LOCATION_SERVICE_VERSION_MAJOR 3)

@@ -1,6 +1,53 @@
+2026-03-26 Mike Gabriel
+
+        * Release 3.4.1 (HEAD -> main, tag: 3.4.1)
+
+2026-03-24 Alfred Neumayer
+
+        * Merge branch 'personal/mariogrip/newerboost' into 'main' (5e42a5f)
+
+2026-03-24 Marius Gripsgard
+
+        * providers: migrate sntp_client to use modern async_resolve API
+          (2d03c24)
+
+2026-03-23 Marius Gripsgard
+
+        * tests: migrate runtime tests from deadline_timer to steady_timer
+          (9c42d2d)
+        * providers: migrate from boost::asio::io_service to io_context
+          (ecd1c0c)
+        * connectivity: migrate from boost::asio::io_service to io_context
+          (06206fe)
+        * connectivity: migrate from boost::asio::io_service to io_context in
+          service runtime (100b849)
+
+2026-02-14 Satyaakam Goswami
+
+        * Translated using Weblate (Hindi) (19b2103)
+
+2026-02-12 Mike Gabriel
+
+        * Merge branch 'systemd-alpine' into 'main' (8ffcb64)
+
+2026-02-03 Luca Weiss
+
+        * init: Add option to install systemd services without systemd
+          installed (db8e2c3)
+
+2026-02-12 Mike Gabriel
+
+        * Merge branch 'personal/lduboeuf/fix_position_timestamp' into 'main'
+          (74a6541)
+
+2026-02-04 Lionel Duboeuf
+
+        * Fix QGeoPositionInfo::timestamp() returning wrong QDateTime. Secure
+          time_since_epoch to QDateTime conversion (66808e4)
+
 2026-02-02 Mike Gabriel
 
-        * Release 3.4.0 (HEAD -> main, tag: 3.4.0)
+        * Release 3.4.0 (e1e2cdd) (tag: 3.4.0)
 
 2026-01-25 BoneNI
 
