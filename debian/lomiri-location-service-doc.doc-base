@@ -1,0 +1,9 @@
+Document: lomiri-location-service-doc
+Title: Lomiri Location Service API Documentation
+Author: UBports.com
+Abstract: This document describes the Lomiri Location Service API
+Section: Programming/C++
+
+Format: HTML
+Index: /usr/share/doc/lomiri-location-service/html/index.html
+Files: /usr/share/doc/lomiri-location-service/html/*

@@ -1,55 +1,431 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Source: https://gitlab.com/ubports/development/core/lomiri-location-service
 Upstream-Name: lomiri-location-service
-Source: https://gitlab.com/ubports/core/lomiri-location-service
 
-Files: *
-Copyright: 2013 Canonical Ltd.
+Files: examples/service/client.cpp
+ examples/service/program_options.h
+ examples/service/service.cpp
+ include/location_service/com/lomiri/location/accuracy.h
+ include/location_service/com/lomiri/location/clock.h
+ include/location_service/com/lomiri/location/codec.h
+ include/location_service/com/lomiri/location/configuration.h
+ include/location_service/com/lomiri/location/connectivity/bounded_integer.h
+ include/location_service/com/lomiri/location/connectivity/manager.h
+ include/location_service/com/lomiri/location/connectivity/radio_cell.h
+ include/location_service/com/lomiri/location/connectivity/wireless_network.h
+ include/location_service/com/lomiri/location/criteria.h
+ include/location_service/com/lomiri/location/default_provider_selection_policy.h
+ include/location_service/com/lomiri/location/fusion_provider.h
+ include/location_service/com/lomiri/location/fusion_provider_selection_policy.h
+ include/location_service/com/lomiri/location/heading.h
+ include/location_service/com/lomiri/location/init_and_shutdown.h
+ include/location_service/com/lomiri/location/logging.h
+ include/location_service/com/lomiri/location/newer_or_more_accurate_update_selector.h
+ include/location_service/com/lomiri/location/newer_update_selector.h
+ include/location_service/com/lomiri/location/optional.h
+ include/location_service/com/lomiri/location/position.h
+ include/location_service/com/lomiri/location/provider.h
+ include/location_service/com/lomiri/location/provider_enumerator.h
+ include/location_service/com/lomiri/location/provider_factory.h
+ include/location_service/com/lomiri/location/provider_selection.h
+ include/location_service/com/lomiri/location/provider_selection_policy.h
+ include/location_service/com/lomiri/location/providers/remote/interface.h
+ include/location_service/com/lomiri/location/providers/remote/skeleton.h
+ include/location_service/com/lomiri/location/providers/remote/stub.h
+ include/location_service/com/lomiri/location/proxy_provider.h
+ include/location_service/com/lomiri/location/satellite_based_positioning_state.h
+ include/location_service/com/lomiri/location/service/configuration.h
+ include/location_service/com/lomiri/location/service/default_permission_manager.h
+ include/location_service/com/lomiri/location/service/interface.h
+ include/location_service/com/lomiri/location/service/permission_manager.h
+ include/location_service/com/lomiri/location/service/session/implementation.h
+ include/location_service/com/lomiri/location/service/session/interface.h
+ include/location_service/com/lomiri/location/service/session/skeleton.h
+ include/location_service/com/lomiri/location/service/session/stub.h
+ include/location_service/com/lomiri/location/service/skeleton.h
+ include/location_service/com/lomiri/location/service/state.h
+ include/location_service/com/lomiri/location/service/stub.h
+ include/location_service/com/lomiri/location/service/system_configuration.h
+ include/location_service/com/lomiri/location/space_vehicle.h
+ include/location_service/com/lomiri/location/units/units.h
+ include/location_service/com/lomiri/location/update.h
+ include/location_service/com/lomiri/location/update_selector.h
+ include/location_service/com/lomiri/location/velocity.h
+ include/location_service/com/lomiri/location/wgs84/altitude.h
+ include/location_service/com/lomiri/location/wgs84/coordinate.h
+ include/location_service/com/lomiri/location/wgs84/latitude.h
+ include/location_service/com/lomiri/location/wgs84/longitude.h
+ include/location_service/com/lomiri/location/wifi_and_cell_reporting_state.h
+ qt/position/core_geo_position_info_source.h
+ qt/position/core_geo_position_info_source_factory.cpp
+ qt/position/core_geo_position_info_source_factory.h
+ src/location_service/com/lomiri/location/boost_ptree_settings.cpp
+ src/location_service/com/lomiri/location/boost_ptree_settings.h
+ src/location_service/com/lomiri/location/connectivity/cached_radio_cell.cpp
+ src/location_service/com/lomiri/location/connectivity/cached_radio_cell.h
+ src/location_service/com/lomiri/location/connectivity/cached_wireless_network.cpp
+ src/location_service/com/lomiri/location/connectivity/cached_wireless_network.h
+ src/location_service/com/lomiri/location/connectivity/dummy_connectivity_manager.h
+ src/location_service/com/lomiri/location/connectivity/manager.cpp
+ src/location_service/com/lomiri/location/connectivity/nm.h
+ src/location_service/com/lomiri/location/connectivity/ofono.h
+ src/location_service/com/lomiri/location/connectivity/ofono_nm_connectivity_manager.cpp
+ src/location_service/com/lomiri/location/connectivity/ofono_nm_connectivity_manager.h
+ src/location_service/com/lomiri/location/connectivity/radio_cell.cpp
+ src/location_service/com/lomiri/location/connectivity/wireless_network.cpp
+ src/location_service/com/lomiri/location/criteria.cpp
+ src/location_service/com/lomiri/location/default_permission_manager.cpp
+ src/location_service/com/lomiri/location/default_provider_selection_policy.cpp
+ src/location_service/com/lomiri/location/engine.cpp
+ src/location_service/com/lomiri/location/engine.h
+ src/location_service/com/lomiri/location/fusion_provider.cpp
+ src/location_service/com/lomiri/location/non_selecting_provider_selection_policy.cpp
+ src/location_service/com/lomiri/location/non_selecting_provider_selection_policy.h
+ src/location_service/com/lomiri/location/position.cpp
+ src/location_service/com/lomiri/location/provider.cpp
+ src/location_service/com/lomiri/location/provider_factory.cpp
+ src/location_service/com/lomiri/location/providers/config.cpp
+ src/location_service/com/lomiri/location/providers/dummy/delayed_provider.cpp
+ src/location_service/com/lomiri/location/providers/dummy/delayed_provider.h
+ src/location_service/com/lomiri/location/providers/dummy/provider.cpp
+ src/location_service/com/lomiri/location/providers/dummy/provider.h
+ src/location_service/com/lomiri/location/providers/geoclue/geoclue.h
+ src/location_service/com/lomiri/location/providers/geoclue/provider.cpp
+ src/location_service/com/lomiri/location/providers/geoclue/provider.h
+ src/location_service/com/lomiri/location/providers/gps/android_hardware_abstraction_layer.cpp
+ src/location_service/com/lomiri/location/providers/gps/android_hardware_abstraction_layer.h
+ src/location_service/com/lomiri/location/providers/gps/hardware_abstraction_layer.cpp
+ src/location_service/com/lomiri/location/providers/gps/hardware_abstraction_layer.h
+ src/location_service/com/lomiri/location/providers/gps/net_cpp_gps_xtra_downloader.h
+ src/location_service/com/lomiri/location/providers/gps/null_gps_xtra_downloader.h
+ src/location_service/com/lomiri/location/providers/gps/provider.cpp
+ src/location_service/com/lomiri/location/providers/gps/provider.h
+ src/location_service/com/lomiri/location/providers/gps/sntp_client.cpp
+ src/location_service/com/lomiri/location/providers/gps/sntp_client.h
+ src/location_service/com/lomiri/location/providers/gps/sntp_reference_time_source.cpp
+ src/location_service/com/lomiri/location/providers/gps/sntp_reference_time_source.h
+ src/location_service/com/lomiri/location/providers/remote/provider.cpp
+ src/location_service/com/lomiri/location/providers/remote/provider.h
+ src/location_service/com/lomiri/location/providers/remote/skeleton.cpp
+ src/location_service/com/lomiri/location/providers/remote/stub.cpp
+ src/location_service/com/lomiri/location/providers/skyhook/provider.cpp
+ src/location_service/com/lomiri/location/providers/skyhook/provider.h
+ src/location_service/com/lomiri/location/proxy_provider.cpp
+ src/location_service/com/lomiri/location/satellite_based_positioning_state.cpp
+ src/location_service/com/lomiri/location/service/always_granting_permission_manager.h
+ src/location_service/com/lomiri/location/service/config.h.in
+ src/location_service/com/lomiri/location/service/daemon.cpp
+ src/location_service/com/lomiri/location/service/daemon.h
+ src/location_service/com/lomiri/location/service/daemon_cli_main.cpp
+ src/location_service/com/lomiri/location/service/daemon_main.cpp
+ src/location_service/com/lomiri/location/service/dbus_connection_factory.h
+ src/location_service/com/lomiri/location/service/default_configuration.cpp
+ src/location_service/com/lomiri/location/service/default_configuration.h
+ src/location_service/com/lomiri/location/service/default_permission_manager.cpp
+ src/location_service/com/lomiri/location/service/demultiplexing_reporter.cpp
+ src/location_service/com/lomiri/location/service/demultiplexing_reporter.h
+ src/location_service/com/lomiri/location/service/harvester.cpp
+ src/location_service/com/lomiri/location/service/harvester.h
+ src/location_service/com/lomiri/location/service/ichnaea_reporter.cpp
+ src/location_service/com/lomiri/location/service/ichnaea_reporter.h
+ src/location_service/com/lomiri/location/service/implementation.cpp
+ src/location_service/com/lomiri/location/service/implementation.h
+ src/location_service/com/lomiri/location/service/program_options.h
+ src/location_service/com/lomiri/location/service/provider_daemon.cpp
+ src/location_service/com/lomiri/location/service/provider_daemon.h
+ src/location_service/com/lomiri/location/service/provider_daemon_main.cpp
+ src/location_service/com/lomiri/location/service/runtime.cpp
+ src/location_service/com/lomiri/location/service/runtime.h
+ src/location_service/com/lomiri/location/service/runtime_tests.cpp
+ src/location_service/com/lomiri/location/service/runtime_tests.h
+ src/location_service/com/lomiri/location/service/session/interface.cpp
+ src/location_service/com/lomiri/location/service/session/interface_p.h
+ src/location_service/com/lomiri/location/service/session/skeleton.cpp
+ src/location_service/com/lomiri/location/service/session/stub.cpp
+ src/location_service/com/lomiri/location/service/skeleton.cpp
+ src/location_service/com/lomiri/location/service/state.cpp
+ src/location_service/com/lomiri/location/service/stub.cpp
+ src/location_service/com/lomiri/location/service/system_configuration.cpp
+ src/location_service/com/lomiri/location/service/trust_store_permission_manager.cpp
+ src/location_service/com/lomiri/location/service/trust_store_permission_manager.h
+ src/location_service/com/lomiri/location/set_name_for_thread.cpp
+ src/location_service/com/lomiri/location/set_name_for_thread.h
+ src/location_service/com/lomiri/location/settings.cpp
+ src/location_service/com/lomiri/location/settings.h
+ src/location_service/com/lomiri/location/state_tracking_provider.h
+ src/location_service/com/lomiri/location/time_based_update_policy.cpp
+ src/location_service/com/lomiri/location/time_based_update_policy.h
+ src/location_service/com/lomiri/location/time_since_boot.cpp
+ src/location_service/com/lomiri/location/time_since_boot.h
+ src/location_service/com/lomiri/location/update_policy.h
+ src/location_service/com/lomiri/location/wifi_and_cell_reporting_state.cpp
+ tests/acceptance_tests.cpp
+ tests/boost_ptree_settings_test.cpp
+ tests/bug_1447110.cpp
+ tests/connectivity_manager_test.cpp
+ tests/controller_test.cpp
+ tests/criteria_test.cpp
+ tests/daemon_and_cli_tests.cpp
+ tests/default_permission_manager_test.cpp
+ tests/delayed_service_test.cpp
+ tests/demultiplexing_reporter_test.cpp
+ tests/did_finish_successfully.h
+ tests/dummy_provider_tests.cpp
+ tests/engine_test.cpp
+ tests/geoclue_provider_test.cpp
+ tests/gps_provider_test.cpp
+ tests/harvester_test.cpp
+ tests/heading_test.cpp
+ tests/ichnaea_reporter_test.cpp
+ tests/mock_connectivity_manager.h
+ tests/mock_engine.h
+ tests/mock_event_consumer.h
+ tests/mock_event_receiver.h
+ tests/mock_network_manager.h
+ tests/mock_ofono.h
+ tests/mock_provider.h
+ tests/mock_reporter.h
+ tests/null_provider_selection_policy.h
+ tests/position_test.cpp
+ tests/provider_test.cpp
+ tests/remote_provider_test.cpp
+ tests/remote_providerd_test.cpp
+ tests/runtime_test.cpp
+ tests/session_test.cpp
+ tests/sntp_client_test.cpp
+ tests/state_tracking_provider_test.cpp
+ tests/time_based_update_policy_test.cpp
+ tests/trust_store_permission_manager_test.cpp
+ tests/wgs84_test.cpp
+ tools/symbol_diff.in
+Copyright: 2012-2016, Canonical Ltd.
 License: LGPL-3
+
+Files: AUTHORS
+ CMakeLists.txt
+ _clang-format
+ astyle-config
+ cmake/FindGFlags.cmake
+ cmake/ParseArguments.cmake
+ data/com.lomiri.location.Service.conf
+ data/lomiri-location-service-connectivity.pc.in
+ data/lomiri-location-service-trust-stored.service.in
+ data/lomiri-location-service.pc.in
+ data/lomiri-location-service.service.in
+ doc/Doxyfile.in
+ doc/daemon_and_cli.md
+ doc/debugging.md
+ doc/hacking.md
+ doc/intro.md
+ doc/manual_testing.md
+ doc/tips_n_tricks.md
+ examples/CMakeLists.txt
+ examples/service/CMakeLists.txt
+ examples/standalone/connectivity/CMakeLists.txt
+ examples/standalone/connectivity/connectivity.cpp
+ include/CMakeLists.txt
+ po/CMakeLists.txt
+ po/LINGUAS
+ po/POTFILES.in
+ qt/CMakeLists.txt
+ qt/position/CMakeLists.txt
+ qt/position/plugin.json
+ qt/position/position.qrc
+ setup/gui/icon.svg
+ src/CMakeLists.txt
+ src/location_service/CMakeLists.txt
+ src/location_service/com/CMakeLists.txt
+ src/location_service/com/lomiri/CMakeLists.txt
+ src/location_service/com/lomiri/location/CMakeLists.txt
+ src/location_service/com/lomiri/location/fusion_provider_selection_policy.cpp
+ src/location_service/com/lomiri/location/init_and_shutdown.cpp
+ src/location_service/com/lomiri/location/providers/CMakeLists.txt
+ src/location_service/com/lomiri/location/providers/dummy/CMakeLists.txt
+ src/location_service/com/lomiri/location/providers/geoclue/CMakeLists.txt
+ src/location_service/com/lomiri/location/providers/gps/CMakeLists.txt
+ src/location_service/com/lomiri/location/providers/gps/gps.conf
+ src/location_service/com/lomiri/location/providers/gps/net_cpp_gps_xtra_downloader.cpp
+ src/location_service/com/lomiri/location/providers/gpsd/CMakeLists.txt
+ src/location_service/com/lomiri/location/providers/remote/CMakeLists.txt
+ src/location_service/com/lomiri/location/providers/skyhook/CMakeLists.txt
+ src/location_service/com/lomiri/location/service/session/implementation.cpp
+ symbols.map
+ tests/CMakeLists.txt
+ tests/app_armor_testing_profile
+ tests/provider_factory_test.cpp
+ tests/provider_selection_policy_test.cpp
+ tests/test_main.cpp
+ tools/CMakeLists.txt
+ doc/images/LocationServiceHighLevel.png
+ ChangeLog
+ examples/service/lomiri-location-service.1
+ examples/service/service.1.ronn
+ examples/service/service.md
+Copyright: 2012-2016, Canonical Ltd.
+  2020-2022, UBports Foundation
+License: LGPL-3
+Comment:
+ Files contain no license header, assuming license and copyright
+ from code files in this project.
+
+Files: tests/web_server.h
+Copyright: Thomas Voß <thomas.voss@canonical.com>
+License: LGPL-3
+
+Files: po/*.po
+ po/lomiri-location-service.pot
+Copyright: 2014-2016, Rosetta Contributors and Canonical Ltd
+  Copyright (C) 2014 Canonical Ltd.
+License: LGPL-3
+Comment:
+ Some .po files contain no license hint, assuming license from code
+ files in this project.
+
+Files: cmake/EnableCoverageReport.cmake
+ cmake/FindLcov.cmake
+ cmake/Findgcovr.cmake
+Copyright: 2010, Johannes Wienke <jwienke at techfak dot uni-bielefeld dot de>
+  2011, Johannes Wienke <jwienke at techfak dot uni-bielefeld dot de>
+License: GPL-2+
+
+Files: 3rd-party/boost/endian/arithmetic.hpp
+ 3rd-party/boost/endian/detail/config.hpp
+ 3rd-party/boost/endian/buffers.hpp
+ 3rd-party/boost/endian/detail/disable_warnings.hpp
+ 3rd-party/boost/endian/detail/disable_warnings_pop.hpp
+ 3rd-party/boost/endian/detail/cover_operators.hpp
+ 3rd-party/boost/endian/conversion.hpp
+ 3rd-party/boost/endian/endian.hpp
+ 3rd-party/boost/endian/std_pair.hpp
+Copyright: Beman Dawes 2003-2014
+  Darin Adler 2000
+License: BSL-1.0
+
+Files: data/CMakeLists.txt
+ doc/CMakeLists.txt
+Copyright: 2013, Canonical Ltd.
+License: GPL-3
+
+Files: qt/position/core_geo_position_info_source.cpp
+ qt/position/instance.h
+Copyright: 2013, Canonical Ltd.
+  2022, UBports Foundation.
+License: LGPL-3
+
+Files: src/location_service/com/lomiri/location/providers/gpsd/provider.cpp
+ src/location_service/com/lomiri/location/providers/gpsd/provider.h
+Copyright: 2020, UBports foundation
+License: LGPL-3
+
+Files: 3rd-party/boost/endian/detail/lightweight_test.hpp
+Copyright: 2010, 2011, 2015, Beman Dawes
+  2013, Ion Gaztanaga
+  2002, 2009, 2014, Peter Dimov
+License: BSL-1.0
+
+Files: 3rd-party/boost/core/scoped_enum.hpp
+Copyright: 2011-2012, Vicente J. Botet Escriba
+  2012, Anthony Williams
+  Beman Dawes, 2009
+License: BSL-1.0
+
+Files: 3rd-party/boost/endian/detail/intrinsic.hpp
+Copyright: 2012, David Stone
+  Beman Dawes 2013
+License: BSL-1.0
+
+Files: tests/mongoose.c
+ tests/mongoose.h
+Copyright: 2004-2013, Sergey Lyubka <valenok@gmail.com>
+  2013-2014, Cesanta Software Limited
+  Steve Reid <steve@edmweb.com>
+License: GPL-2
+
+Files: debian/*
+Copyright: 2025, Guido Berhoerster <guido+debian@berhoerster.name>
+  2025, Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+License: LGPL-3
+
+License: BSL-1.0
+ Boost Software License - Version 1.0 - August 17th, 2003
+ .
+ Permission is hereby granted, free of charge, to any person or organization
+ obtaining a copy of the software and accompanying documentation covered by
+ this license (the "Software") to use, reproduce, display, distribute,
+ execute, and transmit the Software, and to prepare derivative works of the
+ Software, and to permit third-parties to whom the Software is furnished to
+ do so, all subject to the following:
+ .
+ The copyright notices in the Software and this entire statement, including
+ the above license grant, this restriction and the following disclaimer,
+ must be included in all copies of the Software, in whole or in part, and
+ all derivative works of the Software, unless such copies or derivative
+ works are solely in the form of machine-executable object code generated by
+ a source language processor.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+ SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+ FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ DEALINGS IN THE SOFTWARE.
+
+License: GPL-2
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 2 of the License.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in `/usr/share/common-licenses/GPL-2'
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in `/usr/share/common-licenses/GPL-2'
+
+License: GPL-3
  This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU Lesser General Public License version 3 as
- published by the Free Software Foundation.
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, version 3 of the License.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in `/usr/share/common-licenses/GPL-3'
+
+License: LGPL-3
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License version 3,
+ as published by the Free Software Foundation.
  .
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU Lesser General Public License for more details.
  .
- On Debian systems, the full text of the GNU Lesser General Public
- License version 3 can be found in the file
- `/usr/share/common-licenses/LGPL-3'.
-
-Files: cmake/*
-Copyright: 2010-2011 Johannes Wienke
-License: GPL-2+
- This program is free software; you can redistribute it
- and/or modify it under the terms of the GNU General
- Public License as published by the Free Software Foundation;
- either version 2, or (at your option) any later version.
+ You should have received a copy of the GNU Lesser General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  .
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- .
- On Debian systems, the full text of the GNU General Public
- License version 2 can be found in the file
- `/usr/share/common-licenses/GPL-2'.
-
-Files: tests/mongoose.*
-Copyright: 2004-2013 Sergey Lyubka <valenok@gmail.com>
-  2013-2014 Cesanta Software Limited
-License: GPL-2+
- This program is free software; you can redistribute it
- and/or modify it under the terms of the GNU General
- Public License as published by the Free Software Foundation;
- either version 2, or (at your option) any later version.
- .
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- .
- On Debian systems, the full text of the GNU General Public
- License version 2 can be found in the file
- `/usr/share/common-licenses/GPL-2'.
-
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in `/usr/share/common-licenses/LGPL-3'

@@ -1,121 +1,129 @@
 Source: lomiri-location-service
+Standards-Version: 4.7.3
+Maintainer: UBports Developers <developers@ubports.com>
+Uploaders:
+ Mike Gabriel <sunweaver@debian.org>,
 Section: utils
-Priority: optional
-Maintainer: UBports developers <devs@ubports.com>
-Build-Depends: cmake,
-               curl,
-               libdbus-cpp-dev (>= 4.1.0),
-               debhelper-compat (= 13),
-               doxygen <!nodoc>,
-               google-mock (>= 1.6.0+svn437),
-               graphviz <!nodoc>,
-               libapparmor-dev,
-               libboost-filesystem-dev,
-               libboost-program-options-dev,
-               libboost-system-dev,
-               libdbus-1-dev,
-               libdbus-cpp-dev,
-               libgoogle-glog-dev,
-               libgtest-dev,
-               libiw-dev,
-               libjson-c-dev,
-               libnet-cpp-dev,
-               libprocess-cpp-dev,
-               libtrust-store-dev,
-               libubuntu-platform-hardware-api-headers [!ppc64el !powerpc] <!noplatformapi> | hello,
-               libubuntu-platform-hardware-api-dev [!ppc64el !powerpc] <!noplatformapi> | hello,
-               libproperties-cpp-dev,
-               lsb-release,
-               qtbase5-dev,
-               qtlocation5-dev,
-               qtpositioning5-dev,
-               qt6-base-dev,
-               qt6-declarative-dev,
-               qt6-declarative-private-dev,
-               qt6-location-dev,
-               qt6-positioning-dev,
-               trust-store-bin,
-               cmake-extras,
-               libgps-dev,
-               systemd-dev,
-Standards-Version: 4.7.0
-Homepage: https://gitlab.com/ubports/development/core/lomiri-location-service
-Vcs-Git: https://gitlab.com/ubports/development/core/lomiri-location-service.git
+Build-Depends:
+ debhelper-compat (= 13),
+ cmake,
+ cmake-extras,
+ curl,
+ doxygen <!nodoc>,
+ googletest,
+ graphviz <!nodoc>,
+ libapparmor-dev,
+ libboost-filesystem-dev,
+ libboost-program-options-dev,
+ libdbus-1-dev,
+ libdbus-cpp-dev,
+ libgoogle-glog-dev,
+ libgps-dev,
+ libgtest-dev,
+ libiw-dev,
+ libjson-c-dev,
+ libnet-cpp-dev,
+ libprocess-cpp-dev,
+ libproperties-cpp-dev,
+ libtrust-store-dev,
+ libubuntu-platform-hardware-api-headers [!ppc64el !powerpc] <!noplatformapi> | hello,
+ libubuntu-platform-hardware-api-dev [!ppc64el !powerpc] <!noplatformapi> | hello,
+ lsb-release,
+ qt6-base-dev,
+ qt6-declarative-dev,
+ qt6-declarative-private-dev,
+ qt6-location-dev,
+ qt6-positioning-dev,
+ qtbase5-dev,
+ qtlocation5-dev,
+ qtpositioning5-dev,
+ systemd-dev,
+ trust-store-bin,
 Vcs-Browser: https://gitlab.com/ubports/development/core/lomiri-location-service
+Vcs-Git: https://gitlab.com/ubports/development/core/lomiri-location-service.git
+Homepage: https://gitlab.com/ubports/development/core/lomiri-location-service
 
 Package: liblomiri-location-service3
-Section: libs
 Architecture: any
 Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends},
-         ${shlibs:Depends},
-Description: location service aggregating position/velocity/heading
- Aggregates position/velocity/heading updates and exports them over dbus.
+Section: libs
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Lomiri Location Service client library
+ Aggregates position/velocity/heading updates and exports them over DBus.
  .
- Contains the shared library needed by client applications.
+ This package contains the shared library needed by client applications.
 
 Package: lomiri-location-service-qt5-plugin
-Section: libs
 Architecture: any
 Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends},
-         ${shlibs:Depends},
+Section: libs
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Breaks:
+ liblomiri-location-service3 (<< 3.4.1),
+Replaces:
+ liblomiri-location-service3 (<< 3.4.1),
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains the Qt 5 positioning plugin.
 
 Package: lomiri-location-service-qt6-plugin
-Section: libs
 Architecture: any
 Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends},
-         ${shlibs:Depends},
+Section: libs
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
 Description: location service aggregating position/velocity/heading
  Aggregates position/velocity/heading updates and exports them over dbus.
  .
  Contains the Qt 6 positioning plugin.
 
 Package: liblomiri-location-service-dev
-Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: liblomiri-location-service3 (= ${binary:Version}),
-         libdbus-1-dev,
-         libdbus-cpp-dev,
-         libboost-dev,
-         ${misc:Depends},
-Suggests: lomiri-location-service-doc,
-Description: location service aggregating position/velocity/heading
- Aggregates position/velocity/heading updates and exports them over dbus.
+Section: libdevel
+Depends:
+ libboost-dev,
+ libdbus-1-dev,
+ libdbus-cpp-dev,
+ liblomiri-location-service3 (= ${binary:Version}),
+ ${misc:Depends},
+Suggests:
+ lomiri-location-service-doc,
+Description: Lomiri Location Service (development files)
+ Aggregates position/velocity/heading updates and exports them over DBus.
  .
- Contains header files required to develop clients talking to the Lomiri
- location service.
+ This package contains header files required to develop clients talking to the
+ Lomiri Location Service.
 
 Package: lomiri-location-service-tests
 Architecture: any
-Depends: ${misc:Depends},
-         ${shlibs:Depends},
-Description: location service aggregating position/velocity/heading
- Aggregates position/velocity/heading updates and exports them over dbus.
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Lomiri Location Service test executables
+ Aggregates position/velocity/heading updates and exports them over DBus.
  .
- Contains all test executables.
+ This package contains all test executables.
 
 Package: lomiri-location-service-bin
 Architecture: any
-Depends: liblomiri-location-service3 (= ${binary:Version}),
-         ${misc:Depends},
-         ${shlibs:Depends},
-         trust-store-bin,
+Depends:
+ liblomiri-location-service3 (= ${binary:Version}),
+ trust-store-bin,
+ ${misc:Depends},
+ ${shlibs:Depends},
 Breaks: lomiri-location-service-examples (<< 0.0.2),
 Replaces: lomiri-location-service-examples (<< 0.0.2),
-Description: location service aggregating position/velocity/heading
- Aggregates position/velocity/heading updates and exports them over dbus.
+Description: Lomiri Location Service binaries
+ Aggregates position/velocity/heading updates and exports them over DBus.
  .
- Contains the service executable and man pages.
+ This package contains the service executable and man pages.
 
 Package: lomiri-location-service-examples
 Architecture: any
@@ -130,13 +138,15 @@ Description: location service aggregating position/velocity/heading
  Contains example service and client.
 
 Package: lomiri-location-service-doc
-Section: doc
 Architecture: all
-Multi-Arch: foreign
-Depends: ${misc:Depends},
 Build-Profiles: <!nodoc>
-Recommends: lomiri-location-service-examples,
-Description: location service aggregating position/velocity/heading
- Aggregates position/velocity/heading updates and exports them over dbus.
+Multi-Arch: foreign
+Section: doc
+Depends:
+ ${misc:Depends},
+Recommends:
+ lomiri-location-service-examples,
+Description: Lomiri Location Service documentation
+ Aggregates position/velocity/heading updates and exports them over DBus.
  .
- Contains documentation for service and client.
+ This package contains documentation for the service and client.

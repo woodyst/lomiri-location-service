@@ -12,10 +12,10 @@ NULL =
 # export DH_VERBOSE=1
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
-
-export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
 include /usr/share/dpkg/default.mk
 
@@ -40,7 +40,10 @@ ifeq ($(filter $(LOCATION_SERVICE_ENABLE_GPS_PROVIDER),ON),ON)
 endif
 
 override_dh_auto_configure:
-	dh_auto_configure --builddirectory=build-qt5 --buildsystem=cmake .. -- \
+	# -dM -E do not compile anything but only generate lists of #define, no hardening flags are needed here
+	@echo 'blhc: ignore-line-regexp: .*g\+\+.*-dM -E.*'
+	if [ ! -e po/lomiri-location-service.pot.deb-bak ]; then cp po/lomiri-location-service.pot po/lomiri-location-service.pot.deb-bak; fi
+	dh_auto_configure --builddirectory=build-qt5 -- \
 	        -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib/$(DEB_HOST_MULTIARCH)/lomiri-location-service \
 	        -DCMAKE_C_COMPILER=$(CC) \
 	        -DCMAKE_CXX_COMPILER=$(CXX) \
@@ -49,7 +52,7 @@ override_dh_auto_configure:
 	        -DLOCATION_SERVICE_ENABLE_GEOCLUE_PROVIDER=OFF \
 	        -DENABLE_QT6=OFF \
 	        $(NULL)
-	dh_auto_configure --builddirectory=build-qt6 --buildsystem=cmake .. -- \
+	dh_auto_configure --builddirectory=build-qt6 -- \
 	        -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib/$(DEB_HOST_MULTIARCH)/lomiri-location-service \
 	        -DCMAKE_C_COMPILER=$(CC) \
 	        -DCMAKE_CXX_COMPILER=$(CXX) \
@@ -60,14 +63,20 @@ override_dh_auto_configure:
 	        $(NULL)
 
 override_dh_auto_build:
-	dh_auto_build --builddirectory=build-qt5 --buildsystem=cmake ..
-	dh_auto_build --builddirectory=build-qt6 --buildsystem=cmake ..
+	dh_auto_build --builddirectory=build-qt5
+	dh_auto_build --builddirectory=build-qt6
 
 override_dh_auto_test:
 	# Don't run tests in parallel as fake web servers all bind to same port
-	dh_auto_test --builddirectory=build-qt5 --buildsystem=cmake --no-parallel .. -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
-	dh_auto_test --builddirectory=build-qt6 --buildsystem=cmake --no-parallel .. -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
+	dh_auto_test --builddirectory=build-qt5 --no-parallel -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
+	dh_auto_test --builddirectory=build-qt6 --no-parallel -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
 
 override_dh_auto_install:
-	dh_auto_install --builddirectory=build-qt6 --buildsystem=cmake ..
-	dh_auto_install --builddirectory=build-qt5 --buildsystem=cmake ..
+	dh_auto_install --builddirectory=build-qt6
+	dh_auto_install --builddirectory=build-qt5
+
+execute_before_dh_clean:
+	-mv po/lomiri-location-service.pot.deb-bak po/lomiri-location-service.pot
+
+get-orig-source:
+	uscan --noconf --force-download --rename --download-current-version --destdir=..
