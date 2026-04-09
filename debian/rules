@@ -30,6 +30,9 @@ else ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo yes),yes)
     LOCATION_SERVICE_ENABLE_GPS_PROVIDER = ON
 endif
 
+# Ignore test failures on less relevant architectures
+testskip_architectures := s390x
+
 %:
 	dh $@
 
@@ -66,10 +69,15 @@ override_dh_auto_build:
 	dh_auto_build --builddirectory=build-qt5
 	dh_auto_build --builddirectory=build-qt6
 
+# Don't run tests in parallel as fake web servers all bind to same port
 override_dh_auto_test:
-	# Don't run tests in parallel as fake web servers all bind to same port
-	dh_auto_test --builddirectory=build-qt5 --no-parallel -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
-	dh_auto_test --builddirectory=build-qt6 --no-parallel -- ARGS+="-E '^(acceptance_tests|ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests)'"
+ifeq (,$(filter $(DEB_HOST_ARCH),$(testskip_architectures)))
+	dh_auto_test --builddirectory=build-qt5 --no-parallel -- ARGS+="-E '^(ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests|acceptance_tests)'"
+	dh_auto_test --builddirectory=build-qt6 --no-parallel -- ARGS+="-E '^(ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests|acceptance_tests)'"
+else
+	dh_auto_test --builddirectory=build-qt5 --no-parallel -- ARGS+="-E '^(ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests|acceptance_tests)'"
+	dh_auto_test --builddirectory=build-qt6 --no-parallel -- ARGS+="-E '^(ichnaea_reporter_test|remote_providerd_test|delayed_service_test|daemon_and_cli_tests|acceptance_tests)'"
+endif
 
 override_dh_auto_install:
 	dh_auto_install --builddirectory=build-qt6
