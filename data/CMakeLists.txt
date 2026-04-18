@@ -30,6 +30,10 @@ configure_file(
   lomiri-location-service-trust-stored.service.in lomiri-location-service-trust-stored.service @ONLY
 )
 
+configure_file(
+  lomiri-location-service-trust-stored-wayland.service.in lomiri-location-service-trust-stored-wayland.service @ONLY
+)
+
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service.pc
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
@@ -53,6 +57,11 @@ if(SYSTEMD_FOUND OR ENFORCE_SYSTEMD_SERVICE)
 
     install(
       FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored.service
+      DESTINATION ${SYSTEMD_USER_UNITDIR}
+    )
+
+    install(
+      FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-location-service-trust-stored-wayland.service
       DESTINATION ${SYSTEMD_USER_UNITDIR}
     )
 endif()
