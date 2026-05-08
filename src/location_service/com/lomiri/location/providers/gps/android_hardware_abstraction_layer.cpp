@@ -596,18 +596,26 @@ android::HardwareAbstractionLayer::Impl::Impl(
 
 void android::HardwareAbstractionLayer::Impl::register_callbacks()
 {
-    // Exclusive lock: wait for any in-flight callbacks to complete before
-    // replacing the GPS handle. Without this, u_hardware_gps_delete() can
-    // race with an active callback and cause a SIGSEGV (observed with Waydroid
-    // HALIUM_10, which overwrites our HAL callbacks via host_hwbinder).
-    std::unique_lock<std::shared_mutex> lock(callback_mutex);
+    // Phase 1: wait for any in-flight callbacks, then delete the old handle.
+    {
+        std::unique_lock<std::shared_mutex> lock(callback_mutex);
+        if (gps_handle)
+            u_hardware_gps_delete(gps_handle);
+        gps_handle = nullptr;
+    }
 
-    if (gps_handle)
-        u_hardware_gps_delete(gps_handle);
+    // Phase 2: create the new handle WITHOUT the lock.
+    // u_hardware_gps_new() can invoke callbacks (e.g. on_set_capabilities)
+    // synchronously on this thread; holding the write lock here would cause
+    // EDEADLK when those callbacks try to acquire the shared lock.
+    UHardwareGps new_handle = u_hardware_gps_new(std::addressof(gps_params));
 
-    gps_handle = u_hardware_gps_new(std::addressof(gps_params));
-
-    dispatch_updated_modes_to_driver();
+    // Phase 3: install the new handle and push configuration.
+    {
+        std::unique_lock<std::shared_mutex> lock(callback_mutex);
+        gps_handle = new_handle;
+        dispatch_updated_modes_to_driver();
+    }
 }
 
 bool android::HardwareAbstractionLayer::Impl::dispatch_updated_modes_to_driver()

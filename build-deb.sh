@@ -43,9 +43,10 @@ RUN apt-get install -y --no-install-recommends \
     libgoogle-glog-dev libgps-dev libgtest-dev libiw-dev libjson-c-dev \
     libnet-cpp-dev libprocess-cpp-dev libproperties-cpp-dev libtrust-store-dev \
     libubuntu-platform-hardware-api-headers libubuntu-platform-hardware-api-dev \
-    pkg-config qtbase5-dev qtlocation5-dev qtpositioning5-dev \
-    qt6-base-dev qt6-declarative-dev qt6-location-dev qt6-positioning-dev \
-    trust-store-bin && \
+    lsb-release pkg-config qtbase5-dev qtlocation5-dev qtpositioning5-dev \
+    qt6-base-dev qt6-declarative-dev qt6-declarative-private-dev \
+    qt6-location-dev qt6-positioning-dev \
+    systemd-dev trust-store-bin && \
     apt-get clean
 
 WORKDIR /src
