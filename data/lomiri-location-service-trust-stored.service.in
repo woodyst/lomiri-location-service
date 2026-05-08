@@ -1,12 +1,8 @@
 [Unit]
 Description=Location Services Trust Store Daemon
 PartOf=graphical-session.target
-ConditionPathExists=/run/user/%U/mir_socket_trusted
 
 [Service]
 Type=simple
 Restart=always
 ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/trust-stored-skeleton --remote-agent DBusRemoteAgent --bus=system --local-agent MirAgent --trusted-mir-socket=${XDG_RUNTIME_DIR}/mir_socket_trusted --for-service LomiriLocationService --with-text-domain lomiri-location-service --store-bus session
-
-[Install]
-WantedBy=graphical-session.target
