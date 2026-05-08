@@ -122,9 +122,12 @@ clls::Implementation::Implementation(const clls::Implementation::Configuration& 
                           state == cll::SatelliteBasedPositioningState::on;
               }),
           configuration.engine->updates.visible_space_vehicles.changed().connect(
-              [this](const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>&svs)
+              [this](const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>& svs)
               {
-                  visible_space_vehicles() = svs;
+                  configuration.dispatcher([this, svs]()
+                  {
+                      visible_space_vehicles() = svs;
+                  });
               }),
           configuration.engine->updates.last_known_location.changed().connect(
               [this](const cll::Optional<cll::Update<cll::Position>>& update)

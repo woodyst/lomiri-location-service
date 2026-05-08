@@ -249,12 +249,17 @@ int location::service::Daemon::main(const location::service::Daemon::Configurati
         {
             std::make_shared<dummy::ConnectivityManager>(),
             std::make_shared<NullReporter>()
-        }
+        },
+        runtime->to_dispatcher_functional()
     };
 
     auto location_service = std::make_shared<location::service::Implementation>(configuration);
 
     trap->run();
+
+    // Stop io_context before location_service is destroyed to prevent
+    // pending SVS lambdas from running against a partially-destroyed object.
+    runtime->stop();
 
     return EXIT_SUCCESS;
 }

@@ -63,6 +63,11 @@ public:
                   [this](const Update<Velocity>& u)
                   {
                       mutable_updates().velocity(u);
+                  }),
+              impl_->updates().svs.connect(
+                  [this](const Update<std::set<SpaceVehicle>>& u)
+                  {
+                      mutable_updates().svs(u);
                   })
            },
           state_{State::enabled}
@@ -152,6 +157,7 @@ private:
         core::ScopedConnection position_updates;
         core::ScopedConnection heading_updates;
         core::ScopedConnection velocity_updates;
+        core::ScopedConnection svs_updates;
     } connections;
     core::Property<State> state_;
 };

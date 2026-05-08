@@ -163,17 +163,29 @@ clls::Skeleton::Skeleton(const clls::Skeleton::Configuration& configuration)
           {
               on_client_applications_changed(value);
           }),
+          properties.visible_space_vehicles->changed().connect([this](const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>& value)
+          {
+              on_visible_space_vehicles_changed(value);
+          }),
       }
 {
     object->install_method_handler<clls::Interface::CreateSessionForCriteria>([this](const dbus::Message::Ptr& msg)
     {
         handle_create_session_for_criteria(msg);
     });
+
+    object->install_method_handler<clls::Interface::GetVisibleSpaceVehicles>([this](const dbus::Message::Ptr& msg)
+    {
+        auto reply = dbus::Message::make_method_return(msg);
+        reply->writer() << visible_space_vehicles().get();
+        this->configuration.incoming->send(reply);
+    });
 }
 
 clls::Skeleton::~Skeleton() noexcept
 {
     object->uninstall_method_handler<clls::Interface::CreateSessionForCriteria>();
+    object->uninstall_method_handler<clls::Interface::GetVisibleSpaceVehicles>();
 }
 
 core::Property<clls::State>& clls::Skeleton::mutable_state()
@@ -420,4 +432,12 @@ core::Property<std::vector<std::string>>& clls::Skeleton::client_applications()
 {
     VLOG(1) << __PRETTY_FUNCTION__;
     return *properties.client_applications;
+}
+
+void clls::Skeleton::on_visible_space_vehicles_changed(const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>&)
+{
+    // Property value is updated in-memory by the caller.
+    // PropertiesChanged is not emitted here because encoding the full SVS map
+    // as a D-Bus Variant causes a SIGBUS on this platform.
+    // Clients must poll via org.freedesktop.DBus.Properties.Get.
 }

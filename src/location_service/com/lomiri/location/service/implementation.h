@@ -23,6 +23,7 @@
 #include <com/lomiri/location/service/harvester.h>
 #include <com/lomiri/location/service/skeleton.h>
 
+#include <functional>
 #include <memory>
 
 namespace dbus = core::dbus;
@@ -53,6 +54,9 @@ public:
         PermissionManager::Ptr permission_manager;
         // All harvesting specific options.
         Harvester::Configuration harvester;
+        // Dispatcher for posting work to the D-Bus service thread.
+        // SVS updates arrive on the GPS HAL thread and must be re-posted.
+        std::function<void(std::function<void()>)> dispatcher;
     };
 
     // Creates a new instance of the service with the given configuration.

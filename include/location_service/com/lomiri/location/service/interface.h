@@ -87,6 +87,25 @@ class Interface
         }
     };
 
+    struct GetVisibleSpaceVehicles
+    {
+        typedef com::lomiri::location::service::Interface Interface;
+
+        inline static const std::string& name()
+        {
+            static const std::string s{"GetVisibleSpaceVehicles"};
+            return s;
+        }
+
+        typedef std::map<com::lomiri::location::SpaceVehicle::Key,
+                         com::lomiri::location::SpaceVehicle> ResultType;
+
+        inline static const std::chrono::milliseconds default_timeout()
+        {
+            return std::chrono::seconds{5};
+        }
+    };
+
     struct Properties
     {
         struct State

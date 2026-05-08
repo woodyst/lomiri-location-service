@@ -160,6 +160,8 @@ private:
     // Called whenever the value of the respective property changes.
     void on_is_online_changed(bool value);
     void on_client_applications_changed(const std::vector<std::string>& value);
+    // Called whenever the set of visible space vehicles changes.
+    void on_visible_space_vehicles_changed(const std::map<SpaceVehicle::Key, SpaceVehicle>& value);
 
     // Stores the configuration passed in at creation time.
     Configuration configuration;
@@ -192,6 +194,7 @@ private:
         core::ScopedConnection does_report_cell_and_wifi_ids;
         core::ScopedConnection is_online;
         core::ScopedConnection client_applications;
+        core::ScopedConnection visible_space_vehicles;
     } connections;
     // Guards the session store.
     std::mutex guard;
