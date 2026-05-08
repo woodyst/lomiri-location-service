@@ -23,6 +23,8 @@
 
 #include <ubuntu/hardware/gps.h>
 
+#include <shared_mutex>
+
 namespace com { namespace lomiri { namespace location { namespace providers { namespace gps
 {
 namespace android
@@ -293,6 +295,11 @@ struct HardwareAbstractionLayer : public gps::HardwareAbstractionLayer
         GpsXtraDownloader::Configuration gps_xtra_configuration;
         // GPS xtra downloader implementation.
         std::shared_ptr<GpsXtraDownloader> gps_xtra_downloader;
+
+        // Guards register_callbacks() against in-flight HAL callbacks (e.g. Waydroid
+        // overwrites callbacks → re-registration races with a callback in progress).
+        // Callbacks take shared ownership; register_callbacks() takes exclusive.
+        std::shared_mutex callback_mutex;
     } impl;
 };
 }
