@@ -145,6 +145,7 @@ void android::HardwareAbstractionLayer::on_xtra_download_request(void* context)
             << "context=" << context;
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
 
     try
     {
@@ -187,6 +188,7 @@ void android::HardwareAbstractionLayer::on_location_update(UHardwareGpsLocation*
     VLOG(1) << __PRETTY_FUNCTION__;
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
 
     if (location->flags & U_HARDWARE_GPS_LOCATION_HAS_LAT_LONG)
     {
@@ -229,6 +231,7 @@ void android::HardwareAbstractionLayer::on_status_update(uint16_t status, void* 
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": status=" << status << ", context=" << context;
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
     thiz->chipset_status() = static_cast<gps::ChipsetStatus>(status);
 }
 
@@ -241,6 +244,7 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
              << "u: " << sv_info->used_in_fix_mask << " ";
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
 
     std::set<location::SpaceVehicle> svs;
 
@@ -276,6 +280,7 @@ void android::HardwareAbstractionLayer::on_set_capabilities(uint32_t capabilitie
     VLOG(1) << __PRETTY_FUNCTION__;
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
     thiz->capabilities() = capabilities;
 }
 
@@ -290,6 +295,7 @@ void android::HardwareAbstractionLayer::on_agps_status_update(UHardwareGpsAGpsSt
     }
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
     thiz->impl.supl_assistant.status() = static_cast<gps::HardwareAbstractionLayer::SuplAssistant::Status>(status->status);
     thiz->impl.supl_assistant.server_ip() = gps::HardwareAbstractionLayer::SuplAssistant::IpV4Address{status->ipaddr};
 
@@ -327,7 +333,10 @@ void android::HardwareAbstractionLayer::on_request_utc_time(void* context)
     try
     {
         if (auto thiz = static_cast<android::HardwareAbstractionLayer*>(context))
+        {
+            std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
             thiz->inject_reference_time(thiz->impl.reference_time_source->sample());
+        }
     }
     catch (const std::runtime_error& e)
     {
@@ -587,6 +596,12 @@ android::HardwareAbstractionLayer::Impl::Impl(
 
 void android::HardwareAbstractionLayer::Impl::register_callbacks()
 {
+    // Exclusive lock: wait for any in-flight callbacks to complete before
+    // replacing the GPS handle. Without this, u_hardware_gps_delete() can
+    // race with an active callback and cause a SIGSEGV (observed with Waydroid
+    // HALIUM_10, which overwrites our HAL callbacks via host_hwbinder).
+    std::unique_lock<std::shared_mutex> lock(callback_mutex);
+
     if (gps_handle)
         u_hardware_gps_delete(gps_handle);
 
