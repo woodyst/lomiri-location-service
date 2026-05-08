@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch for Mir socket to activate Location Services Trust Store Daemon
+PartOf=graphical-session.target
+
+[Path]
+PathExists=/run/user/%U/mir_socket_trusted
+Unit=lomiri-location-service-trust-stored.service
+
+[Install]
+WantedBy=graphical-session.target
