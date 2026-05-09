@@ -1,10 +1,14 @@
 [Unit]
 Description=Location Services
+StartLimitIntervalSec=60
+StartLimitBurst=3
 
 [Service]
 Type=dbus
 BusName=com.lomiri.location.Service
 ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/lomiri-location-serviced --bus system --provider gps::Provider --provider remote::Provider
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
