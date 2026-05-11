@@ -1,6 +1,7 @@
 [Unit]
 Description=Location Services Trust Store Daemon
 PartOf=graphical-session.target
+After=lomiri-full-greeter.service lomiri-full-shell.service lomiri-shell.service lomiri-greeter.service lomiri.service
 ConditionPathExists=!/run/user/%U/mir_socket_trusted
 
 [Service]
