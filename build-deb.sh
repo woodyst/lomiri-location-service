@@ -14,8 +14,13 @@ OUTPUT_DIR="${1:-$SCRIPT_DIR/debs}"
 IMAGE_NAME="lomiri-location-service-builder"
 UBPORTS_REPO="http://repo.ubports.com/"
 UBPORTS_DIST="24.04-1.x"
+LOG_FILE="/tmp/build-location-service.log"
 
 mkdir -p "$OUTPUT_DIR"
+
+# Redirigir toda la salida al log con tee
+exec > >(tee -a "$LOG_FILE") 2>&1
+echo "=== Build iniciado: $(date) → log en $LOG_FILE ==="
 
 echo "=== Construyendo imagen Docker de compilación ==="
 docker build -t "$IMAGE_NAME" - <<'DOCKERFILE'
@@ -62,15 +67,16 @@ docker run --rm \
         cp -a /src /build
         cd /build
 
-        # Versión: añadir sufijo navius1 si no está ya
-        if ! head -1 debian/changelog | grep -q 'navius'; then
+        # Versión: añadir sufijo navius2 si no está ya
+        if ! head -1 debian/changelog | grep -q 'navius2'; then
             CURRENT_VER=\$(dpkg-parsechangelog -S Version)
-            dch --newversion \"\${CURRENT_VER}+navius1\" \
+            BASE_VER=\$(echo "\$CURRENT_VER" | sed 's/+navius.*//')
+            dch --newversion "\${BASE_VER}+navius2" \
                 --distribution noble --force-distribution \
-                'navius: mutex fix for Waydroid GPS callback race; GetVisibleSpaceVehicles D-Bus method'
+                'navius2: fix trust-stored startup race via .path unit; GetVisibleSpaceVehicles; Waydroid SIGSEGV fix; EDEADLK fix'
         fi
 
-        dpkg-buildpackage -b -uc -us \
+        nice -n 15 dpkg-buildpackage -b -uc -us \
             --build-profiles=nocheck,nodoc \
             -j\$(nproc)
 
