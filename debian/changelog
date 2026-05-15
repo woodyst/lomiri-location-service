@@ -1,3 +1,18 @@
+lomiri-location-service (3.4.1+navius4) noble; urgency=medium
+
+  * gps: GPS watchdog thread (5 s tick, 10 s stale threshold) detects when
+    Waydroid has called u_hardware_gps_stop() or stolen the HAL callbacks and
+    automatically re-registers callbacks + restarts positioning without any
+    LLS restart.
+  * gps: fast path in start_positioning() now calls dispatch_updated_modes_to_driver()
+    before u_hardware_gps_start() so the chipset computes position fixes (was
+    only tracking satellites without producing a fix due to missing mode setup).
+  * gps: on_location_update() logs flags/lat/lon/accuracy for fix tracing.
+  * gps: last_gps_ms atomic timestamp updated by on_location_update and
+    on_sv_status_update; reset to 0 by stop_positioning(); read by watchdog.
+
+ -- Edi <woodyst@gmail.com>  Fri, 15 May 2026 22:00:00 +0200
+
 lomiri-location-service (3.4.1+navius3) noble; urgency=medium
 
   * gps: start_positioning() fast path avoids spawning a thread when the GPS

@@ -306,6 +306,11 @@ struct HardwareAbstractionLayer : public gps::HardwareAbstractionLayer
         // Prevents spawning a second recovery thread if start_positioning() is
         // called again before the first thread finishes.
         std::atomic<bool> positioning_active{false};
+
+        // Timestamp (steady_clock ms) of the last GPS data received from the chipset.
+        // Updated by on_location_update / on_sv_status_update; reset to 0 by stop_positioning().
+        // The watchdog thread uses this to detect when Waydroid has stolen the GPS HAL.
+        std::atomic<uint64_t> last_gps_ms{0};
     } impl;
 };
 }

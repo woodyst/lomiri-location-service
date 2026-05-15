@@ -33,8 +33,18 @@
 
 #include <boost/property_tree/ini_parser.hpp>
 
+#include <chrono>
 #include <random>
 #include <thread>
+
+namespace
+{
+static uint64_t now_ms() {
+    using namespace std::chrono;
+    return static_cast<uint64_t>(
+        duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count());
+}
+}
 
 namespace gps = com::lomiri::location::providers::gps;
 namespace android = com::lomiri::location::providers::gps::android;
@@ -191,6 +201,10 @@ void android::HardwareAbstractionLayer::on_location_update(UHardwareGpsLocation*
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
     std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
 
+    thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
+    fprintf(stderr, "[lls] on_location_update: flags=0x%x lat=%.5f lon=%.5f acc=%.1f\n",
+            location->flags, location->latitude, location->longitude, location->accuracy);
+
     if (location->flags & U_HARDWARE_GPS_LOCATION_HAS_LAT_LONG)
     {
         location::Position pos
@@ -246,6 +260,8 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
     std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
+
+    thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
 
     std::set<location::SpaceVehicle> svs;
 
@@ -494,6 +510,7 @@ bool android::HardwareAbstractionLayer::start_positioning()
         }
         if (handle) {
             fprintf(stderr, "[lls] start_positioning: handle OK, starting directly\n");
+            impl.dispatch_updated_modes_to_driver();
             u_hardware_gps_start(handle);
             return true;
         }
@@ -526,6 +543,7 @@ bool android::HardwareAbstractionLayer::start_positioning()
 bool android::HardwareAbstractionLayer::stop_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
+    impl.last_gps_ms.store(0, std::memory_order_relaxed);
     return u_hardware_gps_stop(impl.gps_handle);
 }
 
@@ -626,6 +644,43 @@ android::HardwareAbstractionLayer::Impl::Impl(
     gps_params.context = parent;
 
     register_callbacks();
+
+    // Watchdog: if GPS callbacks are stolen (e.g. by Waydroid) the sv_status and
+    // location callbacks stop firing. Detect this and re-register callbacks so GPS
+    // is reclaimed without requiring an LLS restart.
+    std::thread([this]() {
+        while (true) {
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+            uint64_t last = last_gps_ms.load(std::memory_order_relaxed);
+            if (last == 0) continue;  // GPS not yet started or already stopped
+            uint64_t now = now_ms();
+            if (now - last <= 10000) continue;  // still fresh (< 10 s)
+
+            bool handle_valid = false;
+            {
+                std::shared_lock<std::shared_mutex> lock(callback_mutex);
+                handle_valid = (gps_handle != nullptr);
+            }
+            if (!handle_valid) continue;  // already recovering via start_positioning()
+
+            bool expected = false;
+            if (!positioning_active.compare_exchange_strong(expected, true)) continue;
+
+            fprintf(stderr, "[lls] watchdog: GPS stale for %llus – reclaiming callbacks\n",
+                    (unsigned long long)((now - last) / 1000));
+            {
+                std::unique_lock<std::shared_mutex> lock(callback_mutex);
+                gps_handle = nullptr;
+            }
+            register_callbacks();
+            if (gps_handle) {
+                dispatch_updated_modes_to_driver();
+                fprintf(stderr, "[lls] watchdog: restarting GPS\n");
+                u_hardware_gps_start(gps_handle);
+            }
+            positioning_active.store(false);
+        }
+    }).detach();
 }
 
 void android::HardwareAbstractionLayer::Impl::register_callbacks()
