@@ -23,6 +23,7 @@
 #include <core/dbus/types/object_path.h>
 
 #include <sys/apparmor.h>
+#include <cstdio>
 
 #include <algorithm>
 
@@ -176,9 +177,13 @@ clls::Skeleton::Skeleton(const clls::Skeleton::Configuration& configuration)
 
     object->install_method_handler<clls::Interface::GetVisibleSpaceVehicles>([this](const dbus::Message::Ptr& msg)
     {
+        fprintf(stderr, "[lls] GetVisibleSpaceVehicles: handler enter\n");
         auto reply = dbus::Message::make_method_return(msg);
+        fprintf(stderr, "[lls] GetVisibleSpaceVehicles: reading property\n");
         reply->writer() << visible_space_vehicles().get();
+        fprintf(stderr, "[lls] GetVisibleSpaceVehicles: sending reply\n");
         this->configuration.incoming->send(reply);
+        fprintf(stderr, "[lls] GetVisibleSpaceVehicles: done\n");
     });
 }
 
@@ -196,6 +201,7 @@ core::Property<clls::State>& clls::Skeleton::mutable_state()
 void clls::Skeleton::handle_create_session_for_criteria(const dbus::Message::Ptr& in)
 {
     VLOG(1) << __PRETTY_FUNCTION__;
+    fprintf(stderr, "[lls] CreateSessionForCriteria: enter\n");
 
     auto sender = in->sender();
     auto reply = the_empty_reply();

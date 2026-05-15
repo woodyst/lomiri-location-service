@@ -23,6 +23,7 @@
 
 #include <ubuntu/hardware/gps.h>
 
+#include <atomic>
 #include <shared_mutex>
 
 namespace com { namespace lomiri { namespace location { namespace providers { namespace gps
@@ -300,6 +301,11 @@ struct HardwareAbstractionLayer : public gps::HardwareAbstractionLayer
         // overwrites callbacks → re-registration races with a callback in progress).
         // Callbacks take shared ownership; register_callbacks() takes exclusive.
         std::shared_mutex callback_mutex;
+
+        // True while a background register_callbacks() thread is running.
+        // Prevents spawning a second recovery thread if start_positioning() is
+        // called again before the first thread finishes.
+        std::atomic<bool> positioning_active{false};
     } impl;
 };
 }

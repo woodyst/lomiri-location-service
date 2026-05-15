@@ -484,13 +484,40 @@ bool android::HardwareAbstractionLayer::start_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
 
+    // Fast path: handle already valid → just start GPS directly, no re-registration.
+    // This is the common case and is non-blocking.
+    {
+        UHardwareGps handle = nullptr;
+        {
+            std::shared_lock<std::shared_mutex> lock(impl.callback_mutex);
+            handle = impl.gps_handle;
+        }
+        if (handle) {
+            fprintf(stderr, "[lls] start_positioning: handle OK, starting directly\n");
+            u_hardware_gps_start(handle);
+            return true;
+        }
+    }
+
+    // Slow path: handle is null (lost to Waydroid or first start race).
     // Run register_callbacks() + start in a background thread so the D-Bus dispatch
-    // thread is never blocked if the Android GPS HAL is temporarily unresponsive
-    // (e.g. Waydroid conflict). The return value is best-effort.
+    // thread is never blocked. Guard against concurrent recovery threads.
+    bool expected = false;
+    if (!impl.positioning_active.compare_exchange_strong(expected, true)) {
+        fprintf(stderr, "[lls] start_positioning: recovery thread already running, skipping\n");
+        return true;
+    }
+
+    fprintf(stderr, "[lls] start_positioning: handle missing, spawning recovery thread\n");
     std::thread([this]() {
         impl.register_callbacks();
-        if (impl.gps_handle)
+        fprintf(stderr, "[lls] gps-thread: register_callbacks done, gps_handle=%p\n", (void*)impl.gps_handle);
+        if (impl.gps_handle) {
+            fprintf(stderr, "[lls] gps-thread: calling u_hardware_gps_start\n");
             u_hardware_gps_start(impl.gps_handle);
+            fprintf(stderr, "[lls] gps-thread: u_hardware_gps_start done\n");
+        }
+        impl.positioning_active.store(false);
     }).detach();
 
     return true;
@@ -604,6 +631,7 @@ android::HardwareAbstractionLayer::Impl::Impl(
 void android::HardwareAbstractionLayer::Impl::register_callbacks()
 {
     // Phase 1: wait for any in-flight callbacks, then delete the old handle.
+    fprintf(stderr, "[lls] register_callbacks: phase1 – deleting old handle\n");
     {
         std::unique_lock<std::shared_mutex> lock(callback_mutex);
         if (gps_handle)
@@ -615,14 +643,18 @@ void android::HardwareAbstractionLayer::Impl::register_callbacks()
     // u_hardware_gps_new() can invoke callbacks (e.g. on_set_capabilities)
     // synchronously on this thread; holding the write lock here would cause
     // EDEADLK when those callbacks try to acquire the shared lock.
+    fprintf(stderr, "[lls] register_callbacks: phase2 – calling u_hardware_gps_new\n");
     UHardwareGps new_handle = u_hardware_gps_new(std::addressof(gps_params));
+    fprintf(stderr, "[lls] register_callbacks: phase2 done, new_handle=%p\n", (void*)new_handle);
 
     // Phase 3: install the new handle and push configuration.
+    fprintf(stderr, "[lls] register_callbacks: phase3 – installing handle\n");
     {
         std::unique_lock<std::shared_mutex> lock(callback_mutex);
         gps_handle = new_handle;
         dispatch_updated_modes_to_driver();
     }
+    fprintf(stderr, "[lls] register_callbacks: done\n");
 }
 
 bool android::HardwareAbstractionLayer::Impl::dispatch_updated_modes_to_driver()
