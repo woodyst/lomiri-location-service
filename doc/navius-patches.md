@@ -2,7 +2,7 @@
 
 This document describes changes made in the `navius` branch on top of the
 upstream `lomiri-location-service` tree.  All patches are in the `main` branch
-and the resulting binary is versioned `3.4.1+navius1`.
+and the resulting binary is versioned `3.4.1+navius4`.
 
 ---
 
@@ -235,6 +235,73 @@ scp debs/liblomiri-location-service3_*_arm64.deb phablet@<device>:/tmp/
 ssh root@<device> "mount -o remount,rw / && \
     dpkg -i /tmp/liblomiri-location-service3_*_arm64.deb && \
     systemctl restart lomiri-location-service"
+```
+
+---
+
+## 5. GPS watchdog + position mode in fast path (navius4)
+
+**Commits:** `8c74e5d`  
+**Files:** `android_hardware_abstraction_layer.cpp`, `android_hardware_abstraction_layer.h`
+
+### Background
+
+Two problems remained after navius3:
+
+1. **Waydroid calls `u_hardware_gps_stop()` on close.** When the Waydroid
+   container shuts down it calls `u_hardware_gps_stop()` on the shared GPS HAL,
+   stopping GPS globally. LLS's `gps_handle` remains non-null so the navius3
+   fast path never detected the stall. GPS stayed frozen until LLS was manually
+   restarted.
+
+2. **No position fix despite 37+ satellites.** `dispatch_updated_modes_to_driver()`
+   (which sets position mode via `u_hardware_gps_set_position_mode()`) was called
+   in `register_callbacks()` phase 3 but **not** in the navius3 fast path. The
+   chipset tracked satellites but never computed fixes.
+
+### Fix 1 — GPS watchdog thread
+
+A detached watchdog thread is started in the `Impl` constructor:
+
+```cpp
+// 5-second tick; 10-second stale threshold
+std::thread([this]() {
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        uint64_t last = last_gps_ms.load(std::memory_order_relaxed);
+        if (last == 0) continue;                      // GPS not started
+        if (now_ms() - last <= 10000) continue;       // still fresh
+        // ... acquire positioning_active flag, re-register + restart GPS
+    }
+}).detach();
+```
+
+`last_gps_ms` (a new `std::atomic<uint64_t>` field in `Impl`) is updated by
+`on_location_update` and `on_sv_status_update`, and reset to 0 by
+`stop_positioning()`. When more than 10 s pass without any GPS data, the
+watchdog re-runs `register_callbacks()` and restarts the chipset — recovering
+GPS without restarting LLS.
+
+**Verified:** Waydroid and navius now both position simultaneously. After
+Waydroid opens and steals the HAL, the watchdog reclaims callbacks within 10 s
+and GPS accuracy converges back to ~4 m while Waydroid continues positioning.
+
+### Fix 2 — `dispatch_updated_modes_to_driver()` in fast path
+
+```cpp
+if (handle) {
+    impl.dispatch_updated_modes_to_driver();   // ← added
+    u_hardware_gps_start(handle);
+    return true;
+}
+```
+
+### Additional: `on_location_update` trace
+
+Each position fix now logs:
+
+```
+[lls] on_location_update: flags=0x77 lat=37.71388 lon=-2.99852 acc=3.8
 ```
 
 ### UBports-specific build dependencies
