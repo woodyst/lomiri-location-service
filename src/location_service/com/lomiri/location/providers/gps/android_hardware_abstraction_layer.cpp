@@ -34,6 +34,7 @@
 #include <boost/property_tree/ini_parser.hpp>
 
 #include <random>
+#include <thread>
 
 namespace gps = com::lomiri::location::providers::gps;
 namespace android = com::lomiri::location::providers::gps::android;
@@ -483,10 +484,16 @@ bool android::HardwareAbstractionLayer::start_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
 
-    // Re-register callbacks in case they have been overwritten (e.g. by Waydroid)
-    impl.register_callbacks();
+    // Run register_callbacks() + start in a background thread so the D-Bus dispatch
+    // thread is never blocked if the Android GPS HAL is temporarily unresponsive
+    // (e.g. Waydroid conflict). The return value is best-effort.
+    std::thread([this]() {
+        impl.register_callbacks();
+        if (impl.gps_handle)
+            u_hardware_gps_start(impl.gps_handle);
+    }).detach();
 
-    return u_hardware_gps_start(impl.gps_handle);
+    return true;
 }
 
 bool android::HardwareAbstractionLayer::stop_positioning()
