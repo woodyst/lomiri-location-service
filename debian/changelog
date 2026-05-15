@@ -1,3 +1,47 @@
+lomiri-location-service (3.4.1+navius3) noble; urgency=medium
+
+  * gps: start_positioning() fast path avoids spawning a thread when the GPS
+    handle is already valid (normal case), eliminating unnecessary latency and
+    thread contention on every StartPositionUpdates call.
+  * gps: atomic guard (positioning_active) prevents concurrent recovery threads
+    when start_positioning() is called while a previous register_callbacks()
+    thread is still running (e.g. after rapid LLS restarts triggered by the
+    navius lambda-leak bug or Waydroid GPS conflict).
+  * Tested with Waydroid + Waze running simultaneously: LLS remains responsive
+    throughout; no handle loss or D-Bus freeze observed.
+
+ -- Edi <woodyst@gmail.com>  Thu, 15 May 2026 17:00:00 +0200
+
+lomiri-location-service (3.4.1+navius2) noble; urgency=medium
+
+  * gps: start_positioning() and register_callbacks() run in a detached thread
+    so the D-Bus dispatch thread never blocks waiting on binder IPC to the
+    Android GPS HAL (which can stall indefinitely when Waydroid is active).
+  * service: added GetVisibleSpaceVehicles D-Bus method for satellite status
+    polling by navigation clients.
+  * packaging: Restart=always in systemd unit so the daemon recovers
+    automatically from crashes; build log piped through tee for monitoring.
+
+ -- Edi <woodyst@gmail.com>  Wed, 14 May 2026 00:00:00 +0200
+
+lomiri-location-service (3.4.1+navius1) noble; urgency=medium
+
+  * gps: fix SIGSEGV caused by Waydroid (HALIUM_10) overwriting GPS HAL
+    callbacks while LLS is in the middle of a callback dispatch. Introduced
+    std::shared_mutex (callback_mutex): callbacks take shared ownership,
+    register_callbacks() takes exclusive.
+  * gps: fix EDEADLK in register_callbacks() by splitting into three phases:
+    write-lock + delete old handle (phase 1), call u_hardware_gps_new()
+    WITHOUT lock (phase 2, avoids recursive locking via HAL callbacks),
+    write-lock + install new handle (phase 3).
+  * packaging: permanent /usr/sbin/lomiri-location-serviced symlink shipped
+    in the .deb via debian/lomiri-location-service-bin.links so it survives
+    clean installs (lxc-android-config resolves the binary via /usr/sbin/).
+  * service: add .path unit to activate trust-stored when mir_socket_trusted
+    appears.
+
+ -- Edi <woodyst@gmail.com>  Mon, 12 May 2026 00:00:00 +0200
+
 lomiri-location-service (3.4.1) unstable; urgency=medium
 
   * Upstream-provided Debian package for lomiri-location-service. See

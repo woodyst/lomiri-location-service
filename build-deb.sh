@@ -67,13 +67,13 @@ docker run --rm \
         cp -a /src /build
         cd /build
 
-        # Versión: añadir sufijo navius2 si no está ya
-        if ! head -1 debian/changelog | grep -q 'navius2'; then
+        # Versión: añadir sufijo navius3 si no está ya
+        if ! head -1 debian/changelog | grep -q 'navius3'; then
             CURRENT_VER=\$(dpkg-parsechangelog -S Version)
             BASE_VER=\$(echo "\$CURRENT_VER" | sed 's/+navius.*//')
-            dch --newversion "\${BASE_VER}+navius2" \
+            dch --newversion "\${BASE_VER}+navius3" \
                 --distribution noble --force-distribution \
-                'navius2: fix trust-stored startup race via .path unit; GetVisibleSpaceVehicles; Waydroid SIGSEGV fix; EDEADLK fix'
+                'navius3: start_positioning fast path + concurrent recovery guard (atomic flag)'
         fi
 
         nice -n 15 dpkg-buildpackage -b -uc -us \
