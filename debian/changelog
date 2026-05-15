@@ -1,3 +1,10 @@
+lomiri-location-service (3.4.1+navius5) noble; urgency=medium
+
+  * gps: gate all debug traces behind LLS_DEBUG compile-time constant
+    (default false); zero runtime cost when disabled.
+
+ -- Edi <woodyst@gmail.com>  Fri, 15 May 2026 23:00:00 +0200
+
 lomiri-location-service (3.4.1+navius4) noble; urgency=medium
 
   * gps: GPS watchdog thread (5 s tick, 10 s stale threshold) detects when

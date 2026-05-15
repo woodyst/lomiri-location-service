@@ -67,13 +67,13 @@ docker run --rm \
         cp -a /src /build
         cd /build
 
-        # Versión: añadir sufijo navius4 si no está ya
-        if ! head -1 debian/changelog | grep -q 'navius4'; then
+        # Versión: añadir sufijo navius5 si no está ya
+        if ! head -1 debian/changelog | grep -q 'navius5'; then
             CURRENT_VER=\$(dpkg-parsechangelog -S Version)
             BASE_VER=\$(echo "\$CURRENT_VER" | sed 's/+navius.*//')
-            dch --newversion "\${BASE_VER}+navius4" \
+            dch --newversion "\${BASE_VER}+navius5" \
                 --distribution noble --force-distribution \
-                'navius4: GPS watchdog + dispatch_updated_modes in fast path + location trace'
+                'navius5: gate all LLS_DEBUG traces behind compile-time constant'
         fi
 
         nice -n 15 dpkg-buildpackage -b -uc -us \
