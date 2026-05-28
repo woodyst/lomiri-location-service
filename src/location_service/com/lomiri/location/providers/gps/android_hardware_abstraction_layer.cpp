@@ -37,6 +37,8 @@
 #include <random>
 #include <thread>
 
+#include <com/lomiri/location/lls_trace.h>
+
 namespace
 {
 static uint64_t now_ms() {
@@ -44,10 +46,7 @@ static uint64_t now_ms() {
     return static_cast<uint64_t>(
         duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count());
 }
-// Set to true to enable LLS GPS debug traces on stderr.
-static constexpr bool LLS_DEBUG = false;
 }
-#define LLS_TRACE(...) do { if (LLS_DEBUG) fprintf(stderr, __VA_ARGS__); } while(0)
 
 namespace gps = com::lomiri::location::providers::gps;
 namespace android = com::lomiri::location::providers::gps::android;
