@@ -37,6 +37,26 @@
 namespace cll = com::lomiri::location;
 namespace cllss = com::lomiri::location::service::session;
 
+static Instance* instance()
+{
+    static Instance* serviceInstance = nullptr;
+
+    if (!serviceInstance) {
+        serviceInstance = new Instance();
+
+        // Ensure we clean up the instance with valid dbus-cpp state,
+        // otherwise hangs or crashes may occur stopping its worker.
+        QObject::connect(qGuiApp, &QGuiApplication::aboutToQuit,
+                         qGuiApp, []()
+        {
+            delete serviceInstance;
+            serviceInstance = nullptr;
+        });
+    }
+
+    return serviceInstance;
+}
+
 struct core::GeoPositionInfoSource::Private
 {
     // If an application requests an individual position update with a
@@ -63,7 +83,6 @@ struct core::GeoPositionInfoSource::Private
 
     core::GeoPositionInfoSource* parent;
     cllss::Interface::Ptr session;
-    std::shared_ptr<Instance> instance;
     QMutex lastKnownPositionGuard;
     QGeoPositionInfo lastKnownPosition;
     QTimer timer;
@@ -233,7 +252,6 @@ int core::GeoPositionInfoSource::minimumUpdateInterval() const {
 
 void core::GeoPositionInfoSource::stopUpdates()
 {
-
     if (error() != QGeoPositionInfoSource::NoError || !d->session)
     {
         // Don't emit an error from stopUpdates(). Applications usually call
@@ -389,10 +407,8 @@ void core::GeoPositionInfoSource::Private::handleVelocityUpdate(const cll::Updat
 
 void core::GeoPositionInfoSource::Private::createLocationServiceSession()
 {
-    instance = std::make_shared<Instance>();
-
     try {
-        session = instance->getService()->create_session_for_criteria(cll::Criteria{});
+        session = instance()->getService()->create_session_for_criteria(cll::Criteria{});
         error = QGeoPositionInfoSource::NoError;
     } catch(...)
     {
