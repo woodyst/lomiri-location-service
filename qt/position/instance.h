@@ -62,6 +62,11 @@ class Instance
         return service;
     }
 
+    const core::dbus::Bus::Ptr& getBus() const
+    {
+        return bus;
+    }
+
 private:
 
     core::dbus::Bus::Ptr bus;
