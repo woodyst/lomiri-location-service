@@ -34,6 +34,11 @@
 #include <com/lomiri/location/velocity.h>
 #include <com/lomiri/location/update.h>
 
+#include <core/dbus/dbus.h>
+#include <core/dbus/service_watcher.h>
+
+#define LOCATION_SERVICE_MAIN_DBUS_NAME "com.lomiri.location.Service"
+
 namespace cll = com::lomiri::location;
 namespace cllss = com::lomiri::location::service::session;
 
@@ -87,6 +92,7 @@ struct core::GeoPositionInfoSource::Private
     QGeoPositionInfo lastKnownPosition;
     QTimer timer;
     QGeoPositionInfoSource::Error error;
+    core::dbus::ServiceWatcher::Ptr watcher;
 };
 
 core::GeoPositionInfoSource::GeoPositionInfoSource(QObject *parent)
@@ -208,7 +214,8 @@ QGeoPositionInfoSource::PositioningMethods core::GeoPositionInfoSource::supporte
 
 void core::GeoPositionInfoSource::startUpdates()
 {
-    if (d->session == nullptr) {
+    if (d->session == nullptr)
+    {
         d->createLocationServiceSession();
     }
 
@@ -224,18 +231,33 @@ void core::GeoPositionInfoSource::startUpdates()
         return;
     }
 
-    d->session->updates().position_status.set(
-                cllss::Interface::Updates::Status::enabled);
+    // Let's not take any chances, these can throw in case of a service restart and
+    // accessing the now-invalid session's updates(). We have a DBus watcher handling
+    // some cases but this might race, so handle additionally.
+    try
+    {
+        d->session->updates().position_status.set(
+                    cllss::Interface::Updates::Status::enabled);
 
-    d->session->updates().heading_status.set(
-                cllss::Interface::Updates::Status::enabled);
+        d->session->updates().heading_status.set(
+                    cllss::Interface::Updates::Status::enabled);
 
-    d->session->updates().velocity_status.set(
-                cllss::Interface::Updates::Status::enabled);
+        d->session->updates().velocity_status.set(
+                    cllss::Interface::Updates::Status::enabled);
 
-
-    if (m_state != State::one_shot)
-        m_state = State::running;
+        if (m_state != State::one_shot)
+            m_state = State::running;
+    }
+    catch (...)
+    {
+        d->error = QGeoPositionInfoSource::ClosedError;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        Q_EMIT(QGeoPositionInfoSource::errorOccurred(d->error));
+#else
+        Q_EMIT(QGeoPositionInfoSource::error(d->error));
+#endif
+        m_state = State::stopped;
+    }
 }
 
 
@@ -260,14 +282,17 @@ void core::GeoPositionInfoSource::stopUpdates()
         return;
     }
 
-    d->session->updates().position_status.set(
-                cllss::Interface::Updates::Status::disabled);
+    try
+    {
+        d->session->updates().position_status.set(
+                    cllss::Interface::Updates::Status::disabled);
 
-    d->session->updates().heading_status.set(
-                cllss::Interface::Updates::Status::disabled);
+        d->session->updates().heading_status.set(
+                    cllss::Interface::Updates::Status::disabled);
 
-    d->session->updates().velocity_status.set(
-                cllss::Interface::Updates::Status::disabled);
+        d->session->updates().velocity_status.set(
+                    cllss::Interface::Updates::Status::disabled);
+    } catch (...) {}
 
     m_state = State::stopped;
 }
@@ -449,12 +474,42 @@ void core::GeoPositionInfoSource::Private::createLocationServiceSession()
                 // We silently ignore the issue and keep going.
             }
         });
+
+    // Invalidate the session if we detect the location service being restarted.
+    try
+    {
+        core::dbus::DBus daemon{instance()->getBus()};
+        watcher = daemon.make_service_watcher(LOCATION_SERVICE_MAIN_DBUS_NAME,
+                                              core::dbus::DBus::WatchMode::owner_change);
+        watcher->owner_changed().connect([this](const std::string& old_owner,
+                                                const std::string& new_owner)
+        {
+            if (old_owner.empty() || !new_owner.empty())
+                return;
+
+            if (session)
+            {
+                qWarning() << "Connection to location service lost, ending session.";
+                destroyLocationServiceSession();
+                error = QGeoPositionInfoSource::ClosedError;
+                parent->m_state = State::stopped;
+            }
+        });
+    }
+    catch (const std::exception& e)
+    {
+        qWarning() << "Error occured while setting up location service watch." <<
+                      "Continuing without it. Error:" << e.what();
+    }
 }
 
 void core::GeoPositionInfoSource::Private::destroyLocationServiceSession()
 {
     if (session)
         session = nullptr;
+
+    if (watcher)
+        watcher = nullptr;
 }
 
 // Creates a new instance and attempts to connect to the background service.
