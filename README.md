@@ -13,7 +13,7 @@ for reliable positioning with Navius, particularly on devices that run
 
 ## Patches
 
-### navius1 — Waydroid GPS callback race condition (SIGSEGV fix)
+### navius1 — Waydroid GPS callback race condition (SIGSEGV fix) + packaging
 
 On devices running Waydroid in HALIUM\_10 mode, two Android containers coexist:
 the Halium layer that owns the real GNSS HAL and the Waydroid container, which
@@ -27,9 +27,25 @@ handle → **SIGSEGV**.
 **Fix:** a `std::shared_mutex callback_mutex` protects all seven GPS callbacks
 (shared lock, concurrent-safe) against `register_callbacks()` (exclusive lock).
 
+**Packaging — `/usr/sbin` symlink:** `lxc-android-config` resolves
+`lomiri-location-serviced` without a full path and `/usr/sbin/` takes
+precedence over `/usr/bin/` in the systemd `PATH`. A
+`debian/lomiri-location-service-bin.links` file installs a permanent
+`/usr/sbin/lomiri-location-serviced → /usr/bin/lomiri-location-serviced`
+symlink so the package works on a fresh device.
+
+**Packaging — trust-stored `.path` unit:** the previous
+`ConditionPathExists=` guard in the trust-stored service was evaluated once at
+session start, before Mir had created `mir_socket_trusted`. On a slow or
+busy boot the socket didn't exist yet → trust-stored was silently skipped →
+all location permission checks returned "rejected". Replaced with a
+`lomiri-location-service-trust-stored.path` systemd unit that activates
+trust-stored the moment the socket appears, regardless of Mir's startup
+timing.
+
 ---
 
-### navius2 — EDEADLK fix in `register_callbacks()`
+### navius2 — EDEADLK fix + non-blocking `start_positioning()` + `GetVisibleSpaceVehicles`
 
 The initial mutex fix held an exclusive lock across the entire
 `delete + new` sequence. `u_hardware_gps_new()` can invoke callbacks
@@ -41,6 +57,11 @@ so the re-entrant shared lock triggered `EDEADLK` at service start.
 1. `unique_lock` → delete old handle → release
 2. `u_hardware_gps_new()` **without** lock (re-entrant callbacks are fine here)
 3. `unique_lock` → install new handle → dispatch position mode → release
+
+**Non-blocking `start_positioning()`:** `u_hardware_gps_new()` and
+`u_hardware_gps_start()` now run in a detached thread so the D-Bus dispatch
+thread is never blocked if the Android GPS HAL stalls (common when Waydroid
+is active or the hardware is busy).
 
 ---
 
@@ -65,15 +86,20 @@ dbus-send --system --dest=com.lomiri.location.Service \
 
 ---
 
-### navius3 — Non-blocking `start_positioning()` via `Qt::QueuedConnection`
+### navius3 — `start_positioning()` fast path + concurrent recovery guard
 
-`startUpdates()` must be called on the main Qt thread that owns the D-Bus event
-loop. If called from a background thread the internal `QEventLoop` blocks
-forever and no GPS fixes ever arrive.
+Two improvements to the non-blocking start introduced in navius2:
 
-**Fix:** `startUpdates()` is dispatched via `QMetaObject::invokeMethod` with
-`Qt::QueuedConnection`, guaranteeing it runs on the correct thread regardless
-of the caller.
+**Fast path:** if `gps_handle` is already valid (the common case after
+startup), `u_hardware_gps_start()` is called directly without spawning any
+thread and without re-registering callbacks. This eliminates unnecessary
+latency and thread churn on every `StartPositionUpdates` D-Bus call.
+
+**Atomic recovery guard:** `std::atomic<bool> positioning_active` prevents
+two concurrent recovery threads from running `register_callbacks()`
+simultaneously. Without this guard, rapid successive `StartPositionUpdates`
+calls while a recovery was in flight caused LLS to become unresponsive to
+D-Bus.
 
 ---
 
