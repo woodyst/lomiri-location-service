@@ -33,7 +33,19 @@
 
 #include <boost/property_tree/ini_parser.hpp>
 
+#include <chrono>
 #include <random>
+#include <thread>
+
+
+namespace
+{
+static uint64_t now_ms() {
+    using namespace std::chrono;
+    return static_cast<uint64_t>(
+        duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count());
+}
+}
 
 namespace gps = com::lomiri::location::providers::gps;
 namespace android = com::lomiri::location::providers::gps::android;
@@ -145,6 +157,7 @@ void android::HardwareAbstractionLayer::on_xtra_download_request(void* context)
             << "context=" << context;
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
 
     try
     {
@@ -187,6 +200,9 @@ void android::HardwareAbstractionLayer::on_location_update(UHardwareGpsLocation*
     VLOG(1) << __PRETTY_FUNCTION__;
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
+
+    thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
 
     if (location->flags & U_HARDWARE_GPS_LOCATION_HAS_LAT_LONG)
     {
@@ -229,6 +245,7 @@ void android::HardwareAbstractionLayer::on_status_update(uint16_t status, void* 
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": status=" << status << ", context=" << context;
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
     thiz->chipset_status() = static_cast<gps::ChipsetStatus>(status);
 }
 
@@ -241,6 +258,9 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
              << "u: " << sv_info->used_in_fix_mask << " ";
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
+
+    thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
 
     std::set<location::SpaceVehicle> svs;
 
@@ -276,6 +296,7 @@ void android::HardwareAbstractionLayer::on_set_capabilities(uint32_t capabilitie
     VLOG(1) << __PRETTY_FUNCTION__;
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
     thiz->capabilities() = capabilities;
 }
 
@@ -290,6 +311,7 @@ void android::HardwareAbstractionLayer::on_agps_status_update(UHardwareGpsAGpsSt
     }
 
     auto thiz = static_cast<android::HardwareAbstractionLayer*>(context);
+    std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
     thiz->impl.supl_assistant.status() = static_cast<gps::HardwareAbstractionLayer::SuplAssistant::Status>(status->status);
     thiz->impl.supl_assistant.server_ip() = gps::HardwareAbstractionLayer::SuplAssistant::IpV4Address{status->ipaddr};
 
@@ -327,7 +349,10 @@ void android::HardwareAbstractionLayer::on_request_utc_time(void* context)
     try
     {
         if (auto thiz = static_cast<android::HardwareAbstractionLayer*>(context))
+        {
+            std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
             thiz->inject_reference_time(thiz->impl.reference_time_source->sample());
+        }
     }
     catch (const std::runtime_error& e)
     {
@@ -474,16 +499,54 @@ bool android::HardwareAbstractionLayer::start_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
 
-    // Re-register callbacks in case they have been overwritten (e.g. by Waydroid)
-    impl.register_callbacks();
+    // Fast path: try to acquire the shared lock without blocking.
+    // If register_callbacks() holds the write lock (watchdog or recovery thread), skip:
+    // that thread will call u_hardware_gps_start() when it finishes.
+    {
+        std::shared_lock<std::shared_mutex> lock(impl.callback_mutex, std::try_to_lock);
+        if (!lock.owns_lock()) {
+            VLOG(1) << __PRETTY_FUNCTION__ << ": reclaim in progress, GPS will start when done";
+            return true;
+        }
+        if (impl.gps_handle) {
+            UHardwareGps h = impl.gps_handle;
+            impl.dispatch_updated_modes_to_driver();
+            lock.unlock();
+            u_hardware_gps_start(h);
+            return true;
+        }
+    }
 
-    return u_hardware_gps_start(impl.gps_handle);
+    // Slow path: handle is null (lost to Waydroid or first start race).
+    // Run register_callbacks() + start in a background thread so the D-Bus dispatch
+    // thread is never blocked. Guard against concurrent recovery threads.
+    bool expected = false;
+    if (!impl.positioning_active.compare_exchange_strong(expected, true)) {
+        VLOG(1) << __PRETTY_FUNCTION__ << ": recovery thread already running, skipping";
+        return true;
+    }
+
+    VLOG(1) << __PRETTY_FUNCTION__ << ": handle missing, spawning recovery thread";
+    std::thread([this]() {
+        impl.register_callbacks();
+        VLOG(1) << "gps-thread: register_callbacks done, gps_handle=" << impl.gps_handle;
+        if (impl.gps_handle) {
+            u_hardware_gps_start(impl.gps_handle);
+        }
+        impl.positioning_active.store(false);
+    }).detach();
+
+    return true;
 }
 
 bool android::HardwareAbstractionLayer::stop_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
-    return u_hardware_gps_stop(impl.gps_handle);
+    impl.last_gps_ms.store(0, std::memory_order_relaxed);
+    std::shared_lock<std::shared_mutex> lock(impl.callback_mutex, std::try_to_lock);
+    if (lock.owns_lock() && impl.gps_handle)
+        return u_hardware_gps_stop(impl.gps_handle);
+    return true;
 }
 
 bool android::HardwareAbstractionLayer::set_assistance_mode(gps::AssistanceMode mode)
@@ -583,16 +646,75 @@ android::HardwareAbstractionLayer::Impl::Impl(
     gps_params.context = parent;
 
     register_callbacks();
+
+    // Watchdog: if GPS callbacks are stolen (e.g. by Waydroid) the sv_status and
+    // location callbacks stop firing. Detect this and re-register callbacks so GPS
+    // is reclaimed without requiring an LLS restart.
+    std::thread([this]() {
+        while (true) {
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+            uint64_t last = last_gps_ms.load(std::memory_order_relaxed);
+            if (last == 0) continue;  // GPS not yet started or already stopped
+            uint64_t now = now_ms();
+            if (now - last <= 10000) continue;  // still fresh (< 10 s)
+
+            bool handle_valid = false;
+            {
+                std::shared_lock<std::shared_mutex> lock(callback_mutex);
+                handle_valid = (gps_handle != nullptr);
+            }
+            if (!handle_valid) continue;  // already recovering via start_positioning()
+
+            bool expected = false;
+            if (!positioning_active.compare_exchange_strong(expected, true)) continue;
+
+            VLOG(1) << "gps watchdog: GPS stale for " << (now - last) / 1000 << "s, reclaiming callbacks";
+            {
+                std::unique_lock<std::shared_mutex> lock(callback_mutex);
+                gps_handle = nullptr;
+            }
+            register_callbacks();
+            if (gps_handle) {
+                dispatch_updated_modes_to_driver();
+                VLOG(1) << "gps watchdog: restarting GPS";
+                u_hardware_gps_start(gps_handle);
+            }
+            positioning_active.store(false);
+        }
+    }).detach();
 }
 
 void android::HardwareAbstractionLayer::Impl::register_callbacks()
 {
+    // Phase 1: wait for any in-flight callbacks, then delete the old handle.
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase 1 – deleting old handle";
+    {
+        std::unique_lock<std::shared_mutex> lock(callback_mutex);
+        if (gps_handle)
+            u_hardware_gps_delete(gps_handle);
+        gps_handle = nullptr;
+    }
+
+    // Phase 2: create the new handle WITHOUT the lock.
+    // u_hardware_gps_new() can invoke callbacks (e.g. on_set_capabilities)
+    // synchronously on this thread; holding the write lock here would cause
+    // EDEADLK when those callbacks try to acquire the shared lock.
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase 2 – calling u_hardware_gps_new";
+    UHardwareGps new_handle = u_hardware_gps_new(std::addressof(gps_params));
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase 2 done, new_handle=" << new_handle;
+
+    // Phase 3: install the new handle under the write lock.
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase 3 – installing handle";
+    {
+        std::unique_lock<std::shared_mutex> lock(callback_mutex);
+        gps_handle = new_handle;
+    }
+    // Phase 4: push configuration WITHOUT the lock.
+    // u_hardware_gps_set_position_mode() may invoke callbacks (e.g. on_set_capabilities)
+    // synchronously; calling it under the write lock would deadlock those callbacks.
     if (gps_handle)
-        u_hardware_gps_delete(gps_handle);
-
-    gps_handle = u_hardware_gps_new(std::addressof(gps_params));
-
-    dispatch_updated_modes_to_driver();
+        dispatch_updated_modes_to_driver();
+    VLOG(1) << __PRETTY_FUNCTION__ << ": done";
 }
 
 bool android::HardwareAbstractionLayer::Impl::dispatch_updated_modes_to_driver()

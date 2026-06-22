@@ -23,6 +23,9 @@
 
 #include <ubuntu/hardware/gps.h>
 
+#include <atomic>
+#include <shared_mutex>
+
 namespace com { namespace lomiri { namespace location { namespace providers { namespace gps
 {
 namespace android
@@ -293,6 +296,21 @@ struct HardwareAbstractionLayer : public gps::HardwareAbstractionLayer
         GpsXtraDownloader::Configuration gps_xtra_configuration;
         // GPS xtra downloader implementation.
         std::shared_ptr<GpsXtraDownloader> gps_xtra_downloader;
+
+        // Guards register_callbacks() against in-flight HAL callbacks (e.g. Waydroid
+        // overwrites callbacks → re-registration races with a callback in progress).
+        // Callbacks take shared ownership; register_callbacks() takes exclusive.
+        std::shared_mutex callback_mutex;
+
+        // True while a background register_callbacks() thread is running.
+        // Prevents spawning a second recovery thread if start_positioning() is
+        // called again before the first thread finishes.
+        std::atomic<bool> positioning_active{false};
+
+        // Timestamp (steady_clock ms) of the last GPS data received from the chipset.
+        // Updated by on_location_update / on_sv_status_update; reset to 0 by stop_positioning().
+        // The watchdog thread uses this to detect when Waydroid has stolen the GPS HAL.
+        std::atomic<uint64_t> last_gps_ms{0};
     } impl;
 };
 }
