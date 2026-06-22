@@ -12,12 +12,14 @@ No todos los cambios son adecuados para upstream:
 
 | Cambio | ¿Proponer? | Motivo |
 |---|---|---|
-| Fix mutex/EDEADLK en `register_callbacks()` | **Sí** — prioritario | Bug real con crash confirmado, afecta a cualquier dispositivo con Waydroid en HALIUM_10 |
+| Fix `is_any_active` (`engine.cpp`, navius6) | **Sí** — trivial | Bug de una línea, afecta a cualquier instalación con ≥2 providers; rama lista: `fix/engine-is-any-active` |
+| Fix mutex/EDEADLK + watchdog + non-blocking (navius1-4+6) | **Sí** — prioritario | Bug real con crash/hang confirmado en hardware; rama lista: `fix/gps-hal-nonblocking-dbus` |
 | `GetVisibleSpaceVehicles` D-Bus method | **Sí** — con discusión | Feature nueva de API pública; requiere revisión del equipo |
-| `build-deb.sh` | No | Herramienta personal de build, no pertenece al árbol upstream |
+| `build-deb.sh`, `doc/`, `lls_trace.h` | No | Herramientas y doc internas del fork, no pertenecen al árbol upstream |
 
-Abre **dos MRs separados**: facilita la revisión y permite que uno se acepte
-independientemente del otro.
+Abre **MRs separados** para cada cambio: facilita la revisión y permite que
+uno se acepte independientemente del otro. Empieza por el fix del engine
+(una línea, sin dependencias) y después el fix del HAL (más complejo).
 
 ---
 
@@ -160,15 +162,22 @@ prefieren que el MR siga algún formato concreto.
 
 ---
 
-## Referencia rápida de commits navius
+## Ramas listas para MR
+
+Estas ramas están en `origin` (GitHub) y deben pushearse al fork GitLab:
+
+| Rama | Commit | Contenido |
+|---|---|---|
+| `fix/engine-is-any-active` | `b67ccfb` | engine.cpp: `is_any_active \|=` — una línea, sin dependencias |
+| `fix/gps-hal-nonblocking-dbus` | `2b3319f` | HAL completo: mutex + EDEADLK + watchdog + try_to_lock + null guard |
+
+Ambas ramas arrancan desde `upstream/main` (commit `6da9cf0`).
+
+## Referencia rápida de commits navius (main)
 
 | Commit | Contenido |
 |---|---|
-| `bc3b7bd` | mutex fix + EDEADLK (primera versión — EDEADLK al arrancar) + GetVisibleSpaceVehicles |
-| `6f270d3` | build-deb.sh (no proponer) |
-| `4369d8b` | fix definitivo EDEADLK (split 3 fases) + deps build-deb.sh |
-| `4b83610` | doc/navius-patches.md (documentación interna, no proponer) |
-
-Para el MR del bug fix, el commit limpio a proponer es la lógica de
-`4369d8b` aplicada sobre el upstream original (sin los cambios de
-`build-deb.sh` ni `navius-patches.md`).
+| `bc3b7bd` | mutex fix + EDEADLK (primera versión) + GetVisibleSpaceVehicles |
+| `4369d8b` | fix definitivo EDEADLK (split 3 fases) |
+| `8c74e5d` | navius4: watchdog + mode dispatch en fast path |
+| `8a78b42` | navius6: engine `\|=` + start_positioning try_to_lock + register_callbacks phase split + stop null guard |
