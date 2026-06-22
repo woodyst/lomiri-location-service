@@ -168,7 +168,7 @@ Estas ramas están en `origin` (GitHub) y deben pushearse al fork GitLab:
 
 | Rama | Commit | Contenido |
 |---|---|---|
-| `fix/engine-is-any-active` | `b67ccfb` | engine.cpp: `is_any_active \|=` — una línea, sin dependencias |
+| `fix/engine-is-any-active` | `b67ccfb` | engine.cpp: `is_any_active \|=` — una línea, sin dependencias — **MR !57** |
 | `fix/gps-hal-nonblocking-dbus` | `2b3319f` | HAL completo: mutex + EDEADLK + watchdog + try_to_lock + null guard |
 
 Ambas ramas arrancan desde `upstream/main` (commit `6da9cf0`).
