@@ -114,6 +114,44 @@ production builds.
 
 ---
 
+### navius6 — Location indicator fix + non-blocking `start_positioning()`
+
+Two independent bugs fixed:
+
+**1. Location indicator never appeared** (`engine.cpp`)
+
+The loop in `Engine::add_provider()` that checks whether any provider is
+active used `=` instead of `|=`. With two providers registered
+(`gps::Provider` and `remote::Provider`), only the last in the iteration
+determined the result — if `remote::Provider` (which stays in `enabled`
+state when unused) was iterated last, `is_any_active` became `false` even
+while GPS was active. `Engine::Status` never reached `active`, so the
+D-Bus `State` property stayed `"enabled"` and the notification-bar location
+indicator never appeared.
+
+**Fix:** `is_any_active |= ...` so the flag is set as soon as any provider
+is active, regardless of map iteration order.
+
+**2. D-Bus thread hang** (`android_hardware_abstraction_layer.cpp`)
+
+`start_positioning()` fast path acquired a **blocking** `shared_lock` on
+`callback_mutex`. If the watchdog (or a recovery thread) held the write
+lock — which can happen for several seconds while `u_hardware_gps_delete()`
+stalls inside the HAL — the D-Bus dispatch thread blocked indefinitely,
+making the service appear frozen.
+
+**Fix:** use `std::try_to_lock`; if the write lock is held, return
+immediately. The thread that owns the write lock calls `u_hardware_gps_start()`
+when it finishes.
+
+**Additionally:** `register_callbacks()` phase 3 now releases the write lock
+before calling `dispatch_updated_modes_to_driver()`, eliminating a potential
+deadlock if `u_hardware_gps_set_position_mode()` triggers `on_set_capabilities`
+synchronously. `stop_positioning()` gained a null-handle guard for safety during
+watchdog recovery.
+
+---
+
 ## Building
 
 The included `build-deb.sh` builds a deployable `.deb` inside an isolated
@@ -175,6 +213,7 @@ ssh phablet@<device> "journalctl -f -u lomiri-location-service"
 The canonical repository is maintained by UBports:
 https://gitlab.com/ubports/development/core/lomiri-location-service
 
-The bug fixes in navius1–2 (mutex/EDEADLK) and the `GetVisibleSpaceVehicles`
+The bug fixes in navius1–2 (mutex/EDEADLK), navius6 (engine `|=` fix,
+non-blocking `start_positioning()`), and the `GetVisibleSpaceVehicles`
 D-Bus method are candidates for upstream contribution. See
 [`doc/contributing-upstream.md`](doc/contributing-upstream.md) for details.
