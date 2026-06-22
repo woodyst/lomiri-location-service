@@ -2,7 +2,7 @@
 
 This document describes changes made in the `navius` branch on top of the
 upstream `lomiri-location-service` tree.  All patches are in the `main` branch
-and the resulting binary is versioned `3.4.1+navius4`.
+and the resulting binary is versioned `3.4.1+navius6`.
 
 ---
 
@@ -318,3 +318,96 @@ present in the Docker image:
 | `libubuntu-platform-hardware-api-dev` | Android HAL bridge (libhybris) |
 | `qt6-declarative-private-dev` | Qt6 QML private headers |
 | `qt6-location-dev` / `qt6-positioning-dev` | Qt6 location stack |
+
+---
+
+## 6. Location indicator fix + non-blocking `start_positioning()` (navius6)
+
+**Commits:** `8a78b42`, `bd0ccef`  
+**Files:** `engine.cpp`, `android_hardware_abstraction_layer.cpp`, `build-deb.sh`
+
+### Bug 1 — Location indicator never appears (`engine.cpp`)
+
+**Symptom:** The location indicator in the UBports notification bar never
+appeared while Navius was using GPS.
+
+**Root cause:** In `Engine::add_provider()`, the callback that checks whether
+any provider is active contained a logic error:
+
+```cpp
+// Before (broken): only the LAST provider in the map determines is_any_active
+for (const auto& pair : providers)
+    is_any_active = pair.first->state() == StateTrackingProvider::State::active;
+```
+
+With two providers (`gps::Provider` and `remote::Provider`), iteration order
+over the `std::map` is deterministic but the wrong result occurs whenever
+`remote::Provider` (which stays in `enabled` state when not used) is last:
+`is_any_active` becomes `false` even though `gps::Provider` is `active` →
+`Engine::Status` never reaches `active` → the D-Bus `State` property stays
+`"enabled"` → the indicator is never shown.
+
+**Fix:**
+
+```cpp
+// After: accumulate with OR so any active provider wins
+for (const auto& pair : providers)
+    is_any_active |= (pair.first->state() == StateTrackingProvider::State::active);
+```
+
+### Bug 2 — LLS hangs intermittently (`android_hardware_abstraction_layer.cpp`)
+
+**Symptom:** `lomiri-location-serviced` appeared frozen — Navius could not
+get GPS updates, and the D-Bus session became unresponsive for tens of
+seconds.
+
+**Root cause:** `start_positioning()` fast path acquired a **blocking**
+`shared_lock` on `callback_mutex`:
+
+```cpp
+// Before (broken): blocks the D-Bus thread if watchdog holds write lock
+std::shared_lock<std::shared_mutex> lock(impl.callback_mutex);  // ← blocks
+handle = impl.gps_handle;
+```
+
+The watchdog thread holds the **write** lock (exclusive) during
+`register_callbacks()` phase 1 while calling `u_hardware_gps_delete()`.
+That HAL call can itself stall for several seconds on some devices.
+Any D-Bus method that reached `start_positioning()` during this window
+blocked the entire D-Bus dispatch thread until the watchdog released
+the lock.
+
+**Fix:** use `std::try_to_lock` so the D-Bus thread is never blocked:
+
+```cpp
+// After: non-blocking; if watchdog holds the lock, return immediately
+std::shared_lock<std::shared_mutex> lock(impl.callback_mutex, std::try_to_lock);
+if (!lock.owns_lock()) {
+    // Watchdog is reclaiming GPS; it will call u_hardware_gps_start() when done.
+    return true;
+}
+```
+
+**Additional fix — `register_callbacks()` phase 3:**
+
+`dispatch_updated_modes_to_driver()` (which calls
+`u_hardware_gps_set_position_mode()`) was previously called while holding the
+write lock in phase 3.  Some HAL implementations invoke `on_set_capabilities`
+**synchronously** from within `u_hardware_gps_set_position_mode()`; that
+callback tries to acquire a `shared_lock` on the same mutex → deadlock.
+
+```cpp
+// After: install handle under lock, then configure without it
+{
+    std::unique_lock<std::shared_mutex> lock(callback_mutex);
+    gps_handle = new_handle;
+}
+if (gps_handle)
+    dispatch_updated_modes_to_driver();  // no lock held — callbacks can run
+```
+
+**Additional fix — `stop_positioning()` null handle guard:**
+
+`u_hardware_gps_stop()` was called unconditionally even when `gps_handle`
+was `nullptr` (possible during watchdog recovery). Fixed with a
+`try_to_lock` guard consistent with `start_positioning()`.
