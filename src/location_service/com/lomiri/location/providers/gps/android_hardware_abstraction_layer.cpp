@@ -502,18 +502,21 @@ bool android::HardwareAbstractionLayer::start_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
 
-    // Fast path: handle already valid → just start GPS directly, no re-registration.
-    // This is the common case and is non-blocking.
+    // Fast path: try to acquire the shared lock without blocking.
+    // If register_callbacks() holds the write lock (watchdog or recovery thread), skip:
+    // that thread will call u_hardware_gps_start() when it finishes.
     {
-        UHardwareGps handle = nullptr;
-        {
-            std::shared_lock<std::shared_mutex> lock(impl.callback_mutex);
-            handle = impl.gps_handle;
+        std::shared_lock<std::shared_mutex> lock(impl.callback_mutex, std::try_to_lock);
+        if (!lock.owns_lock()) {
+            LLS_TRACE("[lls] start_positioning: reclaim in progress, GPS starts when done\n");
+            return true;
         }
-        if (handle) {
-            LLS_TRACE("[lls] start_positioning: handle OK, starting directly\n");
+        if (impl.gps_handle) {
+            UHardwareGps h = impl.gps_handle;
             impl.dispatch_updated_modes_to_driver();
-            u_hardware_gps_start(handle);
+            lock.unlock();
+            LLS_TRACE("[lls] start_positioning: handle OK, starting directly\n");
+            u_hardware_gps_start(h);
             return true;
         }
     }
@@ -546,7 +549,10 @@ bool android::HardwareAbstractionLayer::stop_positioning()
 {
     VLOG(1) << __PRETTY_FUNCTION__ << ": " << this << ", " << impl.gps_handle;
     impl.last_gps_ms.store(0, std::memory_order_relaxed);
-    return u_hardware_gps_stop(impl.gps_handle);
+    std::shared_lock<std::shared_mutex> lock(impl.callback_mutex, std::try_to_lock);
+    if (lock.owns_lock() && impl.gps_handle)
+        return u_hardware_gps_stop(impl.gps_handle);
+    return true;
 }
 
 bool android::HardwareAbstractionLayer::set_assistance_mode(gps::AssistanceMode mode)
@@ -704,13 +710,17 @@ void android::HardwareAbstractionLayer::Impl::register_callbacks()
     UHardwareGps new_handle = u_hardware_gps_new(std::addressof(gps_params));
     LLS_TRACE("[lls] register_callbacks: phase2 done, new_handle=%p\n", (void*)new_handle);
 
-    // Phase 3: install the new handle and push configuration.
+    // Phase 3: install the new handle under the write lock.
     LLS_TRACE("[lls] register_callbacks: phase3 – installing handle\n");
     {
         std::unique_lock<std::shared_mutex> lock(callback_mutex);
         gps_handle = new_handle;
-        dispatch_updated_modes_to_driver();
     }
+    // Phase 4: push configuration WITHOUT the lock.
+    // u_hardware_gps_set_position_mode() may invoke callbacks (e.g. on_set_capabilities)
+    // synchronously; calling it under the write lock would deadlock those callbacks.
+    if (gps_handle)
+        dispatch_updated_modes_to_driver();
     LLS_TRACE("[lls] register_callbacks: done\n");
 }
 

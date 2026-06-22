@@ -1,3 +1,19 @@
+lomiri-location-service (3.4.1+navius6) noble; urgency=medium
+
+  * engine: fix is_any_active loop using |= instead of = so the engine
+    reaches State::active (and the location indicator shows) when any provider
+    is active, regardless of iteration order.
+  * gps: start_positioning() fast path uses try_to_lock instead of a blocking
+    shared_lock; if the watchdog holds the write lock during GPS reclaim the
+    D-Bus thread no longer hangs – it returns immediately and the watchdog
+    calls u_hardware_gps_start() when the reclaim finishes.
+  * gps: register_callbacks() phase 3 releases the write lock before calling
+    dispatch_updated_modes_to_driver() to avoid a potential deadlock if
+    u_hardware_gps_set_position_mode() calls on_set_capabilities() synchronously.
+  * gps: stop_positioning() guards against null handle during watchdog recovery.
+
+ -- Edi <woodyst@gmail.com>  Sun, 22 Jun 2026 13:00:00 +0200
+
 lomiri-location-service (3.4.1+navius5) noble; urgency=medium
 
   * gps: gate all debug traces behind LLS_DEBUG compile-time constant

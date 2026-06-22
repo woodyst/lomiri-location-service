@@ -211,7 +211,7 @@ void cll::Engine::add_provider(const cll::Provider::Ptr& impl)
 
         std::lock_guard<std::recursive_mutex> lg(guard);
         for (const auto& pair : providers)
-            is_any_active = pair.first->state() == StateTrackingProvider::State::active;
+            is_any_active |= (pair.first->state() == StateTrackingProvider::State::active);
 
         configuration.engine_state = is_any_active ? Engine::Status::active : Engine::Status::on;
     });
