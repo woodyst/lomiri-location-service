@@ -1,3 +1,17 @@
+lomiri-location-service (3.4.1+navius7) noble; urgency=medium
+
+  * service: fix trust-stored crash loop at session startup caused by
+    lomiri-location-service-trust-stored.service (MirAgent) and
+    lomiri-location-service-trust-stored-wayland.service (WaylandAgent)
+    both starting simultaneously and racing to register the same D-Bus name.
+    Adds ConditionPathExists=/run/user/%U/mir_socket_trusted and
+    Conflicts/After=wayland variant to MirAgent, and reciprocal Conflicts
+    to WaylandAgent, making them mutually exclusive.
+    This fixes "Client lacks permissions" GPS failures caused by trust-stored
+    being unstable after the crash loop.
+
+ -- Edi <woodyst@gmail.com>  Sun, 29 Jun 2026 20:00:00 +0200
+
 lomiri-location-service (3.4.1+navius6) noble; urgency=medium
 
   * engine: fix is_any_active loop using |= instead of = so the engine
