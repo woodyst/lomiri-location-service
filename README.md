@@ -9,13 +9,24 @@ hardware on Ubuntu Touch devices. This fork adds bug fixes and features needed
 for reliable positioning with Navius, particularly on devices that run
 [Waydroid](https://waydroid.io) alongside the host system.
 
+## Note about AI/LLM
+
+As you'll see in the git logs, some code is AI generated and some AI assisted. I
+use Claude models for this task (Sonnet, Opus and Fable). Of course all code is
+reviewed, tested and, in some cases, modified by me.
+
+The policy of Lomiri/UT development is "not AI-generated code in Lomiri / UT" as
+several developers have let me know. So if you subscribe to that policy, DO NOT USE
+THIS CODE. I am not going to change my way of programming because other people
+consider it wrong when I don't agree.
+
 ---
 
 ## Patches
 
 ### navius1 — Waydroid GPS callback race condition (SIGSEGV fix) + packaging
 
-On devices running Waydroid in HALIUM\_10 mode, two Android containers coexist:
+On devices running Waydroid in HALIUM_10 mode, two Android containers coexist:
 the Halium layer that owns the real GNSS HAL and the Waydroid container, which
 registers its own GPS callbacks through `host_hwbinder`.
 
@@ -72,6 +83,7 @@ via the `lomiri-location` Qt plugin) need a way to poll the current set of
 visible GNSS satellites.
 
 **Added:**
+
 - `Interface::GetVisibleSpaceVehicles` — synchronous D-Bus method that returns
   the current satellite map.
 - `Interface::VisibleSpaceVehicles` — read-only D-Bus property kept up to date
