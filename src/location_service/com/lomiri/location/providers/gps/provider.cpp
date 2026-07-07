@@ -18,8 +18,6 @@
 
 #include "provider.h"
 
-#include <com/lomiri/location/lls_trace.h>
-
 #include "hardware_abstraction_layer.h"
 
 #include <com/lomiri/location/logging.h>
@@ -64,9 +62,9 @@ cllg::Provider::Provider(const std::shared_ptr<HardwareAbstractionLayer>& hal)
 
     hal->space_vehicle_updates().connect([this](const std::set<location::SpaceVehicle>& svs)
     {
-        LLS_TRACE("[lls] provider: svs received count=%zu\n", svs.size());
+        VLOG(1) << "provider: svs received count=" << svs.size();
         mutable_updates().svs(Update<std::set<location::SpaceVehicle>>(svs));
-        LLS_TRACE("[lls] provider: svs update emitted\n");
+        VLOG(1) << "provider: svs update emitted";
     });
 }
 

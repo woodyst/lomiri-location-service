@@ -37,8 +37,6 @@
 #include <random>
 #include <thread>
 
-#include <com/lomiri/location/lls_trace.h>
-
 namespace
 {
 static uint64_t now_ms() {
@@ -204,8 +202,7 @@ void android::HardwareAbstractionLayer::on_location_update(UHardwareGpsLocation*
     std::shared_lock<std::shared_mutex> lock(thiz->impl.callback_mutex);
 
     thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
-    LLS_TRACE("[lls] on_location_update: flags=0x%x lat=%.5f lon=%.5f acc=%.1f\n",
-            location->flags, location->latitude, location->longitude, location->accuracy);
+    VLOG(1) << "on_location_update: flags=" << location->flags << " lat=" << location->latitude << " lon=" << location->longitude << " acc=" << location->accuracy;
 
     if (location->flags & U_HARDWARE_GPS_LOCATION_HAS_LAT_LONG)
     {
@@ -265,7 +262,7 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
 
     thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
 
-    LLS_TRACE("[lls] on_sv_status_update: num_svs=%d\n", sv_info->num_svs);
+    VLOG(1) << "on_sv_status_update: num_svs=" << sv_info->num_svs;
 
     std::set<location::SpaceVehicle> svs;
 
@@ -293,7 +290,7 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
         svs.insert(sv);
     }
 
-    LLS_TRACE("[lls] on_sv_status_update: emitting %zu svs\n", svs.size());
+    VLOG(1) << "on_sv_status_update: emitting " << svs.size() << " svs";
     thiz->space_vehicle_updates()(svs);
 }
 
@@ -511,14 +508,14 @@ bool android::HardwareAbstractionLayer::start_positioning()
     {
         std::shared_lock<std::shared_mutex> lock(impl.callback_mutex, std::try_to_lock);
         if (!lock.owns_lock()) {
-            LLS_TRACE("[lls] start_positioning: reclaim in progress, GPS starts when done\n");
+            VLOG(1) << __PRETTY_FUNCTION__ << ": reclaim in progress, GPS starts when done";
             return true;
         }
         if (impl.gps_handle) {
             UHardwareGps h = impl.gps_handle;
             impl.dispatch_updated_modes_to_driver();
             lock.unlock();
-            LLS_TRACE("[lls] start_positioning: handle OK, starting directly\n");
+            VLOG(1) << __PRETTY_FUNCTION__ << ": handle OK, starting directly";
             u_hardware_gps_start(h);
             return true;
         }
@@ -529,18 +526,18 @@ bool android::HardwareAbstractionLayer::start_positioning()
     // thread is never blocked. Guard against concurrent recovery threads.
     bool expected = false;
     if (!impl.positioning_active.compare_exchange_strong(expected, true)) {
-        LLS_TRACE("[lls] start_positioning: recovery thread already running, skipping\n");
+        VLOG(1) << __PRETTY_FUNCTION__ << ": recovery thread already running, skipping";
         return true;
     }
 
-    LLS_TRACE("[lls] start_positioning: handle missing, spawning recovery thread\n");
+    VLOG(1) << __PRETTY_FUNCTION__ << ": handle missing, spawning recovery thread";
     std::thread([this]() {
         impl.register_callbacks();
-        LLS_TRACE("[lls] gps-thread: register_callbacks done, gps_handle=%p\n", (void*)impl.gps_handle);
+        VLOG(1) << "gps-thread: register_callbacks done, gps_handle=" << impl.gps_handle;
         if (impl.gps_handle) {
-            LLS_TRACE("[lls] gps-thread: calling u_hardware_gps_start\n");
+            VLOG(1) << "gps-thread: calling u_hardware_gps_start";
             u_hardware_gps_start(impl.gps_handle);
-            LLS_TRACE("[lls] gps-thread: u_hardware_gps_start done\n");
+            VLOG(1) << "gps-thread: u_hardware_gps_start done";
         }
         impl.positioning_active.store(false);
     }).detach();
@@ -677,8 +674,7 @@ android::HardwareAbstractionLayer::Impl::Impl(
             bool expected = false;
             if (!positioning_active.compare_exchange_strong(expected, true)) continue;
 
-            LLS_TRACE("[lls] watchdog: GPS stale for %llus – reclaiming callbacks\n",
-                    (unsigned long long)((now - last) / 1000));
+            VLOG(1) << "gps watchdog: GPS stale for " << (now - last) / 1000 << "s, reclaiming callbacks";
             {
                 std::unique_lock<std::shared_mutex> lock(callback_mutex);
                 gps_handle = nullptr;
@@ -686,7 +682,7 @@ android::HardwareAbstractionLayer::Impl::Impl(
             register_callbacks();
             if (gps_handle) {
                 dispatch_updated_modes_to_driver();
-                LLS_TRACE("[lls] watchdog: restarting GPS\n");
+                VLOG(1) << "gps watchdog: restarting GPS";
                 u_hardware_gps_start(gps_handle);
             }
             positioning_active.store(false);
@@ -697,7 +693,7 @@ android::HardwareAbstractionLayer::Impl::Impl(
 void android::HardwareAbstractionLayer::Impl::register_callbacks()
 {
     // Phase 1: wait for any in-flight callbacks, then delete the old handle.
-    LLS_TRACE("[lls] register_callbacks: phase1 – deleting old handle\n");
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase1 - deleting old handle";
     {
         std::unique_lock<std::shared_mutex> lock(callback_mutex);
         if (gps_handle)
@@ -709,12 +705,12 @@ void android::HardwareAbstractionLayer::Impl::register_callbacks()
     // u_hardware_gps_new() can invoke callbacks (e.g. on_set_capabilities)
     // synchronously on this thread; holding the write lock here would cause
     // EDEADLK when those callbacks try to acquire the shared lock.
-    LLS_TRACE("[lls] register_callbacks: phase2 – calling u_hardware_gps_new\n");
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase2 - calling u_hardware_gps_new";
     UHardwareGps new_handle = u_hardware_gps_new(std::addressof(gps_params));
-    LLS_TRACE("[lls] register_callbacks: phase2 done, new_handle=%p\n", (void*)new_handle);
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase2 done, new_handle=" << new_handle;
 
     // Phase 3: install the new handle under the write lock.
-    LLS_TRACE("[lls] register_callbacks: phase3 – installing handle\n");
+    VLOG(1) << __PRETTY_FUNCTION__ << ": phase3 - installing handle";
     {
         std::unique_lock<std::shared_mutex> lock(callback_mutex);
         gps_handle = new_handle;
@@ -724,7 +720,7 @@ void android::HardwareAbstractionLayer::Impl::register_callbacks()
     // synchronously; calling it under the write lock would deadlock those callbacks.
     if (gps_handle)
         dispatch_updated_modes_to_driver();
-    LLS_TRACE("[lls] register_callbacks: done\n");
+    VLOG(1) << __PRETTY_FUNCTION__ << ": done";
 }
 
 bool android::HardwareAbstractionLayer::Impl::dispatch_updated_modes_to_driver()

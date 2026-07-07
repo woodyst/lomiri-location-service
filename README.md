@@ -190,6 +190,38 @@ watchdog recovery.
 
 ---
 
+### navius7 — trust-stored crash loop fix
+
+At session startup, `lomiri-location-service-trust-stored.service` (MirAgent)
+and `lomiri-location-service-trust-stored-wayland.service` (WaylandAgent) can
+both start simultaneously and race to register the same D-Bus name. The loser
+crashes and is restarted in a loop, making trust-stored unstable and causing
+all location permission checks to fail with "Client lacks permissions".
+
+**Fix:** `ConditionPathExists=/run/user/%U/mir_socket_trusted` and
+`Conflicts=/After=` the WaylandAgent variant added to MirAgent; reciprocal
+`Conflicts=` added to WaylandAgent. Exactly one agent activates depending on
+which socket is present — they are mutually exclusive.
+
+---
+
+### navius8 / svstrace5 — SVS propagation traces + upstream-style logging
+
+Two improvements aimed at maintainability and observability:
+
+**Upstream-style logging:** all `LLS_TRACE` calls converted to `VLOG(1)` (the
+glog verbosity-1 level used throughout upstream LLS) and the `lls_trace.h`
+header removed from production source files. Debug builds can still enable
+`VLOG(1)` via `--v=1` at runtime without recompilation.
+
+**SVS propagation traces:** `VLOG(1)` added at each hop in the satellite
+visibility chain (HAL `on_sv_status_update` → `provider` → `engine` →
+`skeleton::on_visible_space_vehicles_changed`) so that a `journalctl
+--grep='svs\|provider\|skeleton' -f` clearly shows where the pipeline stalls
+when `VisibleSpaceVehicles` is unexpectedly empty.
+
+---
+
 ## Building
 
 The included `build-deb.sh` builds a deployable `.deb` inside an isolated
@@ -230,18 +262,22 @@ ssh phablet@<device> "sudo apt install --reinstall lomiri-location-service"
 
 ---
 
-## Enabling debug traces
+## Enabling VLOG traces
 
-Edit `include/location_service/com/lomiri/location/lls_trace.h`:
-
-```cpp
-constexpr bool LLS_DEBUG = true;   // false in production
-```
-
-Rebuild and reinstall, then watch logs:
+VLOG(1) traces are emitted throughout the GPS and SVS pipeline. To enable at
+runtime without recompilation:
 
 ```bash
-ssh phablet@<device> "journalctl -f -u lomiri-location-service"
+ssh phablet@<device> "sudo systemctl set-environment GLOG_v=1 && \
+    sudo systemctl restart lomiri-location-service && \
+    journalctl -f -u lomiri-location-service"
+```
+
+To disable:
+
+```bash
+ssh phablet@<device> "sudo systemctl unset-environment GLOG_v && \
+    sudo systemctl restart lomiri-location-service"
 ```
 
 ---
@@ -251,7 +287,7 @@ ssh phablet@<device> "journalctl -f -u lomiri-location-service"
 The canonical repository is maintained by UBports:
 https://gitlab.com/ubports/development/core/lomiri-location-service
 
-The bug fixes in navius1–2 (mutex/EDEADLK), navius6 (engine `|=` fix,
-non-blocking `start_positioning()`), and the `GetVisibleSpaceVehicles`
-D-Bus method are candidates for upstream contribution. See
+Patches navius1–6 have been proposed upstream as MRs !57 (engine `|=`),
+!58 (GPS race condition / watchdog), !60 (service restart policy), and !61
+(`GetVisibleSpaceVehicles`). See
 [`doc/contributing-upstream.md`](doc/contributing-upstream.md) for details.

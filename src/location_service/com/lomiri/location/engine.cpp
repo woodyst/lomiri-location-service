@@ -16,7 +16,6 @@
  * Authored by: Thomas Voß <thomas.voss@canonical.com>
  */
 #include <com/lomiri/location/engine.h>
-#include <com/lomiri/location/lls_trace.h>
 
 #include <com/lomiri/location/logging.h>
 #include <com/lomiri/location/provider_selection_policy.h>
@@ -188,7 +187,7 @@ void cll::Engine::add_provider(const cll::Provider::Ptr& impl)
     // And do the reverse: Satellite visibility updates are funneled via the engine's configuration.
     auto cs = provider->updates().svs.connect([this](const cll::Update<std::set<cll::SpaceVehicle>>& src)
     {
-        LLS_TRACE("[lls] engine: svs update received count=%zu\n", src.value.size());
+        VLOG(1) << "engine: svs update received count=" << src.value.size();
         updates.visible_space_vehicles.update([src](std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>& dest)
         {
             for(auto& sv : src.value)
@@ -198,7 +197,7 @@ void cll::Engine::add_provider(const cll::Provider::Ptr& impl)
 
             return true;
         });
-        LLS_TRACE("[lls] engine: visible_space_vehicles updated\n");
+        VLOG(1) << "engine: visible_space_vehicles updated";
     });
 
     // We are a bit dumb and just take any position update as new reference.

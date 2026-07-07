@@ -19,7 +19,6 @@
 #include <com/lomiri/location/service/session/skeleton.h>
 
 #include <com/lomiri/location/logging.h>
-#include <com/lomiri/location/lls_trace.h>
 
 #include <core/dbus/types/object_path.h>
 
@@ -178,13 +177,13 @@ clls::Skeleton::Skeleton(const clls::Skeleton::Configuration& configuration)
 
     object->install_method_handler<clls::Interface::GetVisibleSpaceVehicles>([this](const dbus::Message::Ptr& msg)
     {
-        LLS_TRACE("[lls] GetVisibleSpaceVehicles: handler enter\n");
+        VLOG(1) << "GetVisibleSpaceVehicles: handler enter";
         auto reply = dbus::Message::make_method_return(msg);
-        LLS_TRACE("[lls] GetVisibleSpaceVehicles: reading property\n");
+        VLOG(1) << "GetVisibleSpaceVehicles: reading property";
         reply->writer() << visible_space_vehicles().get();
-        LLS_TRACE("[lls] GetVisibleSpaceVehicles: sending reply\n");
+        VLOG(1) << "GetVisibleSpaceVehicles: sending reply";
         this->configuration.incoming->send(reply);
-        LLS_TRACE("[lls] GetVisibleSpaceVehicles: done\n");
+        VLOG(1) << "GetVisibleSpaceVehicles: done";
     });
 }
 
@@ -202,7 +201,7 @@ core::Property<clls::State>& clls::Skeleton::mutable_state()
 void clls::Skeleton::handle_create_session_for_criteria(const dbus::Message::Ptr& in)
 {
     VLOG(1) << __PRETTY_FUNCTION__;
-    LLS_TRACE("[lls] CreateSessionForCriteria: enter\n");
+    VLOG(1) << "CreateSessionForCriteria: enter";
 
     auto sender = in->sender();
     auto reply = the_empty_reply();
@@ -443,7 +442,7 @@ core::Property<std::vector<std::string>>& clls::Skeleton::client_applications()
 
 void clls::Skeleton::on_visible_space_vehicles_changed(const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>& value)
 {
-    LLS_TRACE("[lls] skeleton: on_visible_space_vehicles_changed count=%zu\n", value.size());
+    VLOG(1) << "skeleton: on_visible_space_vehicles_changed count=" << value.size();
     // Property value is updated in-memory by the caller.
     // PropertiesChanged is not emitted here because encoding the full SVS map
     // as a D-Bus Variant causes a SIGBUS on this platform.
