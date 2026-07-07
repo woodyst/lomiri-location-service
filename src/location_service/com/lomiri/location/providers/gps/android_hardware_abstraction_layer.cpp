@@ -265,6 +265,8 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
 
     thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
 
+    LLS_TRACE("[lls] on_sv_status_update: num_svs=%d\n", sv_info->num_svs);
+
     std::set<location::SpaceVehicle> svs;
 
     for (int i = 0; i < sv_info->num_svs; i++)
@@ -291,6 +293,7 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
         svs.insert(sv);
     }
 
+    LLS_TRACE("[lls] on_sv_status_update: emitting %zu svs\n", svs.size());
     thiz->space_vehicle_updates()(svs);
 }
 

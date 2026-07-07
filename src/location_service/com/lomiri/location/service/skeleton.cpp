@@ -441,8 +441,9 @@ core::Property<std::vector<std::string>>& clls::Skeleton::client_applications()
     return *properties.client_applications;
 }
 
-void clls::Skeleton::on_visible_space_vehicles_changed(const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>&)
+void clls::Skeleton::on_visible_space_vehicles_changed(const std::map<cll::SpaceVehicle::Key, cll::SpaceVehicle>& value)
 {
+    LLS_TRACE("[lls] skeleton: on_visible_space_vehicles_changed count=%zu\n", value.size());
     // Property value is updated in-memory by the caller.
     // PropertiesChanged is not emitted here because encoding the full SVS map
     // as a D-Bus Variant causes a SIGBUS on this platform.

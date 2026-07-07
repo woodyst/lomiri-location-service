@@ -1,3 +1,31 @@
+lomiri-location-service (3.4.1+svstrace5) noble; urgency=medium
+
+  * gps: watchdog thread (5 s tick, 10 s stale threshold) detects when
+    Waydroid has stolen the GPS HAL callbacks and automatically re-registers
+    + restarts positioning — no manual LLS restart needed. This is the fix
+    for the recurring problem where GPS stopped updating after the first
+    Navius session until LLS was manually restarted.
+  * gps: start_positioning() fully non-blocking: fast path with try_to_lock
+    (returns immediately if watchdog holds write lock), recovery thread for
+    null handle, atomic guard against duplicate recovery threads.
+  * gps: stop_positioning() guards against null handle during watchdog recovery.
+  * service: fix trust-stored crash loop when MirAgent and WaylandAgent start
+    simultaneously and race to register the same D-Bus name.
+  * gps: engine is_any_active fix (|= instead of =) so the GPS indicator
+    lights up correctly.
+  * gps: swap azimuth/elevation in on_sv_status_update (upstream bug fix).
+  * service: StateTrackingProvider forwards visible_space_vehicles to clients.
+  * gps: LLS_TRACE instrumentation in svs propagation chain for diagnostics.
+
+ -- Edi <woodyst@gmail.com>  Mon, 07 Jul 2026 10:00:00 +0200
+
+lomiri-location-service (3.4.1+navius8) noble; urgency=medium
+
+  * gps: add LLS_TRACE in svs propagation chain (HAL → provider → engine →
+    skeleton) to diagnose why visible_space_vehicles is always empty.
+
+ -- Edi <woodyst@gmail.com>  Tue, 01 Jul 2026 23:50:00 +0200
+
 lomiri-location-service (3.4.1+navius7) noble; urgency=medium
 
   * service: fix trust-stored crash loop at session startup caused by
