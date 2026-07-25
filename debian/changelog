@@ -1,3 +1,25 @@
+lomiri-location-service (3.4.1+navius9) noble; urgency=medium
+
+  * gps: fix heap corruption ("malloc(): unaligned fastbin chunk detected",
+    SIGABRT) caused by the watchdog orphaning the GPS handle. It cleared
+    gps_handle before calling register_callbacks(), so phase 1 skipped
+    u_hardware_gps_delete() and the old handle stayed alive with our context
+    pointer. Every reclaim added one more callback producer feeding the engine
+    concurrently, corrupting the non-thread-safe aggregation containers.
+  * gps: add emit_mutex serializing the update signals emitted from the HAL
+    callbacks. callback_mutex is held in shared mode by the callbacks, so it
+    never ordered them against each other.
+  * gps: arm the watchdog in start_positioning(). last_gps_ms stayed at 0 when
+    the fast path started the chipset without ever receiving a callback (the
+    case when Waydroid owns them, or when LLS starts/restarts while Waydroid is
+    running), so the watchdog never fired and only an LLS restart recovered GPS.
+  * gps: watchdog and recovery thread read gps_handle under callback_mutex
+    instead of racing with register_callbacks().
+  * build: drop the orphan lls_trace.h header; all tracing is VLOG(1) since
+    navius8 and nothing included it any more.
+
+ -- Edi <woodyst@gmail.com>  Fri, 24 Jul 2026 23:15:00 +0200
+
 lomiri-location-service (3.4.1+svstrace5) noble; urgency=medium
 
   * gps: watchdog thread (5 s tick, 10 s stale threshold) detects when

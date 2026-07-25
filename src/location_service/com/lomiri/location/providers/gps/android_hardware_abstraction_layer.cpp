@@ -204,6 +204,10 @@ void android::HardwareAbstractionLayer::on_location_update(UHardwareGpsLocation*
     thiz->impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
     VLOG(1) << "on_location_update: flags=" << location->flags << " lat=" << location->latitude << " lon=" << location->longitude << " acc=" << location->accuracy;
 
+    // Serialize against the other data callbacks: the engine aggregates these
+    // updates into containers that are not thread-safe.
+    std::lock_guard<std::mutex> emit_lock(thiz->impl.emit_mutex);
+
     if (location->flags & U_HARDWARE_GPS_LOCATION_HAS_LAT_LONG)
     {
         location::Position pos
@@ -291,6 +295,7 @@ void android::HardwareAbstractionLayer::on_sv_status_update(UHardwareGpsSvStatus
     }
 
     VLOG(1) << "on_sv_status_update: emitting " << svs.size() << " svs";
+    std::lock_guard<std::mutex> emit_lock(thiz->impl.emit_mutex);
     thiz->space_vehicle_updates()(svs);
 }
 
@@ -516,6 +521,11 @@ bool android::HardwareAbstractionLayer::start_positioning()
             impl.dispatch_updated_modes_to_driver();
             lock.unlock();
             VLOG(1) << __PRETTY_FUNCTION__ << ": handle OK, starting directly";
+            // Arm the watchdog. The fast path deliberately does not re-register the
+            // callbacks, so if another client (Waydroid) owns them we will never see
+            // a single callback. Leaving last_gps_ms at 0 kept the watchdog asleep
+            // forever and only an LLS restart brought GPS back.
+            impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
             u_hardware_gps_start(h);
             return true;
         }
@@ -533,10 +543,16 @@ bool android::HardwareAbstractionLayer::start_positioning()
     VLOG(1) << __PRETTY_FUNCTION__ << ": handle missing, spawning recovery thread";
     std::thread([this]() {
         impl.register_callbacks();
-        VLOG(1) << "gps-thread: register_callbacks done, gps_handle=" << impl.gps_handle;
-        if (impl.gps_handle) {
+        UHardwareGps h = nullptr;
+        {
+            std::shared_lock<std::shared_mutex> lock(impl.callback_mutex);
+            h = impl.gps_handle;
+        }
+        VLOG(1) << "gps-thread: register_callbacks done, gps_handle=" << h;
+        if (h) {
             VLOG(1) << "gps-thread: calling u_hardware_gps_start";
-            u_hardware_gps_start(impl.gps_handle);
+            impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
+            u_hardware_gps_start(h);
             VLOG(1) << "gps-thread: u_hardware_gps_start done";
         }
         impl.positioning_active.store(false);
@@ -675,15 +691,26 @@ android::HardwareAbstractionLayer::Impl::Impl(
             if (!positioning_active.compare_exchange_strong(expected, true)) continue;
 
             VLOG(1) << "gps watchdog: GPS stale for " << (now - last) / 1000 << "s, reclaiming callbacks";
-            {
-                std::unique_lock<std::shared_mutex> lock(callback_mutex);
-                gps_handle = nullptr;
-            }
+
+            // register_callbacks() destroys the old handle in its phase 1. Do NOT
+            // clear gps_handle here: that made phase 1 skip u_hardware_gps_delete()
+            // and orphaned the handle. The orphan kept its HAL thread alive and kept
+            // calling our callbacks with the same context pointer, so after every
+            // reclaim one more producer fed the engine concurrently -> heap corruption.
             register_callbacks();
-            if (gps_handle) {
+
+            UHardwareGps h = nullptr;
+            {
+                std::shared_lock<std::shared_mutex> lock(callback_mutex);
+                h = gps_handle;
+            }
+            if (h) {
                 dispatch_updated_modes_to_driver();
                 VLOG(1) << "gps watchdog: restarting GPS";
-                u_hardware_gps_start(gps_handle);
+                // Re-arm before starting: if the reclaim did not actually get the
+                // callbacks back, the next tick must see a stale timestamp again.
+                last_gps_ms.store(now_ms(), std::memory_order_relaxed);
+                u_hardware_gps_start(h);
             }
             positioning_active.store(false);
         }

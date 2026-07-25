@@ -211,14 +211,54 @@ Two improvements aimed at maintainability and observability:
 
 **Upstream-style logging:** all `LLS_TRACE` calls converted to `VLOG(1)` (the
 glog verbosity-1 level used throughout upstream LLS) and the `lls_trace.h`
-header removed from production source files. Debug builds can still enable
-`VLOG(1)` via `--v=1` at runtime without recompilation.
+header removed from production source files (the header itself was dropped in
+navius9). Debug builds can still enable `VLOG(1)` via `--v=1` at runtime
+without recompilation.
 
 **SVS propagation traces:** `VLOG(1)` added at each hop in the satellite
 visibility chain (HAL `on_sv_status_update` → `provider` → `engine` →
 `skeleton::on_visible_space_vehicles_changed`) so that a `journalctl
 --grep='svs\|provider\|skeleton' -f` clearly shows where the pipeline stalls
 when `VisibleSpaceVehicles` is unexpectedly empty.
+
+---
+
+### navius9 — GPS handle leak / heap corruption + watchdog never armed
+
+Two defects introduced by the navius3–6 rework of `start_positioning()`, both
+observed on a Nothing Phone 1 running Waydroid.
+
+**1. Heap corruption (`malloc(): unaligned fastbin chunk detected`, SIGABRT)**
+
+The watchdog cleared `gps_handle` before calling `register_callbacks()`:
+
+```cpp
+{ std::unique_lock lock(callback_mutex); gps_handle = nullptr; }
+register_callbacks();   // phase 1 sees nullptr → skips u_hardware_gps_delete()
+```
+
+The old handle was therefore never destroyed. Its HAL thread stayed alive and
+kept invoking our callbacks with the same `context` pointer, while
+`u_hardware_gps_new()` produced a second live handle. Every reclaim added one
+more producer, and since all data callbacks take `callback_mutex` in **shared**
+mode they ran concurrently, mutating the engine's `core::Property<std::map>`
+aggregation containers from several threads at once.
+
+**Fix:** let `register_callbacks()` destroy the handle in its phase 1, plus an
+`emit_mutex` that serializes the update signals emitted from the callbacks.
+
+**2. Watchdog asleep forever**
+
+`stop_positioning()` sets `last_gps_ms = 0` and the watchdog skips while it is
+0, but `start_positioning()` never re-armed it. The fast path deliberately does
+not re-register the callbacks, so whenever another client (Waydroid) owned them
+— or LLS started/restarted while Waydroid was running — not a single callback
+arrived, `last_gps_ms` stayed 0 and the watchdog never reclaimed anything. GPS
+stayed dead until the service was restarted by hand.
+
+**Fix:** `last_gps_ms = now_ms()` when starting the chipset, in the fast path,
+in the recovery thread and in the watchdog itself, so 10 s of silence always
+triggers a reclaim.
 
 ---
 

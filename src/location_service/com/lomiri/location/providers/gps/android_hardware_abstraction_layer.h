@@ -24,6 +24,7 @@
 #include <ubuntu/hardware/gps.h>
 
 #include <atomic>
+#include <mutex>
 #include <shared_mutex>
 
 namespace com { namespace lomiri { namespace location { namespace providers { namespace gps
@@ -301,6 +302,15 @@ struct HardwareAbstractionLayer : public gps::HardwareAbstractionLayer
         // overwrites callbacks → re-registration races with a callback in progress).
         // Callbacks take shared ownership; register_callbacks() takes exclusive.
         std::shared_mutex callback_mutex;
+
+        // Serializes the update signals emitted from the GPS callbacks.
+        // callback_mutex is taken in shared mode by the callbacks, so it does not
+        // order them against each other. The Android HAL may deliver callbacks from
+        // more than one thread, and the engine aggregates them into plain
+        // core::Property<std::map>/<Optional> members with no locking of their own —
+        // concurrent emission corrupts those containers (observed as
+        // "malloc(): unaligned fastbin chunk detected").
+        std::mutex emit_mutex;
 
         // True while a background register_callbacks() thread is running.
         // Prevents spawning a second recovery thread if start_positioning() is
