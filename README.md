@@ -150,6 +150,11 @@ All GPS trace logging is gated behind an `LLS_DEBUG` constant defined in
 and rebuild to enable verbose per-fix and per-SV logs; no traces are emitted in
 production builds.
 
+> **Superseded by navius8.** Tracing no longer needs a rebuild: everything is
+> `VLOG(1)` and is enabled at runtime with `GLOG_v=1` (see
+> [Enabling VLOG traces](#enabling-vlog-traces)). The `lls_trace.h` header was
+> deleted in navius9.
+
 ---
 
 ### navius6 — Location indicator fix + non-blocking `start_positioning()`
@@ -293,6 +298,15 @@ ssh root@<device> "mount -o remount,rw / && \
     mount -o remount,ro / && \
     systemctl restart lomiri-location-service"
 ```
+
+The final `remount,ro` usually fails right after `dpkg -i` with *mount point is
+busy* — processes still hold the root filesystem open. It is harmless; a reboot
+restores the read-only mount.
+
+Do not trust `dpkg -l` alone to tell you what is actually running: the package
+database and the files on disk have been observed out of sync on Ubuntu Touch.
+To identify the running build, compare md5sums against the `.deb` in `debs/`,
+or read the source line numbers that `VLOG(1)` prints in the journal.
 
 To revert to the UBports stock package:
 

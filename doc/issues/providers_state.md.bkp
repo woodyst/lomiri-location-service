@@ -1,0 +1,32 @@
+Título: State no se pone active cuando hay proveedores activos pero al menos el último falla
+
+LLS para indicar que tenemos posicionamiento activo utiliza la variable (bool) is_any_active en engine.cpp.
+
+Entiendo que el estado debería de marcarse como active si tengo posicionamiento, indiferentemente de que nos lo de un proveedor u otro. Por ejemplo, tenemos fix en GPS pero falla geocode.
+
+Tal como está escrito el código, en el callback auto cps = provider->state().changed().connect([this](const StateTrackingProvider::State&):
+
+    ```is_any_active = (pair.first->state() == State::active);```
+
+El valor is_any_active se asigna en cada ejecución del callback, por lo que si tenemos fix de otro proveedor y la función se invoca con uno que no tiene fix, el valor queda en false.
+
+La solución que propuse en mi MR es la siguiente:
+
+    ```is_any_active |= (pair.first->state() == State::active);```
+
+Esto hace que si ya lo teníamos en true, siga en true. Pero revisando de nuevo me he dado cuenta de que ahora tenemos otro problema: Al tratarse de un callback, una vez obtenido el primer fix, ya nunca quedará en false con esta solución. Por ello propongo una solución que recorra todos los proveedores:
+
+    ```
+    auto cps = provider->state().changed().connect([this](const StateTrackingProvider::State&)
+    {
+        bool is_any_active = false;
+
+        std::lock_guard<std::recursive_mutex> lg(guard);
+        for (const auto& pair : providers)
+            is_any_active |= (pair.first->state() == State::active);
+
+        configuration.engine_state = is_any_active ? Status::active : Status::on;
+    });
+    ```
+
+Es decir, recorremos todos los proveedores y comprobamos si tenemos fix de alguno de ellos.

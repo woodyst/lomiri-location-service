@@ -2,7 +2,7 @@
 
 This document describes changes made in the `navius` branch on top of the
 upstream `lomiri-location-service` tree.  All patches are in the `main` branch
-and the resulting binary is versioned `3.4.1+navius6`.
+and the resulting binary is versioned `3.4.1+navius9`.
 
 ---
 
@@ -411,3 +411,197 @@ if (gps_handle)
 `u_hardware_gps_stop()` was called unconditionally even when `gps_handle`
 was `nullptr` (possible during watchdog recovery). Fixed with a
 `try_to_lock` guard consistent with `start_positioning()`.
+
+---
+
+## 7. trust-stored crash loop fix (navius7)
+
+**Commit:** `43fb658`
+**Files:** `data/lomiri-location-service-trust-stored.service.in`,
+`data/lomiri-location-service-trust-stored-wayland.service.in`
+
+**Symptom:** all location permission checks failed with "Client lacks
+permissions to access the service", so LLS rejected every GPS session.
+
+**Root cause:** both trust-stored variants were enabled in
+`graphical-session.target.wants` and started simultaneously. The MirAgent and
+the WaylandAgent raced to register the same session-bus name
+(`LomiriLocationService`); the loser crashed with `AlreadyOwned` and, with
+`Restart=always`, entered a restart loop.
+
+**Fix:** make them mutually exclusive.
+`ConditionPathExists=/run/user/%U/mir_socket_trusted` on the MirAgent (the
+inverse of the WaylandAgent condition) plus reciprocal `Conflicts=`/`After=`.
+Exactly one agent activates, depending on which socket is present.
+
+---
+
+## 8. SVS propagation traces + upstream-style logging (navius8 / svstrace5)
+
+**Commits:** `01d0def`, `a12f5f0`
+**Files:** `android_hardware_abstraction_layer.cpp`, `provider.cpp`,
+`engine.cpp`, `skeleton.cpp`
+
+All `LLS_TRACE` calls were converted to `VLOG(1)`, the glog verbosity-1 level
+used throughout upstream LLS. The debug output is no longer a compile-time
+constant: it is enabled at runtime with no rebuild.
+
+```bash
+ssh root@<device> "systemctl set-environment GLOG_v=1 && \
+    systemctl restart lomiri-location-service && \
+    journalctl -f -u lomiri-location-service"
+```
+
+`VLOG(1)` was added at each hop of the satellite visibility chain — HAL
+`on_sv_status_update` → `provider` → `engine` →
+`skeleton::on_visible_space_vehicles_changed` — so a stalled pipeline can be
+located from the journal:
+
+```
+provider: svs received count=32
+engine: svs update received count=32
+engine: visible_space_vehicles updated
+skeleton: on_visible_space_vehicles_changed count=32
+```
+
+Beware: at `GLOG_v=1` the position and SV callbacks log at 1 Hz. Useful for
+diagnosis, but unset `GLOG_v` afterwards — it is a lot of writes to flash.
+
+---
+
+## 9. GPS handle leak / heap corruption + watchdog never armed (navius9)
+
+**Commit:** `998a947`
+**Files:** `android_hardware_abstraction_layer.cpp` (and `.h`)
+
+Two defects introduced by the navius3–6 rework of `start_positioning()`.
+Both reproduced on a Nothing Phone 1 running Waydroid.
+
+### Bug 1 — Heap corruption (SIGABRT)
+
+**Symptom:** `malloc(): unaligned fastbin chunk detected` followed by
+`status=6/ABRT`, after a few hours with Waydroid running. LLS restarted, and
+the GPS came back broken in the way described in Bug 2.
+
+**Root cause:** the watchdog cleared `gps_handle` before calling
+`register_callbacks()`:
+
+```cpp
+// Before (broken)
+{
+    std::unique_lock<std::shared_mutex> lock(callback_mutex);
+    gps_handle = nullptr;
+}
+register_callbacks();   // phase 1 sees nullptr -> skips u_hardware_gps_delete()
+```
+
+Phase 1 only deletes when the handle is non-null, so the old handle was never
+destroyed. Its HAL thread stayed alive and kept invoking our callbacks with
+the same `gps_params.context` pointer, while `u_hardware_gps_new()` produced a
+second live handle. Every reclaim added one more producer.
+
+That matters because all data callbacks take `callback_mutex` in **shared**
+mode — by design, so they never block each other. With several producers they
+therefore ran concurrently, and the engine aggregates their updates into plain
+`core::Property<std::map>` / `core::Property<Optional<...>>` members with no
+locking of their own. Concurrent mutation corrupts those containers.
+
+**Fix:** do not touch `gps_handle`; let `register_callbacks()` destroy it in
+phase 1, under the write lock, as it already does everywhere else.
+
+```cpp
+// After
+register_callbacks();
+
+UHardwareGps h = nullptr;
+{
+    std::shared_lock<std::shared_mutex> lock(callback_mutex);
+    h = gps_handle;
+}
+```
+
+**Additional hardening — `emit_mutex`:** a dedicated `std::mutex` serializes
+the update signals emitted from `on_location_update` and
+`on_sv_status_update`. `callback_mutex` is held in shared mode by the
+callbacks, so it never ordered them against each other; some Android GNSS HALs
+legitimately deliver location and SV status from different threads.
+
+### Bug 2 — The watchdog was never armed
+
+**Symptom:** after using Waydroid, Navius got no fix and no satellites, and
+nothing recovered it except restarting LLS by hand. The navius4 watchdog was
+supposed to cover exactly this case and never fired.
+
+**Root cause:** `stop_positioning()` sets `last_gps_ms` to 0 and the watchdog
+skips its tick while it is 0:
+
+```cpp
+if (last == 0) continue;  // GPS not yet started or already stopped
+```
+
+`start_positioning()` never re-armed it. Since navius3 the fast path
+deliberately does **not** re-register the callbacks, so whenever another client
+(Waydroid) already owned them, not one callback ever arrived, `last_gps_ms`
+stayed 0, and the watchdog slept forever. The same happens when LLS starts or
+restarts while Waydroid is already running — `last_gps_ms` is 0 from the very
+first tick.
+
+**Fix:** arm the watchdog whenever the chipset is started — in the fast path,
+in the recovery thread, and in the watchdog itself after a reclaim.
+
+```cpp
+impl.last_gps_ms.store(now_ms(), std::memory_order_relaxed);
+u_hardware_gps_start(h);
+```
+
+Ten seconds of silence now always trigger a reclaim.
+
+### Verified on device
+
+Sequence: open Waydroid → open Waze inside it (it grabs the GNSS HAL) → open
+Navius.
+
+```
+11:40:28  start_positioning(): handle OK, starting directly
+11:40:40  gps watchdog: GPS stale for 11s, reclaiming callbacks
+11:40:40  register_callbacks(): phase1 -> phase2 -> phase3 -> done
+11:40:40  gps watchdog: restarting GPS
+11:40:41  provider: svs received count=32 -> engine -> skeleton
+```
+
+GPS recovers in ~12 s (the watchdog threshold). Before navius9 it stayed dead
+until the service was restarted manually.
+
+### Known issue still open
+
+With GPS delivering positions normally, the D-Bus `State` property was
+observed as `"enabled"` instead of `"active"` while two client sessions were
+alive, which leaves the notification-bar location indicator switched off. This
+is **not** fixed by navius9.
+
+Working hypothesis, in `implementation.cpp` (upstream code): any change of
+`IsOnline` forces `engine_state` to `on`, never to `active` —
+
+```cpp
+is_online().changed().connect([this](bool value) {
+    configuration.engine->configuration.engine_state
+        = value ? Engine::Status::on : Engine::Status::off;
+}),
+```
+
+— and `on` maps to `State::enabled`. Since `engine_state` is only recomputed
+when a provider changes state, `active` is lost and never restored. The
+indicator itself exposes `location-detection-enabled` and
+`gps-detection-enabled`, which write `IsOnline` and
+`DoesSatelliteBasedPositioning` into LLS, so it is a plausible trigger.
+
+A fix would be to avoid downgrading `active`:
+
+```cpp
+auto& es = configuration.engine->configuration.engine_state;
+if (!value)                         es = Engine::Status::off;
+else if (es == Engine::Status::off) es = Engine::Status::on;
+```
+
+Not applied: the transition has not been captured live yet, and the engine
+state machine deserves evidence before being changed.

@@ -15,7 +15,8 @@ No todos los cambios son adecuados para upstream:
 | Fix `is_any_active` (`engine.cpp`, navius6) | **Sí** — trivial | Bug de una línea, afecta a cualquier instalación con ≥2 providers; rama lista: `fix/engine-is-any-active` |
 | Fix mutex/EDEADLK + watchdog + non-blocking (navius1-4+6) | **Sí** — prioritario | Bug real con crash/hang confirmado en hardware; rama lista: `fix/gps-hal-nonblocking-dbus` |
 | `GetVisibleSpaceVehicles` D-Bus method | **Sí** — con discusión | Feature nueva de API pública; requiere revisión del equipo |
-| `build-deb.sh`, `doc/`, `lls_trace.h` | No | Herramientas y doc internas del fork, no pertenecen al árbol upstream |
+| `build-deb.sh`, `doc/` | No | Herramientas y doc internas del fork, no pertenecen al árbol upstream |
+| Fix del handle huérfano + `emit_mutex` + armado del watchdog (navius9) | **Sí** — corrige !58 | Sin esto, el watchdog de !58 nunca se dispara y además filtra el handle del HAL |
 
 Abre **MRs separados** para cada cambio: facilita la revisión y permite que
 uno se acepte independientemente del otro. Empieza por el fix del engine
@@ -181,3 +182,6 @@ Ambas ramas arrancan desde `upstream/main` (commit `6da9cf0`).
 | `4369d8b` | fix definitivo EDEADLK (split 3 fases) |
 | `8c74e5d` | navius4: watchdog + mode dispatch en fast path |
 | `8a78b42` | navius6: engine `\|=` + start_positioning try_to_lock + register_callbacks phase split + stop null guard |
+| `43fb658` | navius7: trust-stored, MirAgent y WaylandAgent mutuamente excluyentes |
+| `01d0def`, `a12f5f0` | navius8: `LLS_TRACE` → `VLOG(1)` + trazas de la cadena SVS |
+| `998a947` | navius9: fix del handle huérfano del watchdog (corrupción de heap) + `emit_mutex` + armado de `last_gps_ms` en `start_positioning()` |
