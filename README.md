@@ -345,3 +345,12 @@ Patches navius1–6 have been proposed upstream as MRs !57 (engine `|=`),
 !58 (GPS race condition / watchdog), !60 (service restart policy), and !61
 (`GetVisibleSpaceVehicles`). See
 [`doc/contributing-upstream.md`](doc/contributing-upstream.md) for details.
+
+No further patches are being submitted upstream. UBports prefers bug reports
+over patches, so this fork is maintained on its own and distributed as `.deb`.
+Anyone who finds it useful is welcome to use it.
+
+Note for anyone picking up MR !58: it is incomplete without navius9. As
+merged there, the watchdog leaks the GPS handle on every reclaim and is never
+armed by `start_positioning()`, so it does not actually fire in the Waydroid
+case it was written for.
